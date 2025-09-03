@@ -163,11 +163,9 @@ location: https://github.com/tc39/proposal-measure/
             1. If _roundingMode_ is *"halfFloor"*, set _reverseRoundingMode_ to *"halfCeil"*.
             1. Let _d_ be RoundToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
             1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. Let _pow_ be _e_ + _n_.
-          1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
+          1. Let _m_ be _v_ × 10<sup>_n_</sup>.
           1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-          1. Return _rounded_ × 10<sup>_e_ + _n_</sup>.
+          1. Return _rounded_ × 10<sup>-_n_</sup>.
         </emu-alg>
       </emu-clause>
 
