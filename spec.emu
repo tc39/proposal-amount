@@ -133,7 +133,7 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
         </dl>
         <emu-alg>
-          1. Let _v_ be the MV of _s_.
+          1. Let _v_ be <emu-xref href="#sec-static-semantics-mv">the MV</emu-xref> of _s_.
           1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
           1. Return _e_.
