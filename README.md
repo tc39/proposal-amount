@@ -145,3 +145,10 @@ Some units can be combined. In the US, it is common to express the heights of pe
 * [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) (mentioned several times as a natural follow-on proposal to this one)
 * [Decimal](https://github.com/tc39/proposal-decimal) for exact decimal arithmetic
 * [Keep trailing zeroes](https://github.com/tc39/proposal-intl-keep-trailing-zeros) to ensure that when Intl handles digit strings, it doesn't automatically strip trailing zeroes (e.g., silently normalize "1.20" to "1.2").
+
+## Polyfill
+
+A [polyfill](https://www.npmjs.com/package/proposal-amount)
+is available for testing. Since this proposal is still at
+stage 1, expect breaking changes; in general, it is not
+suitable for production use.
