@@ -435,7 +435,6 @@ location: https://github.com/tc39/proposal-measure/
       1. Let _value_ be _O_.[[Value]].
       1. If _fractionDigits_ is not *undefined*, set _value_ to RoundToFractionDigits(_value_, _fractionDigits_).
       1. Else if _significantDigits_ is not *undefined*, set _value_ to RoundToSignificantDigits(_value_, _significantDigits_).
-      1. Otherwise, throw a *TypeError* exception.
       1. Let _N_ be OrdinaryObjectCreate(*"%Amount.prototype%"*, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
       1. If _unit_ is not *undefined* and _O_.[[Unit]] is not *undefined*, then
         1. If SameValueNonNumber(_unit_, _O_.[[Unit]]) is *false*, throw a *TypeError* exception.
