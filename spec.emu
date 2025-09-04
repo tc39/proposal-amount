@@ -74,6 +74,36 @@ location: https://github.com/tc39/proposal-measure/
     <emu-clause id="sec-amount-abstract-ops-decimal-digit-strings">
       <h1>Operations on Decimal Digit Strings</h1>
 
+      <emu-clause id="sec-amount-canonicalizedigitstring" type="abstract operation">
+        <h1>CanonicalizeDigitString(
+          _s_: a decimal digit String
+        ): a decimal digit String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It ensures that a decimal digit string adheres to a restricted syntax in which there are no redundant leading zeroes, no leading or trailing decimal points, and ensures that any *"E"* (indicating exponential notation) is downcased.</dd>
+        </dl>
+        <emu-alg>
+          1. If _s_ contains an occurrence of *"E"*, then
+            1. Let _beforeE_ be the substring of _s_ before the first occurrence of *"E"*.
+            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"E"*.
+            1. Set _s_ to the string concatenation of _beforeE, *"e"*, and _afterE_.
+          1. If _s_ contains an occurrence of *"e"*, then
+            1. Let _beforeE_ be the substring of _s_ before the first occurrence of *"e"*.
+            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"E"*.
+            1. Let _canonicalizedBeforeE_ be CanonicalizeDigitString(_beforeE_).
+            1. Let _canonicalizedAfterE_ be CanonicalizeDigitString(_afterE_).
+            1. Return the string concatenation of _canonicalizedBeforeE_, *"e"*, and _canonicalizedAfterE_.
+          1. If _s_ begins with an occurrence of *"00"*, then
+            1. Let _afterDoubleZero_ be the substring of _s_ after the first occurrence of *"00"*.
+            1. Let _oneFewerZero_ be the string concatenation of *"0"* and _afterDoubleZero_.
+            1. Return CanonicalizeDigitString(_oneFewerZero_).
+          1. If _s_ begins with an occurrence of *"."*, return the string concatenation of *"0"* and _s_.
+          1. IF _s_ ends with an occurrence of *"."*, return the substring of _s_ from 0 to the index of the final occurrence of *"."* in _s_.
+          1. Return _s_.
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-amount-countsignificantdigits" type="abstract operation">
         <h1>CountSignificantDigits(
           _s_: a decimal digit String
@@ -84,6 +114,7 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the number of significant digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
         </dl>
         <emu-alg>
+          1. Set _s_ to CanonicalizeDigitString(_s_).
           1. Let _digitsToCount_ be _s_.
           1. If _digitsToCount_ contains an *e* character, set _digitsToCount_ be the substring of _s_ before the first occurence of *"e"*.
           1. If _digitsToCount_ contains a *"."* character, set _digitsToCount_ to the result of replacing all occurrences of *"."* in _digitsToCount_ by *""*.
@@ -102,6 +133,7 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
         </dl>
         <emu-alg>
+          1. Set _s_ to CanonicalizeDigitString(_s_).
           1. If _s_ contains a *"."* character, then
             1. Let _fractionDigits_ be the substring of _s_ after the first *"."* character up to the first occurrence of *"e"* or *"E"* in _s_, if any.
             1. Let _l_ be the length of _fractionDigits_.
@@ -282,9 +314,9 @@ location: https://github.com/tc39/proposal-measure/
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. If _toParse_ is in « *"NaN"*, *"Infinity"*, *"-Infinity"* », throw a *RangeError* exception.
         1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
-        1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
         1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
         1. Let _amountValue_ be ? StringDecimalValue of _parseResult_.
+        1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
