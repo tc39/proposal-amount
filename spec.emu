@@ -90,7 +90,7 @@ location: https://github.com/tc39/proposal-measure/
             1. Set _s_ to the string concatenation of _beforeE, *"e"*, and _afterE_.
           1. If _s_ contains an occurrence of *"e"*, then
             1. Let _beforeE_ be the substring of _s_ before the first occurrence of *"e"*.
-            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"E"*.
+            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"e"*.
             1. Let _canonicalizedBeforeE_ be CanonicalizeDigitString(_beforeE_).
             1. Let _canonicalizedAfterE_ be CanonicalizeDigitString(_afterE_).
             1. Return the string concatenation of _canonicalizedBeforeE_, *"e"*, and _canonicalizedAfterE_.
