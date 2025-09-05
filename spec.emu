@@ -94,10 +94,8 @@ location: https://github.com/tc39/proposal-measure/
             1. Let _canonicalizedBeforeE_ be CanonicalizeDigitString(_beforeE_).
             1. Let _canonicalizedAfterE_ be CanonicalizeDigitString(_afterE_).
             1. Return the string concatenation of _canonicalizedBeforeE_, *"e"*, and _canonicalizedAfterE_.
-          1. If _s_ begins with an occurrence of *"00"*, then
-            1. Let _afterDoubleZero_ be the substring of _s_ after the first occurrence of *"00"*.
-            1. Let _oneFewerZero_ be the string concatenation of *"0"* and _afterDoubleZero_.
-            1. Return CanonicalizeDigitString(_oneFewerZero_).
+          1. Repeat, until _s_ does not begin with an occurrence of *"00"*,
+            1. Set _s_ to the substring of _s_ after the first occurrence of *"0"*.
           1. If _s_ begins with an occurrence of *"."*, return the string concatenation of *"0"* and _s_.
           1. If _s_ ends with an occurrence of *"."*, return the substring of _s_ from 0 to the index of the final occurrence of *"."* in _s_.
           1. Return _s_.
