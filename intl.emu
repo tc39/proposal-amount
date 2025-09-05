@@ -152,7 +152,7 @@
         </dd>
       </dl>
       <emu-alg>
-        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderMVWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
+        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderAmountValueWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If _primValue_ is a BigInt, return ℝ(_primValue_).
         1. If _primValue_ is a String, then
           1. Let _str_ be _primValue_.
