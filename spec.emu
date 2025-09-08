@@ -307,7 +307,7 @@ location: https://github.com/tc39/proposal-measure/
         1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. If _toParse_ is in « *"NaN"*, *"Infinity"*, *"-Infinity"* », throw a *RangeError* exception.
+        1. If _toParse_ is *"NaN"*, throw a *RangeError* exception.
         1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
         1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
         1. Let _amountValue_ be ? StringDecimalValue of _parseResult_.
