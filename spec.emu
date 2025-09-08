@@ -84,20 +84,24 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It ensures that a decimal digit string adheres to a restricted syntax in which there are no redundant leading zeroes, no leading or trailing decimal points, and ensures that any *"E"* (indicating exponential notation) is downcased.</dd>
         </dl>
         <emu-alg>
-          1. If _s_ contains an occurrence of *"E"*, then
-            1. Let _beforeE_ be the substring of _s_ before the first occurrence of *"E"*.
-            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"E"*.
-            1. Set _s_ to the string concatenation of _beforeE, *"e"*, and _afterE_.
-          1. If _s_ contains an occurrence of *"e"*, then
-            1. Let _beforeE_ be the substring of _s_ before the first occurrence of *"e"*.
-            1. Let _afterE_ be the substring of _s_ after the first occurrence of *"e"*.
-            1. Let _canonicalizedBeforeE_ be CanonicalizeDigitString(_beforeE_).
-            1. Let _canonicalizedAfterE_ be CanonicalizeDigitString(_afterE_).
-            1. Return the string concatenation of _canonicalizedBeforeE_, *"e"*, and _canonicalizedAfterE_.
-          1. Repeat, until _s_ does not begin with an occurrence of *"00"*,
-            1. Set _s_ to the substring of _s_ after the first occurrence of *"0"*.
-          1. If _s_ begins with an occurrence of *"."*, return the string concatenation of *"0"* and _s_.
-          1. If _s_ ends with an occurrence of *"."*, return the substring of _s_ from 0 to the index of the final occurrence of *"."* in _s_.
+          1. If the first code unit of _s_ is the code unit 0x002B (PLUS SIGN), return CanonicalizeDigitString(the substring of _s_ from 1).
+          1. If the first code unit of _s_ is the code unit 0x002D (HYPHEN-MINUS), return the string-concatenation of *"-"* and CanonicalizeDigitString(the substring of _s_ from 1).
+          1. Let _expIndex_ be StringIndexOf(_s_, *"e"*, 0).
+          1. If _expIndex_ is ~not-found~, set _expIndex_ to StringIndexOf(_s_, *"E"*, 0).
+          1. If _expIndex_ is not ~not-found~, then
+            1. Let _beforeE_ be the substring of _s_ from 0 to _expIndex_.
+            1. Let _afterE_ be the substring of _s_ from _expIndex_ + 1.
+            1. Let _canonicalizedExp_ be CanonicalizeDigitString(_afterE_).
+            1. If _canonicalizedExp_ is *"-0"*, set _canonicalizedExp_ to *"0"*.
+            1. NOTE: The following step can return a String that ends with "e0".
+            1. Return the string-concatenation of CanonicalizeDigitString(_beforeE_), *"e"*, and _canonicalizedExp_.
+          1. Repeat, while the length of _s_ ≥ 1 and the first code unit of _s_ is the code unit 0x0030 (DIGIT ZERO),
+            1. Set _s_ to the substring of _s_ from 1.
+          1. If _s_ is the empty String or _s_ is *"."*, return *"0"*.
+          1. Let _len_ be the length of _s_.
+          1. Let _dotIndex_ be StringIndexOf(_s_, *"."*, 0).
+          1. If _dotIndex_ is 0, return the string-concatenation of *"0"* and _s_.
+          1. If _dotIndex_ is _len_ - 1, return the substring of _s_ from 0 to _dotIndex_.
           1. Return _s_.
         </emu-alg>
       </emu-clause>
