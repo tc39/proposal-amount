@@ -217,7 +217,6 @@ location: https://github.com/tc39/proposal-measure/
           1. If _v_ is ~not-a-number~, return *"NaN"*.
           1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
-          1. If _v_ is ~minus-zero~, return *"-0"*.
           1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
           1. If _v_ < 0, set _v_ to -_v_.
