@@ -390,16 +390,11 @@ location: https://github.com/tc39/proposal-measure/
         </emu-alg>
         <emu-grammar>DecimalDigits ::: DecimalDigits DecimalDigit</emu-grammar>
         <emu-alg>
-          1. Let _a_ be |DecimalDigits|.
-          1. Let _b_ be |DecimalDigit|.
-          1. Repeat, while the length of _a_ ≥ 1 and the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO),
+          1. Let _a_ be CodePointsToString(the source text matched by |DecimalDigits|).
+          1. Repeat, while _a_ is not the empty String and the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO),
             1. Set _a_ to the substring of _a_ from 1.
-          1. If the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO) and, then
-            1. If the first code unit of _b_ is the code unit 0x0030 (DIGIT ZERO), return 1.
-          1. Else,
-            1. Let _aLen_ be the string length of _a_.
-            1. Let _bLen_ be the string length of _b_.
-            1. Return _aLen_ + _bLen_.
+          1. Let _aLen_ be the length of _a_.
+          1. Return _aLen_ + 1.
         </emu-alg>
         <emu-grammar>DecimalDigits ::: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar>
         <emu-alg>
