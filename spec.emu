@@ -179,7 +179,7 @@ location: https://github.com/tc39/proposal-measure/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It computes the rounding mode that would be used if we were to n rounding mode a negative mathematical value.</dd>
+          <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
         </dl>
         <emu-alg>
           1. If _mode_ is *"floor"*, return *"ceil"*.
