@@ -278,18 +278,7 @@ location: https://github.com/tc39/proposal-measure/
         1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. If _toParse_ is *"NaN"*, then
-          1. Let _amountValue_ be ~not-a-number~.
-        1. Else if _toParse_ is *"Infinity"*, then
-          1. Let _amountValue_ be ~positive-infinity~.
-        1. Else if _toParse_ is *"-Infinity"*, then
-          1. Let _amountValue_ be ~negative-infinity~.
-        1. Else if _toParse_ is *"-0"*, then
-          1. Let _amountValue_ be ~negative-zero~.
-        1. Otherwise:
-          1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
-          1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
-          1. Let _amountValue_ be <emu-xref href="#sec-static-semantics-mv">the MV</emu-xref> of _toParse_.
+        1. Let _amountValue_ be ? StringIntlMV of _toParse_.
         1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
@@ -297,9 +286,9 @@ location: https://github.com/tc39/proposal-measure/
         1. Let _unit_ be _validatedOpts_.[[Unit]].
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
         1. If _amountValue_ is a mathematical value, then
-          1. Let _roundedValue_ be _amountValue_.
           1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
           1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
+          1. Let _roundedValue_ be _amountValue_.
           1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
             1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
             1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
