@@ -76,18 +76,22 @@ location: https://github.com/tc39/proposal-measure/
 
       <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
         <h1>CountFractionDigits(
-          _s_: a decimal digit String
+          _v_: a mathematical value
         ): a non-negative integer
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
+          <dd>It computes the number of fractional digits in a given mathematical value.</dd>
         </dl>
         <emu-alg>
-          1. Let _v_ be <emu-xref href="#sec-static-semantics-mv">the MV</emu-xref> of _s_.
-          1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
-          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
-          1. Return _e_.
+          1. If _v_ < 0, set _v_ to -_v_.
+          1. Let _integerPart_ be floor(_v_).
+          1. Let _fractionPart_ be _v_ - _integerPart_.
+          1. Assert: There exists a non-negative integer _n_ such that _fractionPart_ × 10<sup>_n_</sup> is an integer.
+          1. Let _e_ be the smallest non-negative integer such that _fractionPart_ × 10<sup>_e_</sup> is an integer.
+          1. If _e_ = 0, return 0.
+          1. Let _l_ be the log-10 of _e_.
+          1. Return floor(_l_) + 1.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -120,6 +124,27 @@ location: https://github.com/tc39/proposal-measure/
           1. Return _mHigh_.
         </emu-alg>
       </emu-clause>
+
+      <emu-clause id="sec-amount-countmvsignificantdigits" type="abstract operation">
+        <h1>CountMVSignificantDigits(
+          _s_: a mathematical value
+        ): a positive integer
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It computes the number of significant digits in a given mathematical value, which is assumed to have a finite representation in base 10.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _v_ be <emu-xref href="#sec-static-semantics-mv">the MV</emu-xref> of _s_.
+          1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
+          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
+          1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
+          1. If _scaled_ = 0, return 1.
+          1. Let _l_ be the log-10 of _scaled_.
+          1. Return floor(_l_) + 1.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
 
       <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
         <h1>ReverseRoundingMode(
@@ -273,16 +298,14 @@ location: https://github.com/tc39/proposal-measure/
         1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
         1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
         1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
-          1. Set _significantDigits_ to ? CountSignificantDigits of _toParse_.
-          1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
+          1. Set _significantDigits_ to CountSignificantDigits of _parseResult_.
+          1. Set _fractionDigits_ to CountFractionDigits(_amountValue_).
         1. Else if _significantDigits_ is *undefined*, then
           1. Set _roundedValue_ be RoundToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _significantDigits_ to ? CountSignificantDigits of _digitStr_.
+          1. Set _significantDigits_ to CountMVSignificantDigits(_roundedValue_).
         1. Otherwise:
           1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _fractionDigits_ to CountFractionDigits(_digitStr_).
+          1. Set _fractionDigits_ to CountFractionDigits(_roundedValue_).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
         1. Set _O_.[[Value]] to _roundedValue_.
         1. Set _O_.[[SignificantDigits]] to _significantDigits_.
@@ -335,7 +358,7 @@ location: https://github.com/tc39/proposal-measure/
         </emu-alg>
       </emu-clause>
       <emu-clause id="sec-runtime-semantics-countsignificantdigits" type="sdo">
-        <h1>Runtime Semantics: CountSignificantDigits ( ): either a normal completion containing an integer or a throw completion</h1>
+        <h1>Runtime Semantics: CountSignificantDigits ( ): an integer</h1>
         <dl class="header">
         </dl>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
@@ -345,7 +368,7 @@ location: https://github.com/tc39/proposal-measure/
         <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
         <emu-alg>
           1. Let _a_ be the first |DecimalDigits|.
-          1. Let _aCount_ be ? CountSignificantDigits of _a_.
+          1. Let _aCount_ be CountSignificantDigits of _a_.
           1. If the second |DecimalDigits| is not present, return _a_.
           1. Let _b_ be the second |DecimalDigits|.
           1. Let _bCount_ be the string length of _b_.
@@ -358,7 +381,7 @@ location: https://github.com/tc39/proposal-measure/
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
-          1. Let _c_ be ? CountSignificantDigits of |DecimalDigits|.
+          1. Let _c_ be CountSignificantDigits of |DecimalDigits|.
           1. Return _c_.
         </emu-alg>
         <emu-grammar>DecimalDigits ::: DecimalDigit</emu-grammar>
