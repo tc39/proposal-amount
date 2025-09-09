@@ -377,7 +377,7 @@ location: https://github.com/tc39/proposal-measure/
         <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
           1. Let _a_ be |DecimalDigits|.
-          1. Return the string length of _a_.
+          1. Return the number of code points in the source text matched by _a_.
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
