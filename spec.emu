@@ -371,7 +371,7 @@ location: https://github.com/tc39/proposal-measure/
           1. Let _aCount_ be CountSignificantDigits of _a_.
           1. If the second |DecimalDigits| is not present, return _a_.
           1. Let _b_ be the second |DecimalDigits|.
-          1. Let _bCount_ be the string length of _b_.
+          1. Let _bCount_ be the number of code points in the source text matched by _b_.
           1. Return _aCount_ + _bCount_.
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
