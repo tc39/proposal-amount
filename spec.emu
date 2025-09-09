@@ -370,15 +370,6 @@ location: https://github.com/tc39/proposal-measure/
         <h1>Runtime Semantics: CountSignificantDigits ( ): either a normal completion containing an integer or a throw completion</h1>
         <dl class="header">
         </dl>
-        <emu-grammar>StrDecimalLiteral ::: StrUnsignedDecimalLiteral</emu-grammar>
-        <emu-alg>
-          1. Return ? CountSignificantDigits of |StrUnsignedDecimalLiteral|.
-        </emu-alg>
-        <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
-        <emu-alg>
-          1. Let _c_ be ? CountSignificantDigits of |StrUnsignedDecimalLiteral|.
-          1. Return _c_.
-        </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
         <emu-alg>
           1. Return 0.
