@@ -106,25 +106,6 @@ location: https://github.com/tc39/proposal-measure/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-countsignificantdigits" type="abstract operation">
-        <h1>CountSignificantDigits(
-          _s_: a decimal digit String
-        ): a positive integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of significant digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
-        </dl>
-        <emu-alg>
-          1. Set _s_ to CanonicalizeDigitString(_s_).
-          1. Let _digitsToCount_ be _s_.
-          1. If _digitsToCount_ contains an *e* character, set _digitsToCount_ be the substring of _s_ before the first occurence of *"e"*.
-          1. If _digitsToCount_ contains a *"."* character, set _digitsToCount_ to the result of replacing all occurrences of *"."* in _digitsToCount_ by *""*.
-          1. Let _l_ be the length of _digitsToCount_.
-          1. Return _l_.
-        </emu-alg>
-      </emu-clause>
-
       <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
         <h1>CountFractionDigits(
           _s_: a decimal digit String
@@ -324,12 +305,12 @@ location: https://github.com/tc39/proposal-measure/
         1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
         1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
         1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
-          1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
+          1. Set _significantDigits_ to ? CountSignificantDigits of _toParse_.
           1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
         1. Else if _significantDigits_ is *undefined*, then
           1. Set _roundedValue_ be RoundToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
           1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _significantDigits_ to CountSignificantDigits(_digitStr_).
+          1. Set _significantDigits_ to ? CountSignificantDigits of _digitStr_.
         1. Otherwise:
           1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
           1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
@@ -383,6 +364,73 @@ location: https://github.com/tc39/proposal-measure/
           1. Let _a_ be MV of |DecimalDigits|.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
           1. Return _a_ × 10<sup>_e_</sup>.
+        </emu-alg>
+      </emu-clause>
+      <emu-clause id="sec-runtime-semantics-countsignificantdigits" type="sdo">
+        <h1>Runtime Semantics: CountSignificantDigits ( ): either a normal completion containing an integer or a throw completion</h1>
+        <dl class="header">
+        </dl>
+        <emu-grammar>StrDecimalLiteral ::: StrUnsignedDecimalLiteral</emu-grammar>
+        <emu-alg>
+          1. Return ? CountSignificantDigits of |StrUnsignedDecimalLiteral|.
+        </emu-alg>
+        <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
+        <emu-alg>
+          1. Let _c_ be ? CountSignificantDigits of |StrUnsignedDecimalLiteral|.
+          1. Return _c_.
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
+        <emu-alg>
+          1. Return 0.
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be the first |DecimalDigits|.
+          1. Let _aCount_ be ? CountSignificantDigits of _a_.
+          1. If the second |DecimalDigits| is *""*, return _a_.
+          1. Let _b_ be the second |DecimalDigits|.
+          1. Let _bCount_ be the string length of _b_.
+          1. Return _aCount_ + _bCount_.
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be |DecimalDigits|.
+          1. Return the string length of _a_.
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _c_ be ? CountSignificantDigits of |DecimalDigits|.
+          1. Return _c_.
+        </emu-alg>
+        <emu-grammar>DecimalDigits ::: DecimalDigit</emu-grammar>
+        <emu-alg>
+          1. Return 1.
+        </emu-alg>
+        <emu-grammar>DecimalDigits ::: DecimalDigits DecimalDigit</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be |DecimalDigits|.
+          1. Let _b_ be |DecimalDigit|.
+          1. Repeat, while the length of _a_ ≥ 1 and the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO),
+            1. Set _a_ to the substring of _a_ from 1.
+          1. If the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO) and, then
+            1. If the first code unit of _b_ is the code unit 0x0030 (DIGIT ZERO), return 1.
+          1. Else,
+            1. Let _aLen_ be the string length of _a_.
+            1. Let _bLen_ be the string length of _b_.
+            1. Return _aLen_ + _bLen_.
+        </emu-alg>
+        <emu-grammar>DecimalDigits ::: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be |DecimalDigits|.
+          1. Let _b_ be |DecimalDigit|.
+          1. Repeat, while the length of _a_ ≥ 1 and the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO),
+            1. Set _a_ to the substring of _a_ from 1.
+          1. If the first code unit of _a_ is the code unit 0x0030 (DIGIT ZERO) and, then
+            1. If the first code unit of _b_ is the code unit 0x0030 (DIGIT ZERO), return 1.
+          1. Else,
+            1. Let _aLen_ be the string length of _a_.
+            1. Let _bLen_ be the string length of _b_.
+            1. Return _aLen_ + _bLen_.
         </emu-alg>
       </emu-clause>
     </emu-clause>
