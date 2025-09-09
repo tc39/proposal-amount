@@ -378,7 +378,7 @@ location: https://github.com/tc39/proposal-measure/
         <emu-alg>
           1. Let _a_ be the first |DecimalDigits|.
           1. Let _aCount_ be ? CountSignificantDigits of _a_.
-          1. If the second |DecimalDigits| is *""*, return _a_.
+          1. If the second |DecimalDigits| is not present, return _a_.
           1. Let _b_ be the second |DecimalDigits|.
           1. Let _bCount_ be the string length of _b_.
           1. Return _aCount_ + _bCount_.
