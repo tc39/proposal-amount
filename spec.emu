@@ -71,6 +71,64 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
     </emu-clause>
 
+    <!-- This is copied directly from 402 -->
+    <emu-clause id="sec-runtime-semantics-stringintlmv" type="sdo">
+      <h1>Runtime Semantics: StringIntlMV</h1>
+      <dl class="header">
+      </dl>
+      <emu-note>
+        <p>The conversion of a |StringNumericLiteral| to an Intl mathematical value is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.</p>
+      </emu-note>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return 0.
+      </emu-alg>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return StringIntlMV of |StrNumericLiteral|.
+      </emu-alg>
+      <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
+      <emu-alg>
+        1. Return MV of |NonDecimalIntegerLiteral|.
+      </emu-alg>
+      <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
+      <emu-alg>
+        1. Let _a_ be StringIntlMV of |StrUnsignedDecimalLiteral|.
+        1. If _a_ is 0, return ~negative-zero~.
+        1. If _a_ is ~positive-infinity~, return ~negative-infinity~.
+        1. Return -_a_.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
+      <emu-alg>
+        1. Return ~positive-infinity~.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _a_ be MV of the first |DecimalDigits|.
+        1. If the second |DecimalDigits| is present, then
+          1. Let _b_ be MV of the second |DecimalDigits|.
+          1. Let _n_ be the number of code points in the second |DecimalDigits|.
+        1. Else,
+          1. Let _b_ be 0.
+          1. Let _n_ be 0.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return (_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _b_ be MV of |DecimalDigits|.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Let _n_ be the number of code points in |DecimalDigits|.
+        1. Return _b_ × 10<sup>_e_ - _n_</sup>.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _a_ be MV of |DecimalDigits|.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return _a_ × 10<sup>_e_</sup>.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-amount-abstract-ops-decimal-digit-strings">
       <h1>Operations on Decimal Digit Strings</h1>
 
@@ -301,6 +359,16 @@ location: https://github.com/tc39/proposal-measure/
           1. Set _O_.[[Value]] to _roundedValue_.
           1. Set _O_.[[SignificantDigits]] to _significantDigits_.
           1. Set _O_.[[FractionDigits]] to _fractionDigits_.
+        1. Else if _amountValue_ is ~minus-zero~, then
+          1. Set _O_.[[Value]] to ~minus-zero~.
+          1. If _toParse_ contains the code point 0x002E (FULL STOP), then
+            1. Let _afterPeriod_ be the substring of _toParse_ after the first occurrence of the code point 0x002E (FULL STOP).
+            1. Let _l_ be the string length of _afterPeriod_.
+            1. Set _O_.[[SignificantDigits]] to 1 + _l_.
+            1. Set _O_.[[FractionDigits]] to _l_.
+          1. Else,
+            1. Set _O_.[[SignificantDigits]] to 1.
+            1. Set _O_.[[FractionDigits]] to 0.
         1. Otherwise:
           1. Set _O_.[[Value]] to _amountValue_.
           1. Set _O_.[[SignificantDigits]] to 0.
