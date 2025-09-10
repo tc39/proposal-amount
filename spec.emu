@@ -286,8 +286,6 @@ location: https://github.com/tc39/proposal-measure/
         1. Let _unit_ be _validatedOpts_.[[Unit]].
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
         1. If _amountValue_ is a mathematical value, then
-          1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
-          1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
           1. Let _roundedValue_ be _amountValue_.
           1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
             1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
