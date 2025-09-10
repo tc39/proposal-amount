@@ -204,7 +204,7 @@ location: https://github.com/tc39/proposal-measure/
 
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
         <h1>RenderAmountValueWithFractionDigits(
-          _v_: a mathematical value or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, or ~minus-zero~,
+          _v_: an Intl mathematical value,
           _numDigits_: a non-negative integer,
           optional _roundingMode_: a rounding mode
         ): a String
