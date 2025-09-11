@@ -306,7 +306,7 @@ location: https://github.com/tc39/proposal-measure/
           1. Set _significantDigits_ to CountMVSignificantDigits(_roundedValue_).
         1. Otherwise:
           1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-          1. Let _renderedRoundedAmount_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
+          1. Let _renderedRoundedAmount_ be the unique decimal string representation of _roundedValue_ without duplicate leading zeroes.
           1. Set _fractionDigits_ to CountFractionDigits(_renderedRoundedAmount_).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
         1. Set _O_.[[Value]] to _roundedValue_.
