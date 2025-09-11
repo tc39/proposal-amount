@@ -71,17 +71,27 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
     </emu-clause>
 
-    <!-- This is copied directly from 402 -->
-    <emu-clause id="sec-runtime-semantics-stringintlmv" type="sdo">
+    <!-- This is copied directly from proposal-intl-keep-trailing-zeros -->
+    <!-- See http://tc39.es/proposal-intl-keep-trailing-zeros/ -->
+    <emu-clause id="sec-runtime-semantics-stringintlmv" type="sdo" number="15">
       <h1>Runtime Semantics: StringIntlMV</h1>
       <dl class="header">
       </dl>
       <emu-note>
-        <p>The conversion of a |StringNumericLiteral| to an Intl mathematical value is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.</p>
+        <del class="block">
+        <p>The
+ conversion of a |StringNumericLiteral| to a Number value is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.</p>
+        </del>
+        <ins class="block">
+        <p>
+          The conversion of a |StringNumericLiteral| to a mathematical value and a precision is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.
+          The result of StringIntlMV is a List value with two elements, a mathematical value and the count of decimal digits in the source text.
+        </p>
+        </ins>
       </emu-note>
       <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
       <emu-alg>
-        1. Return 0.
+        1. Return <del>0</del><ins>« 0, 0 »</ins>.
       </emu-alg>
       <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
       <emu-alg>
@@ -89,22 +99,27 @@ location: https://github.com/tc39/proposal-measure/
       </emu-alg>
       <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
       <emu-alg>
-        1. Return MV of |NonDecimalIntegerLiteral|.
+        1. <del>Return MV of |NonDecimalIntegerLiteral|.</del>
+        1. <ins>Let _i_ be MV of |NonDecimalIntegerLiteral|.</ins>
+        1. <ins>Return « _i_, 0 ».</ins>
       </emu-alg>
       <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
       <emu-alg>
-        1. Let _a_ be StringIntlMV of |StrUnsignedDecimalLiteral|.
-        1. If _a_ is 0, return ~negative-zero~.
-        1. If _a_ is ~positive-infinity~, return ~negative-infinity~.
-        1. Return -_a_.
+        1. Let <del>_a_</del><ins>_x_</ins> be StringIntlMV of |StrUnsignedDecimalLiteral|.
+        1. <ins>Let _a_ be the first element of _x_.</ins>
+        1. <ins>Let _n_ be the second element of _x_.</ins>
+        1. If _a_ is 0, return <del>~negative-zero~</del><ins>« ~negative-zero~, _n_ »</ins>.
+        1. If _a_ is ~positive-infinity~, return <del>~negative-infinity~</del><ins>« ~negative-infinity~, 0 »</ins>.
+        1. Return <del>-_a_</del><ins>« -_a_, _n_ »</ins>.
       </emu-alg>
       <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
       <emu-alg>
-        1. Return ~positive-infinity~.
+        1. Return <del>~positive-infinity~</del><ins>« ~positive-infinity~, 0 »</ins>.
       </emu-alg>
       <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
       <emu-alg>
         1. Let _a_ be MV of the first |DecimalDigits|.
+        1. <ins>Let _m_ be the number of code points in the first |DecimalDigits|.</ins>
         1. If the second |DecimalDigits| is present, then
           1. Let _b_ be MV of the second |DecimalDigits|.
           1. Let _n_ be the number of code points in the second |DecimalDigits|.
@@ -112,20 +127,21 @@ location: https://github.com/tc39/proposal-measure/
           1. Let _b_ be 0.
           1. Let _n_ be 0.
         1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-        1. Return (_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>.
+        1. Return <ins>«</ins> (_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup><ins>, _m_ + _n_ »</ins>.
       </emu-alg>
       <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
       <emu-alg>
         1. Let _b_ be MV of |DecimalDigits|.
         1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
         1. Let _n_ be the number of code points in |DecimalDigits|.
-        1. Return _b_ × 10<sup>_e_ - _n_</sup>.
+        1. Return <ins>«</ins> _b_ × 10<sup>_e_ - _n_</sup><ins>, _n_ ».</ins>
       </emu-alg>
       <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
       <emu-alg>
         1. Let _a_ be MV of |DecimalDigits|.
+        1. <ins>Let _m_ be the number of code points in |DecimalDigits|.</ins>
         1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-        1. Return _a_ × 10<sup>_e_</sup>.
+        1. Return <ins>«</ins> _a_ × 10<sup>_e_</sup><ins>, _m_ »</ins>.
       </emu-alg>
     </emu-clause>
 
@@ -336,7 +352,9 @@ location: https://github.com/tc39/proposal-measure/
         1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. Let _amountValue_ be ? StringIntlMV of _toParse_.
+        1. Let _intlMV_ be the StringIntlMV of _toParse_.
+        1. Let _amountValue_ be _intlMV_[0].
+        1. Let _numDigits_ be _intlMV_[1].
         1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
@@ -346,7 +364,7 @@ location: https://github.com/tc39/proposal-measure/
         1. If _amountValue_ is a mathematical value, then
           1. Let _roundedValue_ be _amountValue_.
           1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
-            1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
+            1. Set _significantDigits_ to _numDigits_.
             1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
           1. Else if _significantDigits_ is *undefined*, then
             1. Set _roundedValue_ be RoundAmountValueToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
@@ -361,17 +379,12 @@ location: https://github.com/tc39/proposal-measure/
           1. Set _O_.[[FractionDigits]] to _fractionDigits_.
         1. Else if _amountValue_ is ~minus-zero~, then
           1. Set _O_.[[Value]] to ~minus-zero~.
-          1. If _toParse_ contains the code point 0x002E (FULL STOP), then
-            1. Let _afterPeriod_ be the substring of _toParse_ after the first occurrence of the code point 0x002E (FULL STOP).
-            1. Let _l_ be the string length of _afterPeriod_.
-            1. Set _O_.[[SignificantDigits]] to 1 + _l_.
-            1. Set _O_.[[FractionDigits]] to _l_.
-          1. Else,
-            1. Set _O_.[[SignificantDigits]] to 1.
-            1. Set _O_.[[FractionDigits]] to 0.
+          1. Set _O_.[[SignificantDigits]] to _numDigits_.
+          1. Assert: _numDigits_ ≥ 1.
+          1. Set _O_.[[FractionDigits]] to _numDigits_ - 1.
         1. Otherwise:
           1. Set _O_.[[Value]] to _amountValue_.
-          1. Set _O_.[[SignificantDigits]] to 0.
+          1. Set _O_.[[SignificantDigits]] to _numDigits_..
           1. Set _O_.[[FractionDigits]] to 0.
         1. If _unit_ is not *undefined*, set _O_.[[Unit]] to _unit_.
         1. Return _O_.
