@@ -127,7 +127,7 @@ location: https://github.com/tc39/proposal-measure/
 
       <emu-clause id="sec-amount-countmvsignificantdigits" type="abstract operation">
         <h1>CountMVSignificantDigits(
-          _s_: a mathematical value
+          _v_: a mathematical value
         ): a positive integer
         </h1>
         <dl class="header">
@@ -135,7 +135,6 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the number of significant digits in a given mathematical value, which is assumed to have a finite representation in base 10.</dd>
         </dl>
         <emu-alg>
-          1. Let _v_ be <emu-xref href="#sec-static-semantics-mv">the MV</emu-xref> of _s_.
           1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
           1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
