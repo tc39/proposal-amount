@@ -129,7 +129,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-countmvsignificantdigits" type="abstract operation">
-        <h1>CountMVSignificantDigits(
+        <h1>CountMVSignificantDigits (
           _v_: a mathematical value
         ): a positive integer
         </h1>
@@ -166,7 +166,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
-        <h1>RoundToFractionDigits(
+        <h1>RoundToFractionDigits (
           _v_: a mathematical value,
           _n_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -190,7 +190,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
-        <h1>RoundToSignificantDigits(
+        <h1>RoundToSignificantDigits (
           _v_: a mathematical value,
           _n_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -216,7 +216,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderMVWithFractionDigits(
+        <h1>RenderMVWithFractionDigits (
           _v_: a mathematical value,
           _numDigits_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -241,7 +241,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
-        <h1>GetAmountOptions(
+        <h1>GetAmountOptions (
           _opts_: an Object
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
