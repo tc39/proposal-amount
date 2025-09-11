@@ -140,8 +140,7 @@ location: https://github.com/tc39/proposal-measure/
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
           1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
           1. If _scaled_ = 0, return 1.
-          1. Let _l_ be the log-10 of _scaled_.
-          1. Return floor(_l_) + 1.
+          1. Return the count of digits in the decimal representation of _scaled_.
         </emu-alg>
       </emu-clause>
     </emu-clause>
