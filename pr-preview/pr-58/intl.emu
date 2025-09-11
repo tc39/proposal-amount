@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<emu-clause id="sec-decimal-intl">
+  <h1>Amendments to the ECMAScript® 2024 Internationalization API Specification</h1>
+
+  <emu-note type="editor">
+    <p>
+      This section lists amendments which must be made to <a href="https://tc39.es/ecma402/">ECMA-402, the ECMAScript® 2024 Internationalization API Specification</a>.
+      Text to be added is marked <ins>like this</ins>, and text to be deleted is marked <del>like this</del>.
+      Blocks of unmodified text between modified sections are marked by [...].
+    </p>
+  </emu-note>
+
+  <emu-clause id="sup-properties-of-the-amount-prototype-object">
+    <h1>Properties of the Amount Prototype Object</h1>
+
+    <emu-clause id="sup-amount.prototype.tolocalestring">
+      <h1>Amount.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+
+      <p>
+        This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring"></emu-xref>.
+      </p>
+
+      <p>
+       This function performs the following steps when called:
+      </p>
+
+      <emu-alg>
+        1. Let _O_ be the *this* value.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
+        1. Return FormatNumeric(_numberFormat_, _O_.[[AmountData]]).
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
+
+<emu-clause id="numberformat-objects">
+  <h1>NumberFormat Objects</h1>
+  <emu-clause id="sec-numberformat-abstracts">
+    <h1>Abstract Operations for NumberFormat Objects</h1>
+    <emu-clause id="sec-getnumberformatpattern" type="abstract operation">
+      <h1>
+        GetNumberFormatPattern (
+          _numberFormat_: an Intl.NumberFormat,
+          _x_: an Intl mathematical value,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>
+          It considers the resolved unit-related options in the number format object along with the final scaled and rounded number being formatted (an Intl mathematical value) and returns a pattern, a String value as described in <emu-xref href="#sec-intl.numberformat-internal-slots"></emu-xref>.
+        </dd>
+      </dl>
+      <emu-alg>
+        1. Let _resolvedLocaleData_ be _numberFormat_.[[LocaleData]].
+        1. Let _patterns_ be _resolvedLocaleData_.[[patterns]].
+        1. Assert: _patterns_ is a Record (see <emu-xref href="#sec-intl.numberformat-internal-slots"></emu-xref>).
+        1. Let _style_ be _numberFormat_.[[Style]].
+        1. If _style_ is *"percent"*, then
+          1. Set _patterns_ to _patterns_.[[percent]].
+        1. Else if _style_ is *"unit"*, then
+          1. Let _unit_ be _numberFormat_.[[Unit]].
+          1. <ins>Let _fmtUnit_ be _x_.[[Unit]].</ins>
+          1. <ins>If _fmtUnit_ is not *undefined* and SameValueNonNumber(_unit_, _fmtUnit_) is *false*, then</ins>
+            1. <ins>If _unit_ is not *undefined*, throw a *TypeError* exception.</ins>
+            1. <ins>Set _unit_ to _fmtUnit_.</ins>
+          1. <ins>Else if _unit_ is *undefined*, then</ins>
+            1. <ins>Throw a *TypeError* exception.</ins>
+          1. Let _unitDisplay_ be _numberFormat_.[[UnitDisplay]].
+          1. Set _patterns_ to _patterns_.[[unit]].
+          1. If _patterns_ doesn't have a field [[&lt;_unit_>]], then
+            1. Set _unit_ to *"fallback"*.
+          1. Set _patterns_ to _patterns_.[[&lt;_unit_>]].
+          1. Set _patterns_ to _patterns_.[[&lt;_unitDisplay_>]].
+        1. Else if _style_ is *"currency"*, then
+          1. Let _currency_ be _numberFormat_.[[Currency]].
+          1. <ins>Let _fmtCurrency_ be _x_.[[Currency]].</ins>
+          1. <ins>If _fmtCurrency_ is not *undefined* and SameValueNonNumber(_currency_, _fmtCurrency_) is *false*, then</ins>
+            1. <ins>If _currency_ is not *undefined*, throw a *TypeError* exception.</ins>
+            1. <ins>Set _currency_ to _fmtCurrency_.</ins>
+          1. <ins>Else if _currency_ is *undefined*, then</ins>
+            1. <ins>Throw a *TypeError* exception.</ins>
+          1. Let _currencyDisplay_ be _numberFormat_.[[CurrencyDisplay]].
+          1. Let _currencySign_ be _numberFormat_.[[CurrencySign]].
+          1. Set _patterns_ to _patterns_.[[currency]].
+          1. If _patterns_ doesn't have a field [[&lt;_currency_>]], then
+            1. Set _currency_ to *"fallback"*.
+          1. Set _patterns_ to _patterns_.[[&lt;_currency_>]].
+          1. Set _patterns_ to _patterns_.[[&lt;_currencyDisplay_>]].
+          1. Set _patterns_ to _patterns_.[[&lt;_currencySign_>]].
+        1. Else,
+          1. Assert: _style_ is *"decimal"*.
+          1. Set _patterns_ to _patterns_.[[decimal]].
+        1. If _x_ is ~negative-infinity~, then
+          1. Let _category_ be ~negative-non-zero~.
+        1. Else if _x_ is ~negative-zero~, then
+          1. Let _category_ be ~negative-zero~.
+        1. Else if _x_ is ~not-a-number~, then
+          1. Let _category_ be ~positive-zero~.
+        1. Else if _x_ is ~positive-infinity~, then
+          1. Let _category_ be ~positive-non-zero~.
+        1. Else,
+          1. Assert: _x_ is a mathematical value.
+          1. If _x_ &lt; 0, then
+            1. Let _category_ be ~negative-non-zero~.
+          1. Else if _x_ > 0, then
+            1. Let _category_ be ~positive-non-zero~.
+          1. Else,
+            1. Let _category_ be ~positive-zero~.
+        1. Let _signDisplay_ be _numberFormat_.[[SignDisplay]].
+        1. If _signDisplay_ is *"never"*, then
+          1. Let _pattern_ be _patterns_.[[zeroPattern]].
+        1. Else if _signDisplay_ is *"auto"*, then
+          1. If _category_ is ~positive-non-zero~ or ~positive-zero~, then
+            1. Let _pattern_ be _patterns_.[[zeroPattern]].
+          1. Else,
+            1. Let _pattern_ be _patterns_.[[negativePattern]].
+        1. Else if _signDisplay_ is *"always"*, then
+          1. If _category_ is ~positive-non-zero~ or ~positive-zero~, then
+            1. Let _pattern_ be _patterns_.[[positivePattern]].
+          1. Else,
+            1. Let _pattern_ be _patterns_.[[negativePattern]].
+        1. Else if _signDisplay_ is *"exceptZero"*, then
+          1. If _category_ is ~positive-zero~ or ~negative-zero~, then
+            1. Let _pattern_ be _patterns_.[[zeroPattern]].
+          1. Else if _category_ is ~positive-non-zero~, then
+            1. Let _pattern_ be _patterns_.[[positivePattern]].
+          1. Else,
+            1. Let _pattern_ be _patterns_.[[negativePattern]].
+        1. Else,
+          1. Assert: _signDisplay_ is *"negative"*.
+          1. If _category_ is ~negative-non-zero~, then
+            1. Let _pattern_ be _patterns_.[[negativePattern]].
+          1. Else,
+            1. Let _pattern_ be _patterns_.[[zeroPattern]].
+        1. Return _pattern_.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-tointlmathematicalvalue" type="abstract operation">
+      <h1>
+        ToIntlMathematicalValue (
+          _value_: an ECMAScript language value,
+        ): either a normal completion containing an Intl mathematical value or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>
+          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is a mathematical value together with ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
+          This abstract operation is similar to <emu-xref href="#sec-tonumeric"></emu-xref>, but a mathematical value can be returned instead of a Number or BigInt, so that exact decimal values can be represented.
+        </dd>
+      </dl>
+      <emu-alg>
+        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderAmountValueWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
+        1. If _primValue_ is a BigInt, return ℝ(_primValue_).
+        1. If _primValue_ is a String, then
+          1. Let _str_ be _primValue_.
+        1. Else,
+          1. Let _x_ be ? ToNumber(_primValue_).
+          1. If _x_ is *-0*<sub>𝔽</sub>, return ~negative-zero~.
+          1. Let _str_ be Number::toString(_x_, 10).
+        1. Let _text_ be StringToCodePoints(_str_).
+        1. Let _literal_ be ParseText(_text_, |StringNumericLiteral|).
+        1. If _literal_ is a List of errors, return ~not-a-number~.
+        1. Let _intlMV_ be the StringIntlMV of _literal_.
+        1. If _intlMV_ is a mathematical value, then
+          1. Let _rounded_ be RoundMVResult(abs(_intlMV_)).
+          1. If _rounded_ is *+∞*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-infinity~.
+          1. If _rounded_ is *+∞*<sub>𝔽</sub>, return ~positive-infinity~.
+          1. If _rounded_ is *+0*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-zero~.
+          1. If _rounded_ is *+0*<sub>𝔽</sub>, return 0.
+        1. Return _intlMV_.
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-setnumberformatunitoptions" type="abstract operation">
+      <h1>
+        SetNumberFormatUnitOptions (
+          _intlObj_: an Intl.NumberFormat,
+          _options_: an Object,
+        ): either a normal completion containing ~unused~ or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It resolves the user-specified options relating to units onto _intlObj_.</dd>
+      </dl>
+      <emu-alg>
+        1. Let _style_ be ? GetOption(_options_, *"style"*, ~string~, « *"decimal"*, *"percent"*, *"currency"*, *"unit"* », *"decimal"*).
+        1. Set _intlObj_.[[Style]] to _style_.
+        1. Let _currency_ be ? GetOption(_options_, *"currency"*, ~string~, ~empty~, *undefined*).
+        1. <del>If _currency_ is *undefined*, then</del>
+          1. <del>If _style_ is *"currency"*, throw a *TypeError* exception.</del>
+        1. <del>Else,</del>
+          1. <del>If IsWellFormedCurrencyCode(_currency_) is *false*, throw a *RangeError* exception.</del>
+        1. <ins>If _currency_ is not *undefined* and IsWellFormedCurrencyCode(_currency_) is *false*, throw a *RangeError* exception.</ins>
+        1. Let _currencyDisplay_ be ? GetOption(_options_, *"currencyDisplay"*, ~string~, « *"code"*, *"symbol"*, *"narrowSymbol"*, *"name"* », *"symbol"*).
+        1. Let _currencySign_ be ? GetOption(_options_, *"currencySign"*, ~string~, « *"standard"*, *"accounting"* », *"standard"*).
+        1. Let _unit_ be ? GetOption(_options_, *"unit"*, ~string~, ~empty~, *undefined*).
+        1. <del>If _unit_ is *undefined*, then</del>
+          1. <del>If _style_ is *"unit"*, throw a *TypeError* exception.</del>
+        1. <del>Else,</del>
+          1. <del>If IsWellFormedUnitIdentifier(_unit_) is *false*, throw a *RangeError* exception.</del>
+        1. <ins>If _unit_ is not *undefined* and IsWellFormedUnitIdentifier(_unit_) is *false*, throw a *RangeError* exception.</ins>
+        1. Let _unitDisplay_ be ? GetOption(_options_, *"unitDisplay"*, ~string~, « *"short"*, *"narrow"*, *"long"* », *"short"*).
+        1. If _style_ is *"currency"*, then
+          1. <ins>If _currency_ is not *undefined*, set</ins> <del>Set</del> _intlObj_.[[Currency]] to the ASCII-uppercase of _currency_.
+          1. Set _intlObj_.[[CurrencyDisplay]] to _currencyDisplay_.
+          1. Set _intlObj_.[[CurrencySign]] to _currencySign_.
+        1. If _style_ is *"unit"*, then
+          1. <ins>If _unit_ is not *undefined*, </ins> <del>Set</del> <ins>set</ins> _intlObj_.[[Unit]] to _unit_.
+          1. Set _intlObj_.[[UnitDisplay]] to _unitDisplay_.
+        1. Return ~unused~.
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
