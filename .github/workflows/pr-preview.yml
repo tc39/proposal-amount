@@ -35,4 +35,3 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
-          custom-url: "."
