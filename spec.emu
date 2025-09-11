@@ -4,18 +4,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
 <pre class="metadata">
-title: Measure
+title: Amount
 status: proposal
 stage: 1
 contributors: Ben Allen, Jesse Alama
-location: https://github.com/tc39/proposal-measure/
+location: https://github.com/tc39/proposal-amount/
 </pre>
 
 <emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-measure/" title="Measure proposal (GitHub)">Measure proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
 </emu-intro>
