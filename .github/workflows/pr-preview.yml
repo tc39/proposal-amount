@@ -28,10 +28,15 @@ jobs:
       - name: Build spec
         run: npm run build
 
+      - name: Prepare deployment directory
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+
       - name: Deploy PR Preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./
+          source-dir: dist/
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
