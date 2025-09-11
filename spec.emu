@@ -145,25 +145,24 @@ location: https://github.com/tc39/proposal-measure/
           1. Return the count of digits in the decimal representation of _scaled_.
         </emu-alg>
       </emu-clause>
-    </emu-clause>
 
-      <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
-        <h1>ReverseRoundingMode(
-          _mode_: a rounding mode
-        ): a rounding mode
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. If _mode_ is *"floor"*, return *"ceil"*.
-          1. If _mode_ is *"ceil"*, return *"floor"*.
-          1. If _mode_ is *"halfCeil"*, return *"halfFloor"*.
-          1. If _mode_ is *"halfFloor"*, return *"halfCeil"*.
-          1. Otherwise, return _mode_.
-        </emu-alg>
-      </emu-clause>
+    <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
+      <h1>ReverseRoundingMode (
+        _mode_: a rounding mode
+      ): a rounding mode
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
+      </dl>
+      <emu-alg>
+        1. If _mode_ is *"floor"*, return *"ceil"*.
+        1. If _mode_ is *"ceil"*, return *"floor"*.
+        1. If _mode_ is *"halfCeil"*, return *"halfFloor"*.
+        1. If _mode_ is *"halfFloor"*, return *"halfCeil"*.
+        1. Otherwise, return _mode_.
+      </emu-alg>
+     </emu-clause>
 
       <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
         <h1>RoundToFractionDigits (
@@ -306,7 +305,7 @@ location: https://github.com/tc39/proposal-measure/
           1. Set _significantDigits_ to CountMVSignificantDigits(_roundedValue_).
         1. Otherwise:
           1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-          1. Let _renderedRoundedAmount_ be the unique decimal string representation of _roundedValue_ without duplicate leading zeroes.
+          1. Let _renderedRoundedAmount_ be the unique decimal string representation of _roundedValue_ without duplicate leading zeroes and having _significantDigits_ significant digits.
           1. Set _fractionDigits_ to CountFractionDigits(_renderedRoundedAmount_).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
         1. Set _O_.[[Value]] to _roundedValue_.
