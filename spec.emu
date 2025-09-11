@@ -75,7 +75,8 @@ location: https://github.com/tc39/proposal-measure/
       <h1>Operations on Decimal Digit Strings</h1>
 
       <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
-        <h1>CountFractionDigits(
+        <h1>
+        CountFractionDigits (
           _s_: a decimal digit String
         ): a non-negative integer
         </h1>
