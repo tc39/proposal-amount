@@ -292,7 +292,7 @@ location: https://github.com/tc39/proposal-amount/
       </emu-clause>
 
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderAmountValueWithFractionDigits(
+        <h1>RenderAmountValueWithFractionDigits (
           _v_: an Intl mathematical value,
           _numDigits_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -306,6 +306,11 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ is ~not-a-number~, return *"NaN"*.
           1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
+          1. If _v_ is ~minus-zero~, then
+            1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
+            1. Let _z_ be *"0"*.
+            1. If _numDigits_ = 0, return _z_.
+            1. Otherwise, return the string-concatenation of _z_, *"."* and _trailingZeroes_.
           1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
           1. If _v_ < 0, then
