@@ -196,7 +196,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _fraction_ < 0.5, return _mLow_.
           1. If _fraction_ > 0.5, return _mHigh_.
           1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"**, return _mHigh_.
+          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"*, return _mHigh_.
           1. If _mLow_ is even, return _mLow_.
           1. Return _mHigh_.
         </emu-alg>
@@ -212,7 +212,6 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It computes the number of significant digits in a given mathematical value, which is assumed to have a finite representation in base 10. Because we deal with mathematical values as input, rather than Strings, the value is tacitly undertood as infinitely precise, which is to say that all digits, even trailing zeroes, are understood here as <q>significant</q>.</dd>
         </dl>
         <emu-alg>
-          1. If _v_ = 0, return 1.
           1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
           1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
@@ -250,8 +249,8 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It computes the closest approximation to a given mathematical value that has at most the given number of fractional digits, rounding (if necessary) according to the given rounding mode.</dd>
         </dl>
         <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ = 0, return 0.
+          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If v &lt; 0, then
             1. Let _reverseRoundingMode_ be _roundingMode_.
             1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
@@ -309,7 +308,9 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
           1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
-          1. If _v_ < 0, set _v_ to -_v_.
+          1. If _v_ < 0, then
+            1. Set _v_ to -_v_.
+            1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
           1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _mode_).
           1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_numDigits_</sup> is an integer.
           1. Let _s_ be the unique decimal string representation of _rounded_ without leading zeroes.
