@@ -300,7 +300,7 @@ location: https://github.com/tc39/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders the given mathematical value or a suitable enum (~positive-infinity~, ~negative-infinity~, ~not-a-number~, or ~minus-zero~) with a given number of fractional digits, possibly rounding if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
+          <dd>It renders the given Intl mathematical value with a given number of fractional digits, rounding, if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
         </dl>
         <emu-alg>
           1. If _v_ is ~not-a-number~, return *"NaN"*.
