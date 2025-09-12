@@ -4,18 +4,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
 <pre class="metadata">
-title: Measure
+title: Amount
 status: proposal
 stage: 1
 contributors: Ben Allen, Jesse Alama
-location: https://github.com/tc39/proposal-measure/
+location: https://github.com/tc39/proposal-amount/
 </pre>
 
 <emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-measure/" title="Measure proposal (GitHub)">Measure proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
 </emu-intro>
@@ -149,7 +149,8 @@ location: https://github.com/tc39/proposal-measure/
       <h1>Operations on Decimal Digit Strings</h1>
 
       <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
-        <h1>CountFractionDigits(
+        <h1>
+        CountFractionDigits (
           _s_: a decimal digit String
         ): a non-negative integer
         </h1>
@@ -158,12 +159,16 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
         </dl>
         <emu-alg>
-          1. If _s_ contains a *"."* character, then
-            1. Let _fractionDigits_ be the substring of _s_ after the first *"."* character up to the first occurrence of *"e"* or *"E"* in _s_, if any.
-            1. Let _l_ be the length of _fractionDigits_.
-            1. Return _l_.
+          1. If _s_ contains an occurrence of the code point 0x002E (FULL STOP), then
+             1. Let _fractionDigits_ be the substring of _s_ after the first *"."* character.
+             1. If _fractionDigits_ contains an occurrence of the code point 0x0045 (UPPERCASE E), then
+               1. Set _fractionDigits_ to the substring of _fractionDigits_ from 0 to the first occurrence of the code point 0x0045 (UPPPERCASE E).
+             1. Else if _fractionDigits_ contains an occurrence of the code point 0x0065 (LOWERCASE E), then
+               1. Set _fractionDigits_ to the substring of _fractionDigits_ from 0 to the first occurrence of the code point 0x0065 (LOWERCASE E).
+             1. Let _l_ be the string-length of _fractionDigits_.
+             1. Return _l_.
           1. Otherwise:
-            1. Return 0.
+             1. Return 0.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -191,11 +196,46 @@ location: https://github.com/tc39/proposal-measure/
           1. If _fraction_ < 0.5, return _mLow_.
           1. If _fraction_ > 0.5, return _mHigh_.
           1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"**, return _mHigh_.
+          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"*, return _mHigh_.
           1. If _mLow_ is even, return _mLow_.
           1. Return _mHigh_.
         </emu-alg>
       </emu-clause>
+
+      <emu-clause id="sec-amount-countmvsignificantdigits" type="abstract operation">
+        <h1>CountMVSignificantDigits (
+          _v_: a mathematical value
+        ): a positive integer
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It computes the number of significant digits in a given mathematical value, which is assumed to have a finite representation in base 10. Because we deal with mathematical values as input, rather than Strings, the value is tacitly undertood as infinitely precise, which is to say that all digits, even trailing zeroes, are understood here as <q>significant</q>.</dd>
+        </dl>
+        <emu-alg>
+          1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
+          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
+          1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
+          1. Return the count of digits in the decimal representation of _scaled_.
+        </emu-alg>
+      </emu-clause>
+
+    <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
+      <h1>ReverseRoundingMode (
+        _mode_: a rounding mode
+      ): a rounding mode
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
+      </dl>
+      <emu-alg>
+        1. If _mode_ is *"floor"*, return *"ceil"*.
+        1. If _mode_ is *"ceil"*, return *"floor"*.
+        1. If _mode_ is *"halfCeil"*, return *"halfFloor"*.
+        1. If _mode_ is *"halfFloor"*, return *"halfCeil"*.
+        1. Otherwise, return _mode_.
+      </emu-alg>
+     </emu-clause>
 
       <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
         <h1>RoundAmountValueToFractionDigits(
@@ -209,8 +249,8 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the closest approximation to a given mathematical value that has at most the given number of fractional digits, rounding (if necessary) according to the given rounding mode.</dd>
         </dl>
         <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ = 0, return 0.
+          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If v &lt; 0, then
             1. Let _reverseRoundingMode_ be _roundingMode_.
             1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
@@ -219,16 +259,14 @@ location: https://github.com/tc39/proposal-measure/
             1. If _roundingMode_ is *"halfFloor"*, set _reverseRoundingMode_ to *"halfCeil"*.
             1. Let _d_ be RoundAmountValueToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
             1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. Let _pow_ be _e_ + _n_.
-          1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
+          1. Let _m_ be _v_ × 10<sup>_n_</sup>.
           1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-          1. Return _rounded_ × 10<sup>_e_ + _n_</sup>.
+          1. Return _rounded_ × 10<sup>-_n_</sup>.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
-        <h1>RoundToSignificantDigits(
+        <h1>RoundToSignificantDigits (
           _v_: a mathematical value,
           _n_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -242,24 +280,19 @@ location: https://github.com/tc39/proposal-measure/
           1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ = 0, return 0.
           1. If v &lt; 0, then
-            1. Let _reverseRoundingMode_ be _roundingMode_.
-            1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
-            1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
+            1. Let _reverseRoundingMode_ be ReverseRoundingMode(_roundingMode_).
             1. Let _d_ be RoundToSignificantDigits(–_v_, _n_, _reverseRoundingMode_).
             1. Return –_d_.
           1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. If _n_ ≤ _e_, then
-            1. Let _pow_ be _e_ - _n_.
-            1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
-            1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-            1. Return _rounded_ × 10<sup>_n_ + _e_</sup>.
-          1. Otherwise:
-            1. <mark>todo</mark>.
+          1. Let _pow_ be _e_ - _n_.
+          1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
+          1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
+          1. Return _rounded_ × 10<sup>_n_ + _e_</sup>.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderAmountValueWithFractionDigits(
+        <h1>RenderAmountValueWithFractionDigits (
           _v_: an Intl mathematical value,
           _numDigits_: a non-negative integer,
           optional _roundingMode_: a rounding mode
@@ -267,19 +300,25 @@ location: https://github.com/tc39/proposal-measure/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders the given mathematical value or a suitable enum (~positive-infinity~, ~negative-infinity~, ~not-a-number~, or ~minus-zero~) with a given number of fractional digits, possibly rounding if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
+          <dd>It renders the given Intl mathematical value with a given number of fractional digits, rounding, if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
         </dl>
         <emu-alg>
           1. If _v_ is ~not-a-number~, return *"NaN"*.
           1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
-          1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
+          1. If _v_ is ~minus-zero~, then
+            1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
+            1. Let _z_ be *"-0"*.
+            1. If _numDigits_ = 0, return _z_.
+            1. Otherwise, return the string-concatenation of _z_, *"."* and _trailingZeroes_.
+          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
-          1. If _v_ < 0, set _v_ to -_v_.
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _mode_).
-          1. Set _v_ to _rounded_ × 10<sup>-_numDigits_</sup>.
-          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_numDigits_</sup> is an integer.
-          1. Let _s_ be the unique decimal string representation of _v_ without leading zeroes.
+          1. If _v_ < 0, then
+            1. Set _v_ to -_v_.
+            1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
+          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _roundingMode_).
+          1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_numDigits_</sup> is an integer.
+          1. Let _s_ be the unique decimal string representation of _rounded_ without duplicate leading zeroes.
           1. If _numDigits_ > _e_, then
             1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
             1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
@@ -289,7 +328,7 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
-        <h1>GetAmountOptions(
+        <h1>GetAmountOptions (
           _opts_: an Object
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
@@ -359,7 +398,7 @@ location: https://github.com/tc39/proposal-measure/
               1. Set _significantDigits_ to floor(_l_) + 1.
           1. Otherwise:
             1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-            1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
+            1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without duplicate leading zeroes.
             1. Set _fractionDigits_ to CountFractionDigits(_digitStr_).
           1. Set _O_.[[Value]] to _roundedValue_.
           1. Set _O_.[[SignificantDigits]] to _significantDigits_.
@@ -431,7 +470,6 @@ location: https://github.com/tc39/proposal-measure/
       1. Let _value_ be _O_.[[Value]].
       1. If _fractionDigits_ is not *undefined*, set _value_ to RoundAmountValueToFractionDigits(_value_, _fractionDigits_).
       1. Else if _significantDigits_ is not *undefined*, set _value_ to RoundToSignificantDigits(_value_, _significantDigits_).
-      1. Otherwise, throw a *TypeError* exception.
       1. Let _N_ be OrdinaryObjectCreate(*"%Amount.prototype%"*, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
       1. If _unit_ is not *undefined* and _O_.[[Unit]] is not *undefined*, then
         1. If SameValueNonNumber(_unit_, _O_.[[Unit]]) is *false*, throw a *TypeError* exception.
