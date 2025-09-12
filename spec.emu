@@ -313,7 +313,7 @@ location: https://github.com/tc39/proposal-amount/
             1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
           1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _mode_).
           1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_numDigits_</sup> is an integer.
-          1. Let _s_ be the unique decimal string representation of _rounded_ without leading zeroes.
+          1. Let _s_ be the unique decimal string representation of _rounded_ without duplicate leading zeroes.
           1. If _numDigits_ > _e_, then
             1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
             1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
@@ -393,7 +393,7 @@ location: https://github.com/tc39/proposal-amount/
               1. Set _significantDigits_ to floor(_l_) + 1.
           1. Otherwise:
             1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-            1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
+            1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without duplicate leading zeroes.
             1. Set _fractionDigits_ to CountFractionDigits(_digitStr_).
           1. Set _O_.[[Value]] to _roundedValue_.
           1. Set _O_.[[SignificantDigits]] to _significantDigits_.
