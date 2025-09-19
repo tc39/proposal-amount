@@ -8,8 +8,10 @@
 
 ## Goals and needs
 
-Modeling amounts with a precision is useful for any task that involves physical quantities.
-It can also be useful for other types of real-world amounts, such as currencies.
+In the real world, it is rare to have a number by itself. Numbers are more often measuring _an amount of something_, from the number of apples in a bowl to the amount of Euros in your bank account, and from the number of milliliters in a cup of water to the number of kWh consumed by an electric car per mile. When measuring a physical quantity, numbers also have a _precision_, or a number of significant digits.
+
+Intl formatters have long been able to format amounts of things, but the quantity associated with the number is not carried along with the number into Intl APIs, which causes real-world bugs.
+
 We propose creating a new object for representing amounts,
 and for producing formatted string representations thereof.
 
@@ -23,7 +25,11 @@ Common user needs that can be addressed by a robust API for measurements include
 
 ## Description
 
-We propose creating a new `Amount` API, whose values will be immutable and have the following properties:
+We propose creating a new `Amount` primordial containing an immutable numeric value, precision, and unit.
+
+### Properties
+
+Amount will have the following properties:
 
 Note: ⚠️  All property/method names up for bikeshedding.
 
@@ -53,7 +59,7 @@ The object prototype would provide the following methods:
 * `with(options)`: Create a new Amount based on this one,
   together with additional options.
 
-### Examples
+## Examples
 
 Let's construct an Amount, query its properties, and render it.
 First, we'll work with a bare number (no unit):
@@ -75,7 +81,84 @@ a.toString(); // "42.7[kg]"
 a.toString({ numberOnly: true }); // "42.7"
 ```
 
-#### Rounding
+### Formatting with Intl
+
+An Amount significantly improves the ergonomics of number formatting and encourages better design patterns for i18n correctness, by correctly separating the data model, user locale, and developer settings.
+
+Without Amount, the purpose of each argument is mixed together:
+
+```js
+let numberOfKilograms = 42.7;
+let locale = "zh-CN";
+
+let localizedString = new Intl.NumberFormat(locale, {
+    minimumSignificantDigits: 4,
+    style: "unit",
+    unit: "kilogram",
+    unitDisplay: "long",
+})
+.format(numberOfKilograms);
+console.log(localizedString);  // "42.70千克"
+```
+
+With Amount, it is more ergonomic and therefore easier to do the right thing:
+
+```js
+// Data model: the thing being formatted
+let amt = new Amount("42.7", { unit: "kilogram", significantDigits: 4 });
+
+// User locale: how to localize
+let locale = "zh-CN";
+
+// Developer options: how much space is available, for example.
+let options = { unitDisplay: "long" };
+
+// Put it all together:
+let localizedString = amt.toLocaleString(locale, options);
+console.log(localizedString);  // "42.70千克"
+```
+
+The Amount type can also be interpolated into [MessageFormat](https://github.com/tc39/proposal-intl-messageformat) implementations, starting in userland and potentially in the standard library in the future.
+
+### Selecting Plural Forms
+
+A common footgun in i18n is the need to set the same precision on both `Intl.PluralRules` and `Intl.NumberFormat`. For example:
+
+```js
+// This code is buggy! Do you see why?
+let locale = "en-US";
+let numberOfStars = 1;
+let numberString = new Intl.NumberFormat(locale, { minimumFractionDigits: 1 }).format(numberOfStars);
+switch (new Intl.PluralRules(locale).select(numberOfStars)) {
+case "one":
+    console.log(`The rating is ${numberString} star`);
+    break;
+default:
+    console.log(`The rating is ${numberString} stars`);
+    break;
+}
+```
+
+This code outputs: "The rating is 1.0 star", which is grammatically incorrect even in English, which has relatively simple rules. The problem is exaggerated in languages with additional plural forms and/or other inflections!
+
+Using Amount makes the code work the way it should, and makes it easier to follow the logical flow:
+
+```js
+let locale = "en-US";
+let stars = new Amount(1, { fractionDigits: 1 });
+let numberString = stars.toLocaleString(locale);
+// Note: This uses a potential toLocalePlural method.
+switch (stars.toLocalePlural(locale)) {
+case "one":
+    console.log(`The rating is ${numberString} star`);
+    break;
+default:
+    console.log(`The rating is ${numberString} stars`);
+    break;
+}
+```
+
+### Rounding
 
 If one downgrades the precision of an Amount, rounding will occur. (Upgrading just adds trailing zeroes.)
 
@@ -91,7 +174,7 @@ let b = new Amount("123.456");
 a.with({ significantDigits: 5, roundingMode: "truncate" }).toString(); // "123.45"
 ```
 
-## Units (including currency)
+### Units (including currency)
 
 A core piece of functionality for the proposal is to support units (`mile`, `kilogram`, etc.) as well as currency (`EUR`, `USD`, etc.). An Amount need not have a unit/currency, and if it does, it has one or the other (not both). Example:
 
