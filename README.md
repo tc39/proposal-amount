@@ -140,6 +140,28 @@ Some units can derive other units, such as square meters and cubic yards (to men
 
 Some units can be combined. In the US, it is common to express the heights of people in terms of feet and inches, rather than a non-integer number of feet or a "large" number of inches. For instance, one would say commonly express a height of 71 inches as "5 feet 11 inches" rather than "71 inches" or "5.92 feet". Thus, one would naturally want to support "foot-and-inch" as a compound unit, derivable from a measurement in terms of feet or inches. Likewise, combining units to express, say, velocity (miles per hour) or density (grams per cubic centimeter) also falls under this umbrella.  Since this is closely related to unit conversion, we prefer to see this functionality in Smart Units.
 
+## Frequently Asked Questions
+
+### Why a language feature and not a library?
+
+This type exists primarily for interop with existing native language features, like Intl, and between libraries.
+
+### If Intl is the motivating use case, why not call this Intl.Amount?
+
+Although Intl is what drives some of the champions to pursue this proposal, the use cases are not limited to Intl. The Amount type is a generally-useful abstraction on top of a numeric type with some non-Intl functionality such as serialization and library interop. Optimal i18n on the Web Platform depends on Amount being a widely accepted and used type, not something only for developers who are already using Intl. It is not unlike how Temporal types earning widespread adoption improves localization of datetimes on the Web.
+
+### Why a primordial and not a protocol?
+
+Some delegates unconvinced by the non-Intl use cases have suggested that `Intl.NumberFormat.prototype.format` can read fields from its argument the same as if it were passed a proper Amount object, which we call a "protocol" based approach.
+
+The primordial assists with discoverability and adoption. If it is just a protocol supported by Intl.NumberFormat, then the usage that would get would be significantly lower than if an Amount actually existed as a thing that developers could find and use and benefit from. The primordial also allows fast-paths in engine APIs that accept it as an argument.
+
+The protocol should likely coexist, as it enables polyfills and cross-membrane code.
+
+### Why represent precision as number of significant digits instead of something else like margin of error?
+
+Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant digits: for example, `Number.prototype.toPrecision` and `minimumSignificantDigits` in `Intl.NumberFormat` and `Intl.PluralRules`. We do not wish to innovate in this area. Further, CLDR does not provide data for formatting of precision any other way, and we are unaware of a feature request for it.
+
 ## Related/See also
 
 * [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) (mentioned several times as a natural follow-on proposal to this one)
