@@ -374,9 +374,14 @@ location: https://github.com/tc39/proposal-amount/
         1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. Let _intlMV_ be the StringIntlMV of _toParse_.
-        1. Let _amountValue_ be _intlMV_[0].
-        1. Let _numDigits_ be _intlMV_[1].
+        1. Let _parsed_ be ParseText(_toParse_, |StringNumericLiteral|).
+        1. If _parsed_ is a List of errors, then
+          1. Let _amountValue_ be ~not-a-number~.
+          1. Let _numDigits_ be 0.
+        1. Else,
+          1. Let _intlMV_ be the StringIntlMV of _parsed_.
+          1. Let _amountValue_ be _intlMV_[0].
+          1. Let _numDigits_ be _intlMV_[1].
         1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
