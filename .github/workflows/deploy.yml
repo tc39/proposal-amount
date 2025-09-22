@@ -7,19 +7,34 @@ on:
 
 permissions:
    contents: write
+   pages: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
+
+      - uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-      - run: npm install
+
+      - run: npm ci
       - run: npm run build
-      - name: commit changes
+
+      # Commit changes back to main branch if any
+      - name: Commit build changes to main
         uses: elstudio/actions-js-build/commit@v4
         with:
           commitMessage: "fixup: [spec] `npm run build`"
+
+      # Deploy to gh-pages branch
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          keep_files: true
+          exclude_assets: '.github,node_modules,*.json,*.md,*.yml,*.yaml,spec.emu,src'
