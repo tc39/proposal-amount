@@ -418,7 +418,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Set _O_.[[Value]] to _amountValue_.
           1. Set _O_.[[SignificantDigits]] to _numDigits_..
           1. Set _O_.[[FractionDigits]] to 0.
-        1. If _unit_ is not *undefined*, set _O_.[[Unit]] to _unit_.
+        1. If _unit_ is not *undefined* and _amountValue_ is not ~not-a-number~, set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
