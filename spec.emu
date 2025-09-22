@@ -516,10 +516,7 @@ location: https://github.com/tc39/proposal-amount/
       1. Let _unit_ be _O_.[[Unit]].
       1. Let _mv_ be _O_.[[Value]].
       1. If _hint_ is *"string"*, then
-        1. Let _fractionDigits_ be _O_.[[FractionDigits]].
-        1. Let _str_ be RenderAmountValueWithFractionDigits(_mv_, _fractionDigits_).
-        1. If _unit_ is *undefined*, return _str_.
-        1. Else, return the string-concatenation of _str_, *"["*, _unit_, and *"]"*.
+        1. Return ! Call(%Amount.prototype.toString%, _O_, « »).
       1. Else,
         1. If _unit_ is not *undefined*, throw a *TypeError* exception.
         1. Return the Number value for _mv_.
