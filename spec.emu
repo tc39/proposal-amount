@@ -214,7 +214,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _fraction_ < 0.5, return _mLow_.
           1. If _fraction_ > 0.5, return _mHigh_.
           1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"*, return _mHigh_.
+          1. If _roundingMode_ is *"halfExpand"* or *"halfCeil"*, return _mHigh_.
           1. If _mLow_ is even, return _mLow_.
           1. Return _mHigh_.
         </emu-alg>
