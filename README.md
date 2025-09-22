@@ -8,7 +8,7 @@
 
 ## Goals and needs
 
-In the real world, it is rare to have a number by itself. Numbers are more often measuring _an amount of something_, from the number of apples in a bowl to the amount of Euros in your bank account, and from the number of milliliters in a cup of water to the number of kWh consumed by an electric car per mile. When measuring a physical quantity, numbers also have a _precision_, or a number of significant digits.
+In the real world, it is rare to have a number by itself. Numbers are more often measuring _an amount of something_, from the number of apples in a bowl to the amount of Euros in your bank account, and from the number of milliliters in a cup of water to the number of kWh consumed by an electric car per mile. When measuring a physical quantity, numbers also have a _precision_.
 
 Intl formatters have long been able to format amounts of things, but the quantity associated with the number is not carried along with the number into Intl APIs, which causes real-world bugs.
 
@@ -34,20 +34,18 @@ Amount will have the following properties:
 Note: ⚠️  All property/method names up for bikeshedding.
 
 * `unit` (String or undefined): The unit of measurement with which number should be understood (with *undefined* indicating "none supplied")
-* `significantDigits` (Number): how many significant digits does this value contain? (Should be a positive integer)
 * `fractionalDigits` (Number): how many digits are required to fully represent the part of the fractional part of the underlying mathematical value. (Should be a non-negative integer.)
 
 #### Precision
 
-A big question is how we should handle precision. When constructing an Amount, both the significant digits and fractional digits are recorded.
+A big question is how we should handle precision. When constructing an Amount, both fractional digits are recorded.
 
 ### Constructor
 
 * `new Amount(value[, options])`. Constructs an Amount with the mathematical value of `value`, and optional `options`, of which the following are supported (all being optional):
   * `unit` (String): a marker for the measurement
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
-  * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
-  * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
+  * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction digits.
 
 The object prototype would provide the following methods:
 
@@ -67,7 +65,6 @@ First, we'll work with a bare number (no unit):
 ```js
 let a = new Amount("123.456");
 a.fractionDigits; // 3
-a.significantDigits; // 6
 a.with({ fractionDigits: 4 }).toString(); // "123.4560"
 ```
 
@@ -164,14 +161,14 @@ If one downgrades the precision of an Amount, rounding will occur. (Upgrading ju
 
 ```js
 let a = new Amount("123.456");
-a.with({ significantDigits: 5 }).toString(); // "123.46"
+a.with({ fractionDigits: 2 }).toString(); // "123.46"
 ```
 
 By default, we use the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal). One can specify a rounding mode:
 
 ```js
 let b = new Amount("123.456");
-a.with({ significantDigits: 5, roundingMode: "truncate" }).toString(); // "123.45"
+a.with({ fractionDigits: 2, roundingMode: "truncate" }).toString(); // "123.45"
 ```
 
 ### Units (including currency)
@@ -241,9 +238,9 @@ The primordial assists with discoverability and adoption. If it is just a protoc
 
 The protocol should likely coexist, as it enables polyfills and cross-membrane code.
 
-### Why represent precision as number of significant digits instead of something else like margin of error?
+### Why represent precision as number of fraction digits instead of something else like margin of error?
 
-Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant digits: for example, `Number.prototype.toPrecision` and `minimumSignificantDigits` in `Intl.NumberFormat` and `Intl.PluralRules`. We do not wish to innovate in this area. Further, CLDR does not provide data for formatting of precision any other way, and we are unaware of a feature request for it.
+Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant digits: for example, `Number.prototype.toPrecision` and `minimumSignificantDigits` in `Intl.NumberFormat` and `Intl.PluralRules`. With our understanding of fraction digits, there's a standard way to compute significant digits. We do not wish to innovate in this area. Further, CLDR does not provide data for formatting of precision any other way, and we are unaware of a feature request for it.
 
 ## Related/See also
 
