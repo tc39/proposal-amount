@@ -870,7 +870,7 @@ let referencePane = {
     this.$pane.appendChild(this.$tableContainer);
 
     if (menu != null) {
-      menu.$specContainer.appendChild(this.$container);
+      menu.$specContainer.after(this.$container);
     }
   },
 
@@ -1202,6 +1202,9 @@ function doShortcut(e) {
     document.documentElement.classList.toggle('show-ao-annotations');
   } else if (e.key === '?') {
     document.getElementById('shortcuts-help').classList.toggle('active');
+  } else if (e.key === ';') {
+    let el = document.getElementById('bd75b99add5f');
+    if (el != null) el.remove();
   }
 }
 
@@ -2249,7 +2252,7 @@ emu-oneof {
 }
 
 emu-nt {
-  display: inline;
+  display: inline-block;
   font-style: italic;
   white-space: nowrap;
   text-indent: 0;
@@ -2589,7 +2592,7 @@ table.real-table th {
 }
 
 emu-table td {
-  background: var(--background-color);
+  background: transparent;
 }
 
 td[colspan]:not([colspan="1"]), th[colspan]:not([colspan="1"]) {
@@ -2696,7 +2699,7 @@ tr.del > td {
   height: 100vh;
   max-width: 500px;
   box-sizing: border-box;
-  background-color: var(--control-background-color);
+  background: var(--control-background-color);
   overflow: hidden;
   transition: opacity 0.1s linear;
   padding: 0 5px;
@@ -3137,7 +3140,7 @@ li.menu-search-result-term::before {
 
 .toolbox::after {
   border-color: var(--toolbox-tail-background-outside-color);
-  border-top-color: var(--control-background-color);
+  border-top-color: var(--control-border-color);
   border-width: 10px;
   margin-left: -10px;
 }
@@ -3154,7 +3157,7 @@ li.menu-search-result-term::before {
   left: 0;
   right: 0;
   display: none;
-  background-color: var(--control-background-color);
+  background: var(--control-background-color);
   z-index: 1;
 }
 
@@ -3195,6 +3198,17 @@ li.menu-search-result-term::before {
   padding-right: 5px;
 }
 
+emu-normative-optional {
+  display: block;
+}
+
+emu-normative-optional::before {
+  display: block;
+  color: var(--attributes-tag-foreground-color);
+  content: "NORMATIVE OPTIONAL";
+}
+
+emu-normative-optional,
 [normative-optional],
 [deprecated],
 [legacy] {
@@ -3227,7 +3241,7 @@ li.menu-search-result-term::before {
   outline: solid 10000px var(--control-dialog-fade-color);
   border-radius: 5px;
   border-width: 1px 1px 0 1px;
-  background-color: var(--control-background-color);
+  background: var(--control-background-color);
   display: none;
 }
 
@@ -3531,6 +3545,18 @@ figcaption:has(+ emu-table) {
 emu-alg ol li:last-child {
   break-before: avoid;
   break-after: initial; /* it's okay to break after the last item in a list, even if it's also the first item in the list */
+}
+
+emu-normative-optional {
+  break-inside: avoid;
+}
+
+emu-normative-optional emu-clause[id] {
+  margin-top: 0;
+}
+
+emu-normative-optional emu-alg > ol {
+  margin-bottom: 0;
 }
 
 emu-note {
