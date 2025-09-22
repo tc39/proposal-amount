@@ -220,23 +220,6 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-countmvsignificantdigits" type="abstract operation">
-        <h1>CountMVSignificantDigits (
-          _v_: a mathematical value
-        ): a positive integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of significant digits in a given mathematical value, which is assumed to have a finite representation in base 10. Because we deal with mathematical values as input, rather than Strings, the value is tacitly undertood as infinitely precise, which is to say that all digits, even trailing zeroes, are understood here as <q>significant</q>.</dd>
-        </dl>
-        <emu-alg>
-          1. Assert: There exists a non-negative integer _n_ such that _v_ × 10<sup>_n_</sup> is an integer.
-          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>_e_</sup> is an integer.
-          1. Let _scaled_ be _v_ × 10<sup>_e_</sup>.
-          1. Return the count of digits in the decimal representation of _scaled_.
-        </emu-alg>
-      </emu-clause>
-
     <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
       <h1>ReverseRoundingMode (
         _mode_: a rounding mode
