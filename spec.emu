@@ -164,10 +164,6 @@ location: https://github.com/tc39/proposal-amount/
       <emu-alg>
         1. Return 0.
       </emu-alg>
-      <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
-      <emu-alg>
-        1. Return CountFractionDigits of |StrUnsignedDecimalLiteral|.
-      </emu-alg>
       <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
       <emu-alg>
         1. Return 0.
