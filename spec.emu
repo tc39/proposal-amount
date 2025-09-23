@@ -337,7 +337,7 @@ location: https://github.com/tc39/proposal-amount/
       <emu-clause id="sec-amount-SignificantToFractionDigits" type="abstract operation">
         <h1>SignificantToFractionDigits (
           _value_: an Intl mathematical value,
-          _significantDigits_: an integer
+          _significantDigits_: a positive integer
         ): an integer
         </h1>
         <dl class="header"></dl>
