@@ -237,7 +237,7 @@ location: https://github.com/tc39/proposal-amount/
       <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
         <h1>RoundAmountValueToFractionDigits(
           _v_: a mathematical value,
-          _n_: a non-negative integer,
+          _n_: an integer,
           optional _roundingMode_: a rounding mode
         ): a mathematical value
         </h1>
