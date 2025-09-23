@@ -327,8 +327,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _value_ is one of 0 or ~negative-zero~, then
             1. Let _integerDigits_ be 1.
           1. Else,
-            1. Let _e_ be the smallest integer such that _e_ > the base 10 logarithm of abs(_value_).
-            1. Let _integerDigits_ be 1 + _e_.
+            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
           1. Assert: _integerDigits_ + _fractionDigits_ > 0.
           1. Return _integerDigits_ + _fractionDigits_.
         </emu-alg>
@@ -347,8 +346,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _value_ is one of 0 or ~negative-zero~, then
             1. Let _integerDigits_ be 1.
           1. Else,
-            1. Let _e_ be the smallest integer such that _e_ > the base 10 logarithm of abs(_value_).
-            1. Let _integerDigits_ be 1 + _e_.
+            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
           1. Assert: _significantDigits_ > 0.
           1. Return _significantDigits_ - _integerDigits_.
         </emu-alg>
