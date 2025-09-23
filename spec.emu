@@ -290,8 +290,7 @@ location: https://github.com/tc39/proposal-amount/
             1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _fractionDigits_ times.
           1. Otherwise:
             1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
-            1. Let _p_ be the unique integer such that 1 ≤ _v_ × 10<sup>_p_</sup> < 10.
-            1. Assert: _fractionDigits_ < 0.
+            1. If _v_ = 0, let _p_ be 0, else let _p_ be the unique integer such that 1 ≤ _v_ × 10<sup>_p_</sup> < 10.
             1. Let _n_ be _p_ + _fractionDigits_.
             1. Assert: _n_ < 0.
             1. Let _exp_ be the unique string representation of -_n_ in base-10 without duplicate leading zeros.
