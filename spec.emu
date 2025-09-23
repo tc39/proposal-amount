@@ -292,25 +292,21 @@ location: https://github.com/tc39/proposal-amount/
             1. Set _v_ to -_v_.
             1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
           1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _roundingMode_).
-          1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_numDigits_</sup> is an integer.
+          1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_e_</sup> is an integer.
           1. Let _s_ be the unique decimal string representation of _rounded_ without duplicate leading zeroes.
-          1. If _numDigits_ > _e_, then
+          1. If _e_ < numDigits_, then
             1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
             1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
-          1. If 0 < _numDigits_, then
+          1. Else if 0 < _numDigits_, then
             1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
           1. Otherwise:
-            1. Assert: _rounded_ is an integer.
             1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
             1. Let _p_ be the unique integer such that 1 ≤ _rounded_ × 10<sup>_p_</sup> < 10.
             1. Let _n_ be _p_ + _numDigits_.
-            1. Assert: _n_ ≥ 0.
-            1. Let _exp_ be the unique string representation of _n_ in base-10 without duplicate leading zeros.
-            1. If _n_ = 0, then
-              1. Return the string-concatenation of _s_, *"e"*, and _exp_.
-            1. Otherwise:
-              1. Let _remainingDigits_ be the substring of _s_ from 1 to _n_.
-              1. Return the string-concatenation of _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _exp_.
+            1. Assert: _n_ < 0.
+            1. Let _exp_ be the unique string representation of -_n_ in base-10 without duplicate leading zeros.
+            1. Let _remainingDigits_ be the substring of _s_ from 1 to _n_.
+            1. Return the string-concatenation of _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _exp_.
         </emu-alg>
       </emu-clause>
 
