@@ -277,13 +277,8 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
           1. If _v_ is ~minus-zero~, then
-            1. If _fractionDigits_ < 0, then
-              1. Let _exp_ be the unique string representation of -_fractionDigits_ in base 10 without duplicate leading zeros.
-              1. Return the string-concatenation of *"-0"*, *"e"*, and _exp_.
-            1. Otherwise:
-              1. If _fractionDigits_ = 0, return *"-0"*.
-              1. Let _trailingZeroes_ be *"0"* repeated _fractionDigits_ times.
-              1. Otherwise, return the string-concatenation of *"-0"*, *"."* and _trailingZeroes_.
+            1. Let _s_ be RenderAmountValueWithFractionDigits(0, _fractionDigits_:).
+            1. Return the string-concatenation of *"-"* and _s_.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
           1. If _v_ < 0, set _v_ to -_v_.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_e_</sup> is an integer.
