@@ -297,7 +297,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _e_ < _numDigits_, then
             1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
             1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
-          1. Else if 0 < _numDigits_, then
+          1. Else if 0 ≤ _numDigits_, then
             1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
           1. Otherwise:
             1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
