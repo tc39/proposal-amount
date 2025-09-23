@@ -282,7 +282,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
           1. If _v_ < 0, set _v_ to -_v_.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_e_</sup> is an integer.
-          1. Let _s_ be the unique decimal string representation of _v_ without duplicate leading zeroes.
+          1. If _v_ = 0, let _s_ be *"0"*, else let _s_ be the unique decimal string representation of _v_ that either starts with "0." or does not start with "0".
           1. If _e_ < _fractionDigits_, then
             1. If _v_ is an integer, return the string-concatenation of _prefix_, _s_, *"."*, and *"0"* repeated _fractionDigits_ times.
             1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _fractionDigits_ - _e_ times.
