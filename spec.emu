@@ -265,7 +265,7 @@ location: https://github.com/tc39/proposal-amount/
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
         <h1>RenderAmountValueWithFractionDigits (
           _v_: an Intl mathematical value,
-          _numDigits_: an integer
+          _fractionDigits_: an integer
         ): a String
         </h1>
         <dl class="header">
@@ -277,28 +277,28 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
           1. If _v_ is ~positive-infinity~, return *"Infinity"*.
           1. If _v_ is ~minus-zero~, then
-            1. If _numDigits_ < 0, then
-              1. Let _exp_ be the unique string representation of -_numDigits_ in base 10 without duplicate leading zeros.
+            1. If _fractionDigits_ < 0, then
+              1. Let _exp_ be the unique string representation of -_fractionDigits_ in base 10 without duplicate leading zeros.
               1. Return the string-concatenation of *"0"*, *"e"*, and _exp_.
             1. Otherwise:
-              1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
+              1. Let _trailingZeroes_ be *"0"* repeated _fractionDigits_ times.
               1. Let _z_ be *"-0"*.
-              1. If _numDigits_ = 0, return _z_.
+              1. If _fractionDigits_ = 0, return _z_.
               1. Otherwise, return the string-concatenation of _z_, *"."* and _trailingZeroes_.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
           1. If _v_ < 0, set _v_ to -_v_.
           1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_e_</sup> is an integer.
           1. Let _s_ be the unique decimal string representation of _v_ without duplicate leading zeroes.
-          1. If _e_ < _numDigits_, then
-            1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
-            1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
-          1. Else if 0 ≤ _numDigits_, then
-            1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
+          1. If _e_ < _fractionDigits_, then
+            1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _fractionDigits_ times.
+            1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _fractionDigits_ - _e_ times.
+          1. Else if 0 ≤ _fractionDigits_, then
+            1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _fractionDigits_ times.
           1. Otherwise:
             1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
             1. Let _p_ be the unique integer such that 1 ≤ _v_ × 10<sup>_p_</sup> < 10.
-            1. Assert: _numDigits_ < 0.
-            1. Let _n_ be _p_ + _numDigits_.
+            1. Assert: _fractionDigits_ < 0.
+            1. Let _n_ be _p_ + _fractionDigits_.
             1. Assert: _n_ < 0.
             1. Let _exp_ be the unique string representation of -_n_ in base-10 without duplicate leading zeros.
             1. Let _remainingDigits_ be the substring of _s_ from 1 to _n_.
