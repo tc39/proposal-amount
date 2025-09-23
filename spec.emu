@@ -302,6 +302,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Otherwise:
             1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
             1. Let _p_ be the unique integer such that 1 ≤ _rounded_ × 10<sup>_p_</sup> < 10.
+            1. Assert: _numDigits_ < 0.
             1. Let _n_ be _p_ + _numDigits_.
             1. Assert: _n_ < 0.
             1. Let _exp_ be the unique string representation of -_n_ in base-10 without duplicate leading zeros.
