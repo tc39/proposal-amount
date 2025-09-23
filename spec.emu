@@ -370,7 +370,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
-            1. If _fractionDigits_ is not a non-negative integral number, throw a *RangeError* exception.
+            1. If _fractionDigits_ is not an integral number, throw a *RangeError* exception.
           1. Else if _significantDigits_ is not *undefined*, then
             1. If _significantDigits_ is not an integral number, throw a *RangeError* exception.
             1. If ℝ(_significantDigits_) < 1, throw a *RangeError* exception.
