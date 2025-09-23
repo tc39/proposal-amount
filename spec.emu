@@ -325,6 +325,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _value_ is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, then
             1. Return 0.
           1. If _value_ is one of 0 or ~negative-zero~, then
+            1. If _fractionDigits_ < 0, return 1.
             1. Let _integerDigits_ be 1.
           1. Else,
             1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
