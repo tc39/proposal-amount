@@ -279,7 +279,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If _v_ is ~minus-zero~, then
             1. If _fractionDigits_ < 0, then
               1. Let _exp_ be the unique string representation of -_fractionDigits_ in base 10 without duplicate leading zeros.
-              1. Return the string-concatenation of *"0"*, *"e"*, and _exp_.
+              1. Return the string-concatenation of *"-0"*, *"e"*, and _exp_.
             1. Otherwise:
               1. Let _trailingZeroes_ be *"0"* repeated _fractionDigits_ times.
               1. Let _z_ be *"-0"*.
