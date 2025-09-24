@@ -443,6 +443,39 @@ location: https://github.com/tc39/proposal-amount/
 <emu-clause id="sec-amount-prototype-properties">
   <h1>Properties of the Amount Prototype</h1>
 
+  <emu-clause id="sec-amount.prototype.fractiondigits">
+    <h1>get Decimal.prototype.fractionDigits</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a Number value indicating how many fraction digits an Amount contains. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[FractionDigits]]).
+      1. Let _fractionDigits_ be _O_.[[FractionDigits]].
+      1. Return 𝔽(_fractionDigits_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-amount.prototype.significantdigits">
+    <h1>get Decimal.prototype.significantDigits</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a Number value indicating how many significant digits an Amount contains. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[FractionDigits]]).
+      1. Let _fractionDigits_ be _O_.[[FractionDigits]].
+      1. Let _significantDigits_ be FractionToSignificantDigits(_fractionDigits_).
+      1. Return 𝔽(_significantDigits_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-amount.prototype.unit">
+    <h1>get Decimal.prototype.unit</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a String value (or *undefined*) indicating the unit that this Amount has. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Unit]]).
+      1. Return _O_.[[Unit]].
+    </emu-alg>
+  </emu-clause>
+
   <emu-clause id="sec-amount.prototype.tostring">
     <h1>Amount.prototype.toString ( [ _options_ ] )</h1>
     <p>This method returns a String value that renders the underlying mathematical value according to its precision, as well as a unit indicator, if present.</p>
