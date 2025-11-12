@@ -27,9 +27,16 @@
 
       <emu-alg>
         1. Let _O_ be the *this* value.
-        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+        1. Let _amountUnit_ be _O_.[[Unit]].
+        1. Let _optionsUnit_ be _options_.[[unit]].
+        1. If _amountUnit_ is a String, then
+          1. If _optionsUnit_ is a String, then
+            1. If _amountUnit_ is not equal to _optionsUnit_, throw a *TypeError* exception.
+          1. Else,
+            1. Set _options_.[[unit]] to _amountUnit_.
         1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
-        1. Return FormatNumeric(_numberFormat_, _O_.[[AmountData]]).
+        1. Return FormatNumeric(_numberFormat_, _O_.[[Value]]).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -152,7 +159,7 @@
         </dd>
       </dl>
       <emu-alg>
-        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderAmountValueWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
+        1. Let _primValue_ be ? ToPrimitive(_value_, <del>~number~</del><ins>~string~</ins>).
         1. If _primValue_ is a BigInt, return ℝ(_primValue_).
         1. If _primValue_ is a String, then
           1. Let _str_ be _primValue_.
@@ -161,8 +168,10 @@
           1. If _x_ is *-0*<sub>𝔽</sub>, return ~negative-zero~.
           1. Let _str_ be Number::toString(_x_, 10).
         1. Let _text_ be StringToCodePoints(_str_).
-        1. Let _literal_ be ParseText(_text_, |StringNumericLiteral|).
-        1. If _literal_ is a List of errors, return ~not-a-number~.
+        1. Let _trimmedText_ be the longest prefix of _text_ that satisfies the syntax of a |StringNumericLiteral|, which might be _text_ itself. If there is no such prefix, return ~not-a-number~.
+        1. NOTE: The previous step is a adapted from <emu-xref href="#sec-parsefloat-string">parseFloat</emu-xref>.
+        1. Let _literal_ be ParseText(_trimmedText_, |StringNumericLiteral|).
+        1. <del>If _literal_ is a List of errors, return ~not-a-number~.</del>
         1. Let _intlMV_ be the StringIntlMV of _literal_.
         1. If _intlMV_ is a mathematical value, then
           1. Let _rounded_ be RoundMVResult(abs(_intlMV_)).
