@@ -29,12 +29,19 @@
         1. Let _O_ be the *this* value.
         1. Perform ? RequireInternalSlot(_O_, [[Value]]).
         1. Let _amountUnit_ be _O_.[[Unit]].
-        1. Let _optionsUnit_ be ? Get(_options_, *"unit"*).
+        1. If _options_ is an Object, let _optionsUnit_ be ? Get(_options_, *"unit"*) else let _optionsUnit_ be *undefined*.
         1. If _amountUnit_ is a String, then
           1. If _optionsUnit_ is a String, then
             1. If _amountUnit_ is not equal to _optionsUnit_, throw a *TypeError* exception.
-          1. Else,
-            1. Call ? Set(_options_., *"unit"*, _amountUnit_, *false*).
+          1. Else if _options_ is an Object, then
+            1. Let _propsAndValues_ be ? EnumerableOwnProperties(_options_, ~key+value~).
+            1. Let _newOptions_ be OrdinaryObjectCreate(%Object.prototype%).
+            1. For each element _propAndValue_ of _propsAndValues_, do
+              1. Let _prop_ be _propAndValue_.[[0]].
+              1. Let _value_ be _propAndValue_.[[1]].
+              1. If _prop_ is *"unit"*, set _value_ to _amountUnit_.
+              1. Call ? Set(_newOptions_, _prop_, _value_, *false*).
+            1. Set _options_ to _newOptions_.
         1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
         1. Return FormatNumeric(_numberFormat_, _O_.[[Value]]).
       </emu-alg>
