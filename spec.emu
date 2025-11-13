@@ -374,6 +374,25 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-amount-significanttofractiondigits" type="abstract operation">
+        <h1>SignificantToFractionDigits (
+          _value_: an Intl mathematical value,
+          _significantDigits_: a positive integer
+        ): an integer
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. If _value_ is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, then
+            1. Return 0.
+          1. If _value_ is one of 0 or ~negative-zero~, then
+            1. Let _integerDigits_ be 1.
+          1. Else,
+            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
+          1. Assert: _significantDigits_ > 0.
+          1. Return _significantDigits_ - _integerDigits_.
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an Object
