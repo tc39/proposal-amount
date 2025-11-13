@@ -20,6 +20,103 @@ location: https://github.com/tc39/proposal-amount/
   </ul>
 </emu-intro>
 
+<emu-clause id="sec-ecmascript-data-types-and-values">
+  <h1>ECMAScript Data Types and Values</h1>
+  <emu-clause id="sec-ecmascript-language-types">
+    <h1>ECMAScript Language Types</h1>
+    <emu-clause id="sec-numeric-types">
+      <h1>Numeric Types</h1>
+      <emu-clause id="sec-ecmascript-language-types-number-type">
+        <h1>The Number Type</h1>
+        <emu-clause id="" type="abstract operation">
+          <h1>MVToNonExponentialString(
+            _x_ : a mathematical value,
+            _radix_ : an integer in the inclusive interval from 2 to 36
+           ): a String
+           </h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>It represents _x_ as a String using a positional numeral system with radix _radix_. The digits used in the representation of a number using radix _r_ are taken from the first _r_ code units of *"0123456789abcdefghijklmnopqrstuvwxyz"* in order. The representation of numbers with magnitude greater than or equal to *1*<sub>𝔽</sub> never includes leading zeroes.</dd>
+          </dl>
+          <emu-alg>
+            1. If _radix_ ≠ 10 or _n_ is in the inclusive interval from -5 to 21, then
+              1. If _n_ ≥ _k_, then
+                1. Return the string-concatenation of:
+                  * the code units of the _k_ digits of the representation of _s_ using radix _radix_
+                  * _n_ - _k_ occurrences of the code unit 0x0030 (DIGIT ZERO)
+              1. Else if _n_ > 0, then
+                1. Return the string-concatenation of:
+                  * the code units of the most significant _n_ digits of the representation of _s_ using radix _radix_
+                  * the code unit 0x002E (FULL STOP)
+                  * the code units of the remaining _k_ - _n_ digits of the representation of _s_ using radix _radix_
+              1. Else,
+                1. Assert: _n_ ≤ 0.
+                1. Return the string-concatenation of:
+                  * the code unit 0x0030 (DIGIT ZERO)
+                  * the code unit 0x002E (FULL STOP)
+                  * -_n_ occurrences of the code unit 0x0030 (DIGIT ZERO)
+                  * the code units of the _k_ digits of the representation of _s_ using radix _radix_
+          </emu-alg>
+        </emu-clause>
+        <emu-clause id="sec-numeric-types-number-tostring" type="numeric method" oldids="sec-tostring-applied-to-the-number-type">
+          <h1>
+            Number::toString (
+              _x_: a Number,
+              _radix_: an integer in the inclusive interval from 2 to 36,
+            ): a String
+          </h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>It represents _x_ as a String using a positional numeral system with radix _radix_. The digits used in the representation of a number using radix _r_ are taken from the first _r_ code units of *"0123456789abcdefghijklmnopqrstuvwxyz"* in order. The representation of numbers with magnitude greater than or equal to *1*<sub>𝔽</sub> never includes leading zeroes.</dd>
+          </dl>
+          <emu-alg>
+            1. If _x_ is *NaN*, return *"NaN"*.
+            1. If _x_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *"0"*.
+            1. If _x_ &lt; *-0*<sub>𝔽</sub>, return the string-concatenation of *"-"* and Number::toString(-_x_, _radix_).
+            1. If _x_ is *+∞*<sub>𝔽</sub>, return *"Infinity"*.
+            1. [id="step-number-tostring-intermediate-values"] Let _n_, _k_, and _s_ be integers such that _k_ ≥ 1, _radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>, 𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) is _x_, and _k_ is as small as possible. Note that _k_ is the number of digits in the representation of _s_ using radix _radix_, that _s_ is not divisible by _radix_, and that the least significant digit of _s_ is not necessarily uniquely determined by these criteria.
+            1. If _radix_ ≠ 10 or _n_ is in the inclusive interval from -5 to 21, then
+              1. If _n_ ≥ _k_, then
+                1. Return the string-concatenation of:
+                  * the code units of the _k_ digits of the representation of _s_ using radix _radix_
+                  * _n_ - _k_ occurrences of the code unit 0x0030 (DIGIT ZERO)
+              1. Else if _n_ > 0, then
+                1. Return the string-concatenation of:
+                  * the code units of the most significant _n_ digits of the representation of _s_ using radix _radix_
+                  * the code unit 0x002E (FULL STOP)
+                  * the code units of the remaining _k_ - _n_ digits of the representation of _s_ using radix _radix_
+              1. Else,
+                1. Assert: _n_ ≤ 0.
+                1. Return the string-concatenation of:
+                  * the code unit 0x0030 (DIGIT ZERO)
+                  * the code unit 0x002E (FULL STOP)
+                  * -_n_ occurrences of the code unit 0x0030 (DIGIT ZERO)
+                  * the code units of the _k_ digits of the representation of _s_ using radix _radix_
+            1. NOTE: In this case, the input will be represented using scientific E notation, such as `1.2e+3`.
+            1. Assert: _radix_ is 10.
+            1. If _n_ &lt; 0, then
+              1. Let _exponentSign_ be the code unit 0x002D (HYPHEN-MINUS).
+            1. Else,
+              1. Let _exponentSign_ be the code unit 0x002B (PLUS SIGN).
+            1. If _k_ = 1, then
+              1. Return the string-concatenation of:
+                * the code unit of the single digit of _s_
+                * the code unit 0x0065 (LATIN SMALL LETTER E)
+                * _exponentSign_
+                * the code units of the decimal representation of abs(_n_ - 1)
+            1. Return the string-concatenation of:
+              * the code unit of the most significant digit of the decimal representation of _s_
+              * the code unit 0x002E (FULL STOP)
+              * the code units of the remaining _k_ - 1 digits of the decimal representation of _s_
+              * the code unit 0x0065 (LATIN SMALL LETTER E)
+              * _exponentSign_
+              * the code units of the decimal representation of abs(_n_ - 1)
+          </emu-alg>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
+
 <emu-clause id="sec-the-amount-object">
   <h1>The Amount Object</h1>
   <emu-intro id="sec-amount-intro">
