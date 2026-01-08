@@ -1,7 +1,7 @@
 name: Deploy PR Previews
 
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - reopened
@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - uses: actions/setup-node@v4
         with:
