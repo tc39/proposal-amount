@@ -11,7 +11,8 @@
 Modeling amounts with a precision is useful for any task that involves physical quantities.
 It can also be useful for other types of real-world amounts, such as currencies.
 We propose creating a new object for representing amounts,
-and for producing formatted string representations thereof.
+for producing formatted string representations thereof,
+and for converting amounts between scales.
 
 Common user needs that can be addressed by a robust API for measurements include, but are not limited to:
 
@@ -20,6 +21,10 @@ Common user needs that can be addressed by a robust API for measurements include
 * The need to represent currency values. Often users will want to keep track of money values together with the currency in which those values are denominated.
 
 * The need to format measurements into string representations
+
+* The need to convert measurements from one scale to another
+
+* Related to both of the above, the need to localize measurements.
 
 ## Description
 
@@ -44,6 +49,24 @@ A big question is how we should handle precision. When constructing an Amount, b
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
 
 The object prototype would provide the following methods:
+
+* `convertTo(options)`. This method returns an Amount in the scale indicated by the `options` parameter,
+  with the value of the new Amount being the value of the Amount it is called on converted to the new scale.
+  The `options` object supports all the same properties as the `options` of the Amount constructor, as well as:
+
+  * `locale` (String or Array of Strings or undefined):
+    The locale for which the preferred unit of the corresponding category is determined.
+  * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
+
+  The `options` must contain at least one of `unit`, `locale`, or `usage`.
+  If the `options` contains an explicit `unit` value, it must not contain `locale` or `usage`.
+  If `locale` is set and `usage` is undefined, the `"default"` usage is assumed.
+  If `usage` is set and `locale` is undefined, the default locale is assumed.
+
+  Calling `convertTo()` will throw an error if conversion is not supported
+  for the Amount's unit (such as currency units),
+  or if the resolved conversion target is not valid for the Amount's unit
+  (such as attempting to convert a mass unit into a length unit).
 
 * `toString([ options ])`: Returns a string representation of the Amount.
   By default, returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have an amount; otherwise, just the bare numeric value.
@@ -100,12 +123,42 @@ let a = new Amount("123.456", { unit: "kg" }); // 123.456 kilograms
 let b = new Amount("42.55", { unit: "EUR" }); // 42.55 Euros
 ```
 
-Note that, currently, no meaning is specified within Amount for units.
+Note that, currently, no meaning is specified within Amount for units, except for what is supported for unit conversion.
 You can use `"XYZ"` or `"keelogramz"` as a unit.
 Calling `toLocaleString()` on an Amount with a unit not supported by Intl.NumberFormat will throw an Error.
 Unit identifiers consisting of three upper-case ASCII letters will be formatted with `style: 'currency'`,
 while all other units will be formatted with `style: 'unit'`.
 
+### Unit conversion
+
+Unit conversion is supported for some units, the data for which is provided by the CLDR in the its file
+[`common/supplemental/units.xml`](https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml).
+This file also provides the data for per-usage and per-locale unit preferences.
+
+For each unit type, the data given in CLDR defines
+a multiplication factor for converting from a source unit to the unit type's base unit.
+For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
+while the conversion from `inch` to `meter` is given as 0.3048/12.
+
+Unit conversions with Amount work by first converting the source unit to the base unit,
+and then to the target unit.
+Each of these operations is done with Number multiplication or division.
+For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
+```js
+1.75 * 0.3048 / 0.025400000000000002 = 20.999999999999996
+```
+
+Rounding is applied only to the final result,
+according to the `fractionDigits`, `significantDigits`, and `roundingMode` set in the method's `options`.
+The precision of the source Amount is not retained.
+
+For example:
+
+```js
+let feet = new Amount(1.75, { unit: "foot" });
+feet.convertTo({ unit: "inch", fractionDigits: 2 ); // 21.00 inches
+feet.convertTo({ locale: "fr", usage: "person", significantDigits: 3 }); // 53.3 cm
+```
 
 ## Related but out-of-scope features
 
@@ -123,14 +176,6 @@ Below is a list of mathematical operations that one could consider supporting. H
 
 could be imagined, but are out-of-scope in this proposal.
 This proposal focuses on the numeric core that future proposals can build on.
-
-### Unit conversion
-
-One might want to convert an Amount from one unit (e.g., miles) to another (e.g., kilometers).
-We envision that functionality to be potentially introduced as part of the [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) proposal.
-This implies that converting from unit to another is not supported,
-as well as converting amounts between scales (e.g., converting grams to kilograms).
-Our work here in this proposal is designed to provide a foundation for such ideas.
 
 ### Derived units
 
