@@ -1,10 +1,18 @@
-# Representing Measures
+# Representing Amounts
 
 **Stage**: 1
 
 **Champion**: Ben Allen [@ben-allen](https://github.com/ben-allen)
 
 **Author**: Ben Allen [@ben-allen](https://github.com/ben-allen)
+
+**TC39 discussions**:
+
+- 2025-11: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-11/november-20.md#amount-stage-1-update)
+- 2025-07: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-07/july-29.md#measureamount-for-stage-2), [Continuation](https://github.com/tc39/notes/blob/main/meetings/2025-07/july-30.md#continuation-measureamount-for-stage-2)
+- 2025-04: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-04/april-16.md#stage-1-update-for-decimal--measure-amounts)
+- 2024-12: [Update](https://github.com/tc39/notes/blob/main/meetings/2024-12/december-05.md#measure-stage-1-update)
+- 2024-10: [Stage 1](https://github.com/tc39/notes/blob/main/meetings/2024-10/october-10.md#measure-object-stage-0)
 
 ## Goals and needs
 
