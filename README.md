@@ -45,7 +45,7 @@ A big question is how we should handle precision. When constructing an Amount, b
 The object prototype would provide the following methods:
 
 * `toString()`: A string representation of the Amount.
-  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have an amount;
+  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have a unit;
   otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
@@ -74,7 +74,7 @@ a.toLocaleString("fr"); // "42,7 kg"
 
 #### Rounding
 
-If the given precision is less than the input value,rounding will occur.
+If the given precision is less than the input value, rounding will occur.
 (Upgrading just adds trailing zeroes.)
 
 ```js
