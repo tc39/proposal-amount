@@ -105,6 +105,42 @@ The object prototype would provide the following methods:
 * `with(options)`: Create a new Amount based on this one,
   together with additional options.
 
+### Unit conversion
+
+Unit conversion is supported for some units, the data for which is provided by the CLDR in the its file
+[`common/supplemental/units.xml`](https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml).
+This file also provides the data for per-usage and per-locale unit preferences.
+
+For each unit type, the data given in CLDR defines
+a multiplication factor (and an offset for temperature untis)
+for converting from a source unit to the unit type's base unit.
+For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
+while the conversion from `inch` to `meter` is given as 0.3048/12.
+
+Unit conversions with Amount work by first converting the source unit to the base unit,
+and then to the target unit.
+Each of these operations is done with Number operations.
+For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
+```js
+1.75 * 0.3048 / 0.025400000000000002 = 20.999999999999996
+```
+
+Rounding is applied only to the final result, according to the [digit options]
+set in the conversion method's `options`.
+The precision of the source Amount is not retained,
+and the precision of the result is capped by the precision of Number.
+
+The `locale` and `usage` values that may have been used in the conversion are not retained,
+but the resulting Amount will of course have an appropriate `unit` set.
+
+For example:
+
+```js
+let feet = new Amount(1.75, { unit: "foot" });
+feet.convertTo({ unit: "inch" }); // 21 inches
+feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); // 53.3 cm
+```
+
 [digit options]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#digit_options
 
 ## Examples
@@ -236,42 +272,6 @@ You can use `"XYZ"` or `"keelogramz"` as a unit.
 Calling `toLocaleString()` on an Amount with a unit not supported by Intl.NumberFormat will throw an Error.
 Unit identifiers consisting of three upper-case ASCII letters will be formatted with `style: 'currency'`,
 while all other units will be formatted with `style: 'unit'`.
-
-### Unit conversion
-
-Unit conversion is supported for some units, the data for which is provided by the CLDR in the its file
-[`common/supplemental/units.xml`](https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml).
-This file also provides the data for per-usage and per-locale unit preferences.
-
-For each unit type, the data given in CLDR defines
-a multiplication factor (and an offset for temperature untis)
-for converting from a source unit to the unit type's base unit.
-For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
-while the conversion from `inch` to `meter` is given as 0.3048/12.
-
-Unit conversions with Amount work by first converting the source unit to the base unit,
-and then to the target unit.
-Each of these operations is done with Number operations.
-For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
-```js
-1.75 * 0.3048 / 0.025400000000000002 = 20.999999999999996
-```
-
-Rounding is applied only to the final result, according to the [digit options]
-set in the conversion method's `options`.
-The precision of the source Amount is not retained,
-and the precision of the result is capped by the precision of Number.
-
-The `locale` and `usage` values that may have been used in the conversion are not retained,
-but the resulting Amount will of course have an appropriate `unit` set.
-
-For example:
-
-```js
-let feet = new Amount(1.75, { unit: "foot" });
-feet.convertTo({ unit: "inch" }); // 21 inches
-feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); // 53.3 cm
-```
 
 ## Related but out-of-scope features
 
