@@ -37,24 +37,36 @@ We propose creating a new `Amount` primordial containing an immutable numeric va
 
 ### Properties
 
-Amount will have the following properties:
+Amount will have the following read-only properties:
 
 Note: ⚠️  All property/method names up for bikeshedding.
 
-* `value` (String): The numerical value of the amount, expressed as a string that may be parsed as a [StrDecimalLiteral](https://tc39.es/ecma262/#prod-StrDecimalLiteral), or `"NaN"`.
-* `unit` (String or undefined): The unit of measurement with which number should be understood (with *undefined* indicating "none supplied")
-
-#### Precision
-
-A big question is how we should handle precision. When constructing an Amount, both the significant digits and fractional digits are recorded.
+* `value` (Number or BigInt or String): The numerical value of the amount.
+  By default, the type of the value used in the constructor is retained.
+  The value of an Amount constructed with precision options,
+  or one that's the result of unit conversion,
+  is always a numerical string.
+* `unit` (String or not defined): The unit of measurement associated with the Amount's numerical value.
+  An undefined value indicates "no unit supplied".
 
 ### Constructor
 
-* `new Amount(value[, options])`. Constructs an Amount with the mathematical value of `value`, and optional `options`, of which the following are supported (all being optional):
-  * `unit` (String): a marker for the measurement
+* `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
+  and optional `options`, of which the following are supported (all being optional):
+  * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
+
+  Attempting to construct an Amount from a `value` that is not a Number or BigInt or String will throw a TypeError.
+  When constructing an Amount from a String `value`,
+  its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
+  or a RangeError is thrown.
+  The `value` property of a String-valued Amount is not necessarily equal to the `value` its constructor was called with,
+  as it is always a [StrDecimalLiteral](https://tc39.es/ecma262/#prod-StrDecimalLiteral), or `"NaN"`.
+
+  If either `fractionDigits` or `significantDigits` is set,
+  the `value` is rounded accordingly, and is stored as a String.
 
 The object prototype would provide the following methods:
 
@@ -71,8 +83,9 @@ The options are a subset of the Intl.NumberFormat constructor options.
 First, an Amount with only a value:
 
 ```js
-let a = new Amount("123.456", { fractionDigits: 4 });
+let a = new Amount(123.456, { fractionDigits: 4 });
 a.value; // "123.4560"
+typeof a.value; // "string"
 a.toString(); // "123.4560[]"
 a.toLocaleString("fr"); // "123,4560"
 ```
@@ -80,8 +93,9 @@ a.toLocaleString("fr"); // "123,4560"
 Here's an example with units:
 
 ```js
-let a = new Amount("42.7", { unit: "kg" });
-a.value; // "42.7"
+let a = new Amount(42.7, { unit: "kg" });
+a.value; // 42.7
+typeof a.value; // "number"
 a.toString(); // "42.7[kg]"
 a.toLocaleString("fr"); // "42,7 kg"
 ```
@@ -185,7 +199,7 @@ b.value; // "123.45"
 A core piece of functionality for the proposal is to support units (`mile`, `kilogram`, etc.) as well as currency (`EUR`, `USD`, etc.). An Amount need not have a unit/currency, and if it does, it has one or the other (not both). Example:
 
 ```js
-let a = new Amount("123.456", { unit: "kg" }); // 123.456 kilograms
+let a = new Amount(123.456, { unit: "kg" }); // 123.456 kilograms
 let b = new Amount("42.55", { unit: "EUR" }); // 42.55 Euros
 ```
 
