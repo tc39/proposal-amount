@@ -52,16 +52,31 @@ The object prototype would provide the following methods:
 
 * `convertTo(options)`. This method returns an Amount in the scale indicated by the `options` parameter,
   with the value of the new Amount being the value of the Amount it is called on converted to the new scale.
-  The `options` object supports all the same properties as the `options` of the Amount constructor, as well as:
+  The `options` object supports the following properties:
 
+  * `unit` (String): An explicit conversion target unit identifier
   * `locale` (String or Array of Strings or undefined):
     The locale for which the preferred unit of the corresponding category is determined.
   * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
+  * Optional properties with the same meanings as the corresponding
+    Intl.NumberFormat constructor [digit options]:
+    * `minimumFractionDigits`
+    * `maximumFractionDigits`
+    * `minimumSignificantDigits`
+    * `maximumSignificantDigits`
+    * `roundingMode`
+    * `roundingPriority`
 
   The `options` must contain at least one of `unit`, `locale`, or `usage`.
   If the `options` contains an explicit `unit` value, it must not contain `locale` or `usage`.
   If `locale` is set and `usage` is undefined, the `"default"` usage is assumed.
   If `usage` is set and `locale` is undefined, the default locale is assumed.
+
+  The result of unit conversion will be rounded according to the digit options.
+  By default, if no rounding options are set,
+  `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
+  If both fraction and significant digit options are set,
+  the resulting behaviour is selected by the `roundingPriority`.
 
   Calling `convertTo()` will throw an error if conversion is not supported
   for the Amount's unit (such as currency units),
@@ -75,6 +90,8 @@ The object prototype would provide the following methods:
 * `toLocaleString(locale[, options])`: Return a formatted string representation appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator). The options are the same as those for `toString()` above.
 * `with(options)`: Create a new Amount based on this one,
   together with additional options.
+
+[digit options]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#digit_options
 
 ### Examples
 
@@ -136,28 +153,33 @@ Unit conversion is supported for some units, the data for which is provided by t
 This file also provides the data for per-usage and per-locale unit preferences.
 
 For each unit type, the data given in CLDR defines
-a multiplication factor for converting from a source unit to the unit type's base unit.
+a multiplication factor (and an offset for temperature untis)
+for converting from a source unit to the unit type's base unit.
 For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
 while the conversion from `inch` to `meter` is given as 0.3048/12.
 
 Unit conversions with Amount work by first converting the source unit to the base unit,
 and then to the target unit.
-Each of these operations is done with Number multiplication or division.
+Each of these operations is done with Number operations.
 For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
 ```js
 1.75 * 0.3048 / 0.025400000000000002 = 20.999999999999996
 ```
 
-Rounding is applied only to the final result,
-according to the `fractionDigits`, `significantDigits`, and `roundingMode` set in the method's `options`.
-The precision of the source Amount is not retained.
+Rounding is applied only to the final result, according to the [digit options]
+set in the conversion method's `options`.
+The precision of the source Amount is not retained,
+and the precision of the result is capped by the precision of Number.
+
+The `locale` and `usage` values that may have been used in the conversion are not retained,
+but the resulting Amount will of course have an appropriate `unit` set.
 
 For example:
 
 ```js
 let feet = new Amount(1.75, { unit: "foot" });
-feet.convertTo({ unit: "inch", fractionDigits: 2 ); // 21.00 inches
-feet.convertTo({ locale: "fr", usage: "person", significantDigits: 3 }); // 53.3 cm
+feet.convertTo({ unit: "inch" }); // 21 inches
+feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); // 53.3 cm
 ```
 
 ## Related but out-of-scope features
