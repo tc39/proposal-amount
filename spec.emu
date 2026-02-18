@@ -4,18 +4,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
 <pre class="metadata">
-title: Measure
+title: Amount
 status: proposal
 stage: 1
 contributors: Ben Allen, Jesse Alama
-location: https://github.com/tc39/proposal-measure/
+location: https://github.com/tc39/proposal-amount/
 </pre>
 
 <emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-measure/" title="Measure proposal (GitHub)">Measure proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
 </emu-intro>
@@ -71,45 +71,120 @@ location: https://github.com/tc39/proposal-measure/
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-amount-abstract-ops-decimal-digit-strings">
-      <h1>Operations on Decimal Digit Strings</h1>
+    <!-- This is copied directly from proposal-intl-keep-trailing-zeros -->
+    <!-- See http://tc39.es/proposal-intl-keep-trailing-zeros/ -->
+    <emu-clause id="sec-runtime-semantics-stringintlmv" type="sdo" number="15">
+      <h1>Runtime Semantics: StringIntlMV</h1>
+      <dl class="header">
+      </dl>
+      <emu-note>
+        <del class="block">
+        <p>The
+ conversion of a |StringNumericLiteral| to a Number value is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.</p>
+        </del>
+        <ins class="block">
+        <p>
+          The conversion of a |StringNumericLiteral| to a mathematical value and a precision is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.
+          The result of StringIntlMV is a List value with two elements, a mathematical value and the count of decimal digits in the source text.
+        </p>
+        </ins>
+      </emu-note>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return <del>0</del><ins>« 0, 0 »</ins>.
+      </emu-alg>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return StringIntlMV of |StrNumericLiteral|.
+      </emu-alg>
+      <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
+      <emu-alg>
+        1. <del>Return MV of |NonDecimalIntegerLiteral|.</del>
+        1. <ins>Let _i_ be MV of |NonDecimalIntegerLiteral|.</ins>
+        1. <ins>Return « _i_, 0 ».</ins>
+      </emu-alg>
+      <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
+      <emu-alg>
+        1. Let <del>_a_</del><ins>_x_</ins> be StringIntlMV of |StrUnsignedDecimalLiteral|.
+        1. <ins>Let _a_ be the first element of _x_.</ins>
+        1. <ins>Let _n_ be the second element of _x_.</ins>
+        1. If _a_ is 0, return <del>~negative-zero~</del><ins>« ~negative-zero~, _n_ »</ins>.
+        1. If _a_ is ~positive-infinity~, return <del>~negative-infinity~</del><ins>« ~negative-infinity~, 0 »</ins>.
+        1. Return <del>-_a_</del><ins>« -_a_, _n_ »</ins>.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
+      <emu-alg>
+        1. Return <del>~positive-infinity~</del><ins>« ~positive-infinity~, 0 »</ins>.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _a_ be MV of the first |DecimalDigits|.
+        1. <ins>Let _m_ be the number of code points in the first |DecimalDigits|.</ins>
+        1. If the second |DecimalDigits| is present, then
+          1. Let _b_ be MV of the second |DecimalDigits|.
+          1. Let _n_ be the number of code points in the second |DecimalDigits|.
+        1. Else,
+          1. Let _b_ be 0.
+          1. Let _n_ be 0.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return <ins>«</ins> (_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup><ins>, _m_ + _n_ »</ins>.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _b_ be MV of |DecimalDigits|.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Let _n_ be the number of code points in |DecimalDigits|.
+        1. Return <ins>«</ins> _b_ × 10<sup>_e_ - _n_</sup><ins>, _n_ ».</ins>
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _a_ be MV of |DecimalDigits|.
+        1. <ins>Let _m_ be the number of code points in |DecimalDigits|.</ins>
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return <ins>«</ins> _a_ × 10<sup>_e_</sup><ins>, _m_ »</ins>.
+      </emu-alg>
+    </emu-clause>
 
-      <emu-clause id="sec-amount-countsignificantdigits" type="abstract operation">
-        <h1>CountSignificantDigits(
-          _s_: a decimal digit String
-        ): a positive integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of significant digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _digitsToCount_ be _s_.
-          1. If _digitsToCount_ contains an *e* character, set _digitsToCount_ be the substring of _s_ before the first occurence of *"e"*.
-          1. If _digitsToCount_ contains a *"."* character, set _digitsToCount_ to the result of replacing all occurrences of *"."* in _digitsToCount_ by *""*.
-          1. Let _l_ be the length of _digitsToCount_.
-          1. Return _l_.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
-        <h1>CountFractionDigits(
-          _s_: a decimal digit String
-        ): a non-negative integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
-        </dl>
-        <emu-alg>
-          1. If _s_ contains a *"."* character, then
-            1. Let _fractionDigits_ be the substring of _s_ after the first *"."* character up to the first occurrence of *"e"* or *"E"* in _s_, if any.
-            1. Let _l_ be the length of _fractionDigits_.
-            1. Return _l_.
-          1. Otherwise:
-            1. Return 0.
-        </emu-alg>
-      </emu-clause>
+    <emu-clause id="sec-runtime-semantics-countfractiondigits" type="sdo">
+      <h1>Runtime Semantics: CountFractionDigits</h1>
+      <dl class="header">
+      </dl>
+      <emu-note>
+        <p>It computes the power of 10 of the least significant precise digit of a |StringNumericLiteral|.</p>
+      </emu-note>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return 0.
+      </emu-alg>
+      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
+      <emu-alg>
+        1. Return CountFractionDigits of |StrNumericLiteral|.
+      </emu-alg>
+      <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
+      <emu-alg>
+        1. Return 0.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
+      <emu-alg>
+        1. Return 0.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. If |ExponentPart| is present, let _e_ be the MV of |ExponentPart|, else let _e_ be 0.
+        1. If the second |DecimalDigits| is present, let _m_ be the number of code points in the second |DecimalDigits|, else let _m_ be 0.
+        1. Return _m_ - _e_.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. Let _m_ be the number of code points in |DecimalDigits|.
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return _m_ - _e_.
+      </emu-alg>
+      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
+      <emu-alg>
+        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+        1. Return -_e_.
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-amount-abstract-ops-mv">
@@ -135,16 +210,34 @@ location: https://github.com/tc39/proposal-measure/
           1. If _fraction_ < 0.5, return _mLow_.
           1. If _fraction_ > 0.5, return _mHigh_.
           1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"**, return _mHigh_.
+          1. If _roundingMode_ is *"halfExpand"* or *"halfCeil"*, return _mHigh_.
           1. If _mLow_ is even, return _mLow_.
           1. Return _mHigh_.
         </emu-alg>
       </emu-clause>
 
+    <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
+      <h1>ReverseRoundingMode (
+        _mode_: a rounding mode
+      ): a rounding mode
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
+      </dl>
+      <emu-alg>
+        1. If _mode_ is *"floor"*, return *"ceil"*.
+        1. If _mode_ is *"ceil"*, return *"floor"*.
+        1. If _mode_ is *"halfCeil"*, return *"halfFloor"*.
+        1. If _mode_ is *"halfFloor"*, return *"halfCeil"*.
+        1. Otherwise, return _mode_.
+      </emu-alg>
+     </emu-clause>
+
       <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
-        <h1>RoundToFractionDigits(
+        <h1>RoundAmountValueToFractionDigits(
           _v_: a mathematical value,
-          _n_: a non-negative integer,
+          _n_: an integer,
           optional _roundingMode_: a rounding mode
         ): a mathematical value
         </h1>
@@ -153,84 +246,115 @@ location: https://github.com/tc39/proposal-measure/
           <dd>It computes the closest approximation to a given mathematical value that has at most the given number of fractional digits, rounding (if necessary) according to the given rounding mode.</dd>
         </dl>
         <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ = 0, return 0.
+          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If v &lt; 0, then
             1. Let _reverseRoundingMode_ be _roundingMode_.
             1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
             1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
             1. If _roundingMode_ is *"halfCeil"*, set _reverseRoundingMode_ to *"halfFloor"*.
             1. If _roundingMode_ is *"halfFloor"*, set _reverseRoundingMode_ to *"halfCeil"*.
-            1. Let _d_ be RoundToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
+            1. Let _d_ be RoundAmountValueToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
             1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. Let _pow_ be _e_ + _n_.
-          1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
+          1. Let _m_ be _v_ × 10<sup>_n_</sup>.
           1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-          1. Return _rounded_ × 10<sup>_e_ + _n_</sup>.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
-        <h1>RoundToSignificantDigits(
-          _v_: a mathematical value,
-          _n_: a non-negative integer,
-          optional _roundingMode_: a rounding mode
-        ): a mathematical value
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest approximation to a given mathematical value that has at most the given number of significant digits, rounding (if necessary) according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
-          1. If _v_ = 0, return 0.
-          1. If v &lt; 0, then
-            1. Let _reverseRoundingMode_ be _roundingMode_.
-            1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
-            1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
-            1. Let _d_ be RoundToSignificantDigits(–_v_, _n_, _reverseRoundingMode_).
-            1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. If _n_ ≤ _e_, then
-            1. Let _pow_ be _e_ - _n_.
-            1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
-            1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-            1. Return _rounded_ × 10<sup>_n_ + _e_</sup>.
-          1. Otherwise:
-            1. <mark>todo</mark>.
+          1. Return _rounded_ × 10<sup>-_n_</sup>.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderMVWithFractionDigits(
-          _v_: a mathematical value,
-          _numDigits_: a non-negative integer,
+        <h1>RenderAmountValueWithFractionDigits (
+          _v_: an Intl mathematical value,
+          _numDigits_: an integer,
           optional _roundingMode_: a rounding mode
         ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders the given mathematical value with a given number of fractional digits, possibly rounding if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
+          <dd>It renders the given Intl mathematical value with a given number of fractional digits, rounding, if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
         </dl>
         <emu-alg>
-          1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
+          1. If _v_ is ~not-a-number~, return *"NaN"*.
+          1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
+          1. If _v_ is ~positive-infinity~, return *"Infinity"*.
+          1. If _v_ is ~minus-zero~, then
+            1. If _numDigits_ < 0, then
+              1. Let _exp_ be the unique string representation of -_numDigits_ in base 10 without duplicate leading zeros.
+              1. Return the string-concatenation of *"0"*, *"e"*, and _exp_.
+            1. Otherwise:
+              1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
+              1. Let _z_ be *"-0"*.
+              1. If _numDigits_ = 0, return _z_.
+              1. Otherwise, return the string-concatenation of _z_, *"."* and _trailingZeroes_.
+          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
           1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
-          1. If _v_ < 0, set _v_ to -_v_.
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _mode_).
-          1. Set _v_ to _rounded_ × 10<sup>-_numDigits_</sup>.
-          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_numDigits_</sup> is an integer.
-          1. Let _s_ be the unique decimal string representation of _v_ without leading zeroes.
+          1. If _v_ < 0, then
+            1. Set _v_ to -_v_.
+            1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
+          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _roundingMode_).
+          1. Let _e_ be the smallest non-negative integer such that _rounded_ × 10<sup>-_numDigits_</sup> is an integer.
+          1. Let _s_ be the unique decimal string representation of _rounded_ without duplicate leading zeroes.
           1. If _numDigits_ > _e_, then
-            1. If _v_ is an integer, return the string concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
-            1. Otherwise, return the string concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
+            1. If _v_ is an integer, return the string-concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
+            1. Otherwise, return the string-concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
+          1. If 0 < _numDigits_, then
+            1. Return the string-concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
           1. Otherwise:
-            1. Return the string concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
+            1. Assert: _rounded_ is an integer.
+            1. Let _firstDigit_ be the substring of _s_ from 0 to 1.
+            1. Let _p_ be the unique integer such that 1 ≤ _rounded_ × 10<sup>_p_</sup> < 10.
+            1. Let _n_ be _p_ + _numDigits_.
+            1. Assert: _n_ ≥ 0.
+            1. Let _exp_ be the unique string representation of _n_ in base-10 without duplicate leading zeros.
+            1. If _n_ = 0, then
+              1. Return the string-concatenation of _s_, *"e"*, and _exp_.
+            1. Otherwise:
+              1. Let _remainingDigits_ be the substring of _s_ from 1 to _n_.
+              1. Return the string-concatenation of _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _exp_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-FractionToSignificantDigits" type="abstract operation">
+        <h1>FractionToSignificantDigits (
+          _value_: an Intl mathematical value,
+          _fractionDigits_: an integer
+        ): a non-negative integer
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. If _value_ is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, then
+            1. Return 0.
+          1. If _value_ is one of 0 or ~negative-zero~, then
+            1. If _fractionDigits_ < 0, return 1.
+            1. Let _integerDigits_ be 1.
+          1. Else,
+            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
+          1. Assert: _integerDigits_ + _fractionDigits_ > 0.
+          1. Return _integerDigits_ + _fractionDigits_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-SignificantToFractionDigits" type="abstract operation">
+        <h1>SignificantToFractionDigits (
+          _value_: an Intl mathematical value,
+          _significantDigits_: a positive integer
+        ): an integer
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. If _value_ is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, then
+            1. Return 0.
+          1. If _value_ is one of 0 or ~negative-zero~, then
+            1. Let _integerDigits_ be 1.
+          1. Else,
+            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
+          1. Assert: _significantDigits_ > 0.
+          1. Return _significantDigits_ - _integerDigits_.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
-        <h1>GetAmountOptions(
+        <h1>GetAmountOptions (
           _opts_: an Object
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
@@ -246,7 +370,7 @@ location: https://github.com/tc39/proposal-measure/
           1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
-            1. If _fractionDigits_ is not a non-negative integral number, throw a *RangeError* exception.
+            1. If _fractionDigits_ is not an integral number, throw a *RangeError* exception.
           1. Else if _significantDigits_ is not *undefined*, then
             1. If _significantDigits_ is not an integral number, throw a *RangeError* exception.
             1. If ℝ(_significantDigits_) < 1, throw a *RangeError* exception.
@@ -275,86 +399,74 @@ location: https://github.com/tc39/proposal-measure/
         1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. If _toParse_ is in « *"NaN"*, *"Infinity"*, *"-Infinity"* », throw a *RangeError* exception.
-        1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
+        1. Let _parsed_ be ParseText(_toParse_, |StringNumericLiteral|).
+        1. If _parsed_ is a List of errors, then
+          1. Let _amountValue_ be ~not-a-number~.
+        1. Else,
+          1. Let _intlMV_ be the StringIntlMV of _parsed_.
+          1. Let _amountValue_ be _intlMV_[0].
         1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
-        1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
-        1. Let _amountValue_ be ? StringDecimalValue of _parseResult_.
-        1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
+        1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
-        1. Let _roundedValue_ be _amountValue_.
-        1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
-        1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
-        1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
-          1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
-          1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
-        1. Else if _significantDigits_ is *undefined*, then
-          1. Set _roundedValue_ be RoundToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _significantDigits_ to CountSignificantDigits(_digitStr_).
-        1. Otherwise:
-          1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _fractionDigits_ to CountFractionDigits(_digitStr_).
-        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
-        1. Set _O_.[[Value]] to _roundedValue_.
-        1. Set _O_.[[SignificantDigits]] to _significantDigits_.
+        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[FractionDigits]], [[Unit]], [[Value]] »).
+        1. If _fractionDigits_ is *undefined*, then
+          1. If _significantDigits_ is not *undefined*, then
+            1. Set _fractionDigits_ to SignificantToFractionDigits(_amountValue_, _significantDigits_).
+          1. Else if _amountValue_ is a mathematical value or ~negative-zero~, then
+            1. Set _fractionDigits_ to the CountFractionDigits of _toParse_.
+          1. Else,
+            1. Set _fractionDigits_ to 0.
         1. Set _O_.[[FractionDigits]] to _fractionDigits_.
-        1. If _unit_ is not *undefined*, set _O_.[[Unit]] to _unit_.
+        1. If _amountValue_ is a mathematical value, then
+          1. Set _O_.[[Value]] to RoundAmountValueToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
+        1. Else,
+          1. Set _O_.[[Value]] to _amountValue_.
+        1. If _unit_ is not *undefined* and _amountValue_ is not ~not-a-number~, set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
         <p>Given a Number argument, the constructor converts it to a String using the <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> method (with no arguments). In some cases, this may not be desired; consider passing in a String form of a Number using the <emu-xref href="#sec-number.prototype.tofixed">toFixed</emu-xref> or <emu-xref href="#sec-number.prototype.toprecision">toPrecision</emu-xref> methods.</p>
       </emu-note>
-      <emu-clause id="sec-runtime-semantics-stringdecimalvalue" type="sdo">
-        <h1>Runtime Semantics: StringDecimalValue ( ): either a normal completion containing a mathematical value or a throw completion</h1>
-        <dl class="header">
-        </dl>
-        <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be ? StringAmountValue of |StrUnsignedDecimalLiteral|.
-          1. Assert: _a_ is finite.
-          1. Return −_a_.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
-        <emu-alg>
-          1. Throw a *RangeError* exception.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be MV of the first |DecimalDigits|.
-          1. If the second |DecimalDigits| is present, then
-            1. Let _b_ be MV of the second |DecimalDigits|.
-            1. Let _n_ be the number of code points in the second |DecimalDigits|.
-          1. Else,
-            1. Let _b_ be 0.
-            1. Let _n_ be 0.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return (_a_ + (_b_ × 10<sup>−_n_</sup>)) × 10<sup>_e_</sup>.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _b_ be MV of |DecimalDigits|.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Let _n_ be the number of code points in |DecimalDigits|.
-          1. Let _newValue_ be _b_ × 10<sup>_e_ − _n_</sup>.
-          1. Return _newValue_.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be MV of |DecimalDigits|.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return _a_ × 10<sup>_e_</sup>.
-        </emu-alg>
-      </emu-clause>
     </emu-clause>
   </emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-amount-prototype-properties">
   <h1>Properties of the Amount Prototype</h1>
+
+  <emu-clause id="sec-amount.prototype.fractiondigits">
+    <h1>get Decimal.prototype.fractionDigits</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a Number value indicating how many fraction digits an Amount contains. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[FractionDigits]]).
+      1. Let _fractionDigits_ be _O_.[[FractionDigits]].
+      1. Return 𝔽(_fractionDigits_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-amount.prototype.significantdigits">
+    <h1>get Decimal.prototype.significantDigits</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a Number value indicating how many significant digits an Amount contains. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[SignificantDigits]]).
+      1. Let _significantDigits_ be _O_.[[SignificantDigits]].
+      1. Return 𝔽(_significantDigits_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-amount.prototype.unit">
+    <h1>get Decimal.prototype.unit</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, stores a String value (or *undefined*) indicating the unit that this Amount has. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Unit]]).
+      1. Return _O_.[[Unit]].
+    </emu-alg>
+  </emu-clause>
 
   <emu-clause id="sec-amount.prototype.tostring">
     <h1>Amount.prototype.toString ( [ _options_ ] )</h1>
@@ -369,13 +481,13 @@ location: https://github.com/tc39/proposal-measure/
       1. Let _u_ be _O_.[[Unit]].
       1. Let _v_ be _O_.[[Value]].
       1. Let _fractionDigits_ be _O_.[[FractionDigits]].
-      1. Let _s_ be RenderMVWithFractionDigits(_v_, _fractionDigits_).
+      1. Let _s_ be RenderAmountValueWithFractionDigits(_v_, _fractionDigits_).
       1. If _displayUnit_ is *"never"*, return _s_.
       1. If _u_ is *undefined*, then
         1. If _displayUnit_ is *"always"*, return the string-concatenation of _s_ and *"[1]"*.
         1. Else, return _s_.
       1. Else,
-        1. Return the string concatenation of _s_, *"["*, _u_, and *"]"*.
+        1. Return the string-concatenation of _s_, *"["*, _u_, and *"]"*.
     </emu-alg>
   </emu-clause>
 
@@ -399,16 +511,14 @@ location: https://github.com/tc39/proposal-measure/
       1. Let _fractionDigits_ be _processedOptions_.[[FractionDigits]].
       1. Let _significantDigits_ be _processedOptions_.[[SignificantDigits]].
       1. Let _value_ be _O_.[[Value]].
-      1. If _fractionDigits_ is not *undefined*, set _value_ to RoundToFractionDigits(_value_, _fractionDigits_).
-      1. Else if _significantDigits_ is not *undefined*, set _value_ to RoundToSignificantDigits(_value_, _significantDigits_).
-      1. Otherwise, throw a *TypeError* exception.
-      1. Let _N_ be OrdinaryObjectCreate(*"%Amount.prototype%"*, « [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
+      1. If _significantDigits_ is not *undefined*, set _fractionDigits_ to SignificantToFractionDigits(_value_, _significantDigits_).
+      1. If _fractionDigits_ is not *undefined*, set _value_ to RoundAmountValueToFractionDigits(_value_, _fractionDigits_).
+      1. Let _N_ be OrdinaryObjectCreate(*"%Amount.prototype%"*, « [[FractionDigits]], [[Unit]], [[Value]] »).
       1. If _unit_ is not *undefined* and _O_.[[Unit]] is not *undefined*, then
         1. If SameValueNonNumber(_unit_, _O_.[[Unit]]) is *false*, throw a *TypeError* exception.
       1. Set _N_.[[Value]] to _value_.
       1. Set _N_.[[Unit]] to _unit_.
       1. Set _N_.[[FractionDigits]] to ℝ(_fractionDigits_).
-      1. Set _N_.[[SignificantDigits]] to ℝ(_significantDigits_).
       1. Return _N_.
     </emu-alg>
   </emu-clause>
@@ -426,10 +536,7 @@ location: https://github.com/tc39/proposal-measure/
       1. Let _unit_ be _O_.[[Unit]].
       1. Let _mv_ be _O_.[[Value]].
       1. If _hint_ is *"string"*, then
-        1. Let _fractionDigits_ be _O_.[[FractionDigits]].
-        1. Let _str_ be RenderMVWithFractionDigits(_mv_, _fractionDigits_).
-        1. If _unit_ is *undefined*, return _str_.
-        1. Else, return the string concatenation of _str_, *"["*, _unit_, and *"]"*.
+        1. Return ! Call(%Amount.prototype.toString%, _O_, « »).
       1. Else,
         1. If _unit_ is not *undefined*, throw a *TypeError* exception.
         1. Return the Number value for _mv_.

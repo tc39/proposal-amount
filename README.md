@@ -1,4 +1,4 @@
-# Representing Measures
+# Representing Amounts
 
 **Stage**: 1
 
@@ -6,10 +6,20 @@
 
 **Author**: Ben Allen [@ben-allen](https://github.com/ben-allen)
 
+**TC39 discussions**:
+
+- 2025-11: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-11/november-20.md#amount-stage-1-update)
+- 2025-07: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-07/july-29.md#measureamount-for-stage-2), [Continuation](https://github.com/tc39/notes/blob/main/meetings/2025-07/july-30.md#continuation-measureamount-for-stage-2)
+- 2025-04: [Update](https://github.com/tc39/notes/blob/main/meetings/2025-04/april-16.md#stage-1-update-for-decimal--measure-amounts)
+- 2024-12: [Update](https://github.com/tc39/notes/blob/main/meetings/2024-12/december-05.md#measure-stage-1-update)
+- 2024-10: [Stage 1](https://github.com/tc39/notes/blob/main/meetings/2024-10/october-10.md#measure-object-stage-0)
+
 ## Goals and needs
 
-Modeling amounts with a precision is useful for any task that involves physical quantities.
-It can also be useful for other types of real-world amounts, such as currencies.
+In the real world, it is rare to have a number by itself. Numbers are more often measuring _an amount of something_, from the number of apples in a bowl to the amount of Euros in your bank account, and from the number of milliliters in a cup of water to the number of kWh consumed by an electric car per mile. When measuring a physical quantity, numbers also have a _precision_, or a number of significant digits.
+
+Intl formatters have long been able to format amounts of things, but the quantity associated with the number is not carried along with the number into Intl APIs, which causes real-world bugs.
+
 We propose creating a new object for representing amounts,
 and for producing formatted string representations thereof.
 
@@ -23,7 +33,11 @@ Common user needs that can be addressed by a robust API for measurements include
 
 ## Description
 
-We propose creating a new `Amount` API, whose values will be immutable and have the following properties:
+We propose creating a new `Amount` primordial containing an immutable numeric value, precision, and unit.
+
+### Properties
+
+Amount will have the following properties:
 
 Note: ⚠️  All property/method names up for bikeshedding.
 
@@ -52,7 +66,7 @@ The object prototype would provide the following methods:
 appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator).
 The options are a subset of the Intl.NumberFormat constructor options.
 
-### Examples
+## Examples
 
 First, an Amount with only a value:
 
@@ -72,7 +86,84 @@ a.toString(); // "42.7[kg]"
 a.toLocaleString("fr"); // "42,7 kg"
 ```
 
-#### Rounding
+### Formatting with Intl
+
+An Amount significantly improves the ergonomics of number formatting and encourages better design patterns for i18n correctness, by correctly separating the data model, user locale, and developer settings.
+
+Without Amount, the purpose of each argument is mixed together:
+
+```js
+let numberOfKilograms = 42.7;
+let locale = "zh-CN";
+
+let localizedString = new Intl.NumberFormat(locale, {
+    minimumSignificantDigits: 4,
+    style: "unit",
+    unit: "kilogram",
+    unitDisplay: "long",
+})
+.format(numberOfKilograms);
+console.log(localizedString);  // "42.70千克"
+```
+
+With Amount, it is more ergonomic and therefore easier to do the right thing:
+
+```js
+// Data model: the thing being formatted
+let amt = new Amount("42.7", { unit: "kilogram", significantDigits: 4 });
+
+// User locale: how to localize
+let locale = "zh-CN";
+
+// Developer options: how much space is available, for example.
+let options = { unitDisplay: "long" };
+
+// Put it all together:
+let localizedString = amt.toLocaleString(locale, options);
+console.log(localizedString);  // "42.70千克"
+```
+
+The Amount type can also be interpolated into [MessageFormat](https://github.com/tc39/proposal-intl-messageformat) implementations, starting in userland and potentially in the standard library in the future.
+
+### Selecting Plural Forms
+
+A common footgun in i18n is the need to set the same precision on both `Intl.PluralRules` and `Intl.NumberFormat`. For example:
+
+```js
+// This code is buggy! Do you see why?
+let locale = "en-US";
+let numberOfStars = 1;
+let numberString = new Intl.NumberFormat(locale, { minimumFractionDigits: 1 }).format(numberOfStars);
+switch (new Intl.PluralRules(locale).select(numberOfStars)) {
+case "one":
+    console.log(`The rating is ${numberString} star`);
+    break;
+default:
+    console.log(`The rating is ${numberString} stars`);
+    break;
+}
+```
+
+This code outputs: "The rating is 1.0 star", which is grammatically incorrect even in English, which has relatively simple rules. The problem is exaggerated in languages with additional plural forms and/or other inflections!
+
+Using Amount makes the code work the way it should, and makes it easier to follow the logical flow:
+
+```js
+let locale = "en-US";
+let stars = new Amount(1, { fractionDigits: 1 });
+let numberString = stars.toLocaleString(locale);
+// Note: This uses a potential toLocalePlural method.
+switch (stars.toLocalePlural(locale)) {
+case "one":
+    console.log(`The rating is ${numberString} star`);
+    break;
+default:
+    console.log(`The rating is ${numberString} stars`);
+    break;
+}
+```
+
+### Rounding
 
 If the given precision is less than the input value, rounding will occur.
 (Upgrading just adds trailing zeroes.)
@@ -89,7 +180,7 @@ let b = new Amount("123.456", { significantDigits: 5, roundingMode: "truncate" }
 b.value; // "123.45"
 ```
 
-## Units (including currency)
+### Units (including currency)
 
 A core piece of functionality for the proposal is to support units (`mile`, `kilogram`, etc.) as well as currency (`EUR`, `USD`, etc.). An Amount need not have a unit/currency, and if it does, it has one or the other (not both). Example:
 
@@ -138,8 +229,37 @@ Some units can derive other units, such as square meters and cubic yards (to men
 
 Some units can be combined. In the US, it is common to express the heights of people in terms of feet and inches, rather than a non-integer number of feet or a "large" number of inches. For instance, one would say commonly express a height of 71 inches as "5 feet 11 inches" rather than "71 inches" or "5.92 feet". Thus, one would naturally want to support "foot-and-inch" as a compound unit, derivable from a measurement in terms of feet or inches. Likewise, combining units to express, say, velocity (miles per hour) or density (grams per cubic centimeter) also falls under this umbrella.  Since this is closely related to unit conversion, we prefer to see this functionality in Smart Units.
 
+## Frequently Asked Questions
+
+### Why a language feature and not a library?
+
+This type exists primarily for interop with existing native language features, like Intl, and between libraries.
+
+### If Intl is the motivating use case, why not call this Intl.Amount?
+
+Although Intl is what drives some of the champions to pursue this proposal, the use cases are not limited to Intl. The Amount type is a generally-useful abstraction on top of a numeric type with some non-Intl functionality such as serialization and library interop. Optimal i18n on the Web Platform depends on Amount being a widely accepted and used type, not something only for developers who are already using Intl. It is not unlike how Temporal types earning widespread adoption improves localization of datetimes on the Web.
+
+### Why a primordial and not a protocol?
+
+Some delegates unconvinced by the non-Intl use cases have suggested that `Intl.NumberFormat.prototype.format` can read fields from its argument the same as if it were passed a proper Amount object, which we call a "protocol" based approach.
+
+The primordial assists with discoverability and adoption. If it is just a protocol supported by Intl.NumberFormat, then the usage that would get would be significantly lower than if an Amount actually existed as a thing that developers could find and use and benefit from. The primordial also allows fast-paths in engine APIs that accept it as an argument.
+
+The protocol should likely coexist, as it enables polyfills and cross-membrane code.
+
+### Why represent precision as number of significant digits instead of something else like margin of error?
+
+Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant digits: for example, `Number.prototype.toPrecision` and `minimumSignificantDigits` in `Intl.NumberFormat` and `Intl.PluralRules`. We do not wish to innovate in this area. Further, CLDR does not provide data for formatting of precision any other way, and we are unaware of a feature request for it.
+
 ## Related/See also
 
 * [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) (mentioned several times as a natural follow-on proposal to this one)
 * [Decimal](https://github.com/tc39/proposal-decimal) for exact decimal arithmetic
 * [Keep trailing zeroes](https://github.com/tc39/proposal-intl-keep-trailing-zeros) to ensure that when Intl handles digit strings, it doesn't automatically strip trailing zeroes (e.g., silently normalize "1.20" to "1.2").
+
+## Polyfill
+
+A [polyfill](https://www.npmjs.com/package/proposal-amount)
+is available for testing. Since this proposal is still at
+stage 1, expect breaking changes; in general, it is not
+suitable for production use.
