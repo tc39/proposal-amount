@@ -179,7 +179,7 @@ default:
 
 ### Rounding
 
-If the given precision is less than the input value, rounding will occur.
+If the given precision is less than that of the input value, rounding will occur.
 (Upgrading just adds trailing zeroes.)
 
 ```js
