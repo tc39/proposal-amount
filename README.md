@@ -122,7 +122,7 @@ and then to the target unit.
 Each of these operations is done with Number operations.
 For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
 ```js
-1.75 * 0.3048 / 0.025400000000000002 = 20.999999999999996
+1.75 * 0.3048 / (0.3048 / 12) = 20.999999999999996
 ```
 
 Rounding is applied only to the final result, according to the [digit options]
