@@ -21,7 +21,8 @@ In the real world, it is rare to have a number by itself. Numbers are more often
 Intl formatters have long been able to format amounts of things, but the quantity associated with the number is not carried along with the number into Intl APIs, which causes real-world bugs.
 
 We propose creating a new object for representing amounts,
-and for producing formatted string representations thereof.
+for producing formatted string representations thereof,
+and for converting amounts between scales.
 
 Common user needs that can be addressed by a robust API for measurements include, but are not limited to:
 
@@ -30,6 +31,10 @@ Common user needs that can be addressed by a robust API for measurements include
 * The need to represent currency values. Often users will want to keep track of money values together with the currency in which those values are denominated.
 
 * The need to format measurements into string representations
+
+* The need to convert measurements from one scale to another
+
+* Related to both of the above, the need to localize measurements.
 
 ## Description
 
@@ -70,6 +75,39 @@ Note: ⚠️  All property/method names up for bikeshedding.
 
 The object prototype would provide the following methods:
 
+* `convertTo(options)`. This method returns an Amount in the scale indicated by the `options` parameter,
+  with the value of the new Amount being the value of the Amount it is called on converted to the new scale.
+  The `options` object supports the following properties:
+
+  * `unit` (String): An explicit conversion target unit identifier
+  * `locale` (String or Array of Strings or undefined):
+    The locale for which the preferred unit of the corresponding category is determined.
+  * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
+  * Optional properties with the same meanings as the corresponding
+    Intl.NumberFormat constructor [digit options]:
+    * `minimumFractionDigits`
+    * `maximumFractionDigits`
+    * `minimumSignificantDigits`
+    * `maximumSignificantDigits`
+    * `roundingMode`
+    * `roundingPriority`
+
+  The `options` must contain at least one of `unit`, `locale`, or `usage`.
+  If the `options` contains an explicit `unit` value, it must not contain `locale` or `usage`.
+  If `locale` is set and `usage` is undefined, the `"default"` usage is assumed.
+  If `usage` is set and `locale` is undefined, the default locale is assumed.
+
+  The result of unit conversion will be rounded according to the digit options.
+  By default, if no rounding options are set,
+  `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
+  If both fraction and significant digit options are set,
+  the resulting behaviour is selected by the `roundingPriority`.
+
+  Calling `convertTo()` will throw an error if conversion is not supported
+  for the Amount's unit (such as currency units),
+  or if the resolved conversion target is not valid for the Amount's unit
+  (such as attempting to convert a mass unit into a length unit).
+
 * `toString()`: A string representation of the Amount.
   Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have a unit;
   otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
@@ -77,6 +115,44 @@ The object prototype would provide the following methods:
 * `toLocaleString(locale[, options])`: Return a formatted string representation
 appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator).
 The options are a subset of the Intl.NumberFormat constructor options.
+
+### Unit conversion
+
+Unit conversion is supported for some units, the data for which is provided by the CLDR in the its file
+[`common/supplemental/units.xml`](https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml).
+This file also provides the data for per-usage and per-locale unit preferences.
+
+For each unit type, the data given in CLDR defines
+a multiplication factor (and an offset for temperature untis)
+for converting from a source unit to the unit type's base unit.
+For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
+while the conversion from `inch` to `meter` is given as 0.3048/12.
+
+Unit conversions with Amount work by first converting the source unit to the base unit,
+and then to the target unit.
+Each of these operations is done with Number operations.
+For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
+```js
+1.75 * 0.3048 / (0.3048 / 12) = 20.999999999999996
+```
+
+Rounding is applied only to the final result, according to the [digit options]
+set in the conversion method's `options`.
+The precision of the source Amount is not retained,
+and the precision of the result is capped by the precision of Number.
+
+The `locale` and `usage` values that may have been used in the conversion are not retained,
+but the resulting Amount will of course have an appropriate `unit` set.
+
+For example:
+
+```js
+let feet = new Amount(1.75, { unit: "foot" });
+feet.convertTo({ unit: "inch" }); // 21 inches
+feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); // 53.3 cm
+```
+
+[digit options]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#digit_options
 
 ## Examples
 
@@ -203,12 +279,11 @@ let a = new Amount(123.456, { unit: "kg" }); // 123.456 kilograms
 let b = new Amount("42.55", { unit: "EUR" }); // 42.55 Euros
 ```
 
-Note that, currently, no meaning is specified within Amount for units.
+Note that, currently, no meaning is specified within Amount for units, except for what is supported for unit conversion.
 You can use `"XYZ"` or `"keelogramz"` as a unit.
 Calling `toLocaleString()` on an Amount with a unit not supported by Intl.NumberFormat will throw an Error.
 Unit identifiers consisting of three upper-case ASCII letters will be formatted with `style: 'currency'`,
 while all other units will be formatted with `style: 'unit'`.
-
 
 ## Related but out-of-scope features
 
@@ -226,14 +301,6 @@ Below is a list of mathematical operations that one could consider supporting. H
 
 could be imagined, but are out-of-scope in this proposal.
 This proposal focuses on the numeric core that future proposals can build on.
-
-### Unit conversion
-
-One might want to convert an Amount from one unit (e.g., miles) to another (e.g., kilometers).
-We envision that functionality to be potentially introduced as part of the [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) proposal.
-This implies that converting from unit to another is not supported,
-as well as converting amounts between scales (e.g., converting grams to kilograms).
-Our work here in this proposal is designed to provide a foundation for such ideas.
 
 ### Derived units
 
