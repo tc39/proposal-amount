@@ -42,25 +42,36 @@ We propose creating a new `Amount` primordial containing an immutable numeric va
 
 ### Properties
 
-Amount will have the following properties:
+Amount will have the following read-only properties:
 
 Note: ⚠️  All property/method names up for bikeshedding.
 
-* `unit` (String or undefined): The unit of measurement with which number should be understood (with *undefined* indicating "none supplied")
-* `significantDigits` (Number): how many significant digits does this value contain? (Should be a positive integer)
-* `fractionalDigits` (Number): how many digits are required to fully represent the part of the fractional part of the underlying mathematical value. (Should be a non-negative integer.)
-
-#### Precision
-
-A big question is how we should handle precision. When constructing an Amount, both the significant digits and fractional digits are recorded.
+* `value` (Number or BigInt or String): The numerical value of the amount.
+  By default, the type of the value used in the constructor is retained.
+  The value of an Amount constructed with precision options,
+  or one that's the result of unit conversion,
+  is always a numerical string.
+* `unit` (String or not defined): The unit of measurement associated with the Amount's numerical value.
+  An undefined value indicates "no unit supplied".
 
 ### Constructor
 
-* `new Amount(value[, options])`. Constructs an Amount with the mathematical value of `value`, and optional `options`, of which the following are supported (all being optional):
-  * `unit` (String): a marker for the measurement
+* `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
+  and optional `options`, of which the following are supported (all being optional):
+  * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
+
+  Attempting to construct an Amount from a `value` that is not a Number or BigInt or String will throw a TypeError.
+  When constructing an Amount from a String `value`,
+  its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
+  or a RangeError is thrown.
+  The `value` property of a String-valued Amount is not necessarily equal to the `value` its constructor was called with,
+  as it is always a [StrDecimalLiteral](https://tc39.es/ecma262/#prod-StrDecimalLiteral), or `"NaN"`.
+
+  If either `fractionDigits` or `significantDigits` is set,
+  the `value` is rounded accordingly, and is stored as a String.
 
 The object prototype would provide the following methods:
 
@@ -91,19 +102,20 @@ The object prototype would provide the following methods:
   `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
   If both fraction and significant digit options are set,
   the resulting behaviour is selected by the `roundingPriority`.
+  The numerical value of the Amount resulting from unit conversion is stored as a String.
 
   Calling `convertTo()` will throw an error if conversion is not supported
   for the Amount's unit (such as currency units),
   or if the resolved conversion target is not valid for the Amount's unit
   (such as attempting to convert a mass unit into a length unit).
 
-* `toString([ options ])`: Returns a string representation of the Amount.
-  By default, returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have an amount; otherwise, just the bare numeric value.
-  With `options` specified (not undefined), we consult its `displayUnit` property, looking for three possible String values: `"auto"`, `"never"`, and `"always"`. With `"auto"` (the default), we do what was just described previously. With `displayUnit "never"`, we will never show the unit, even if the Amount does have one; and with `displayUnit: "always"` we will always show the unit, using `"1"` as the unit for Amounts without a unit (the "unit unit").
+* `toString()`: A string representation of the Amount.
+  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have a unit;
+  otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
 
-* `toLocaleString(locale[, options])`: Return a formatted string representation appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator). The options are the same as those for `toString()` above.
-* `with(options)`: Create a new Amount based on this one,
-  together with additional options.
+* `toLocaleString(locale[, options])`: Return a formatted string representation
+appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator).
+The options are a subset of the Intl.NumberFormat constructor options.
 
 ### Unit conversion
 
@@ -145,24 +157,24 @@ feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); 
 
 ## Examples
 
-Let's construct an Amount, query its properties, and render it.
-First, we'll work with a bare number (no unit):
+First, an Amount with only a value:
 
 ```js
-let a = new Amount("123.456");
-a.fractionDigits; // 3
-a.significantDigits; // 6
-a.with({ fractionDigits: 4 }).toString(); // "123.4560"
+let a = new Amount(123.456, { fractionDigits: 4 });
+a.value; // "123.4560"
+typeof a.value; // "string"
+a.toString(); // "123.4560[]"
+a.toLocaleString("fr"); // "123,4560"
 ```
-
-Notice that "upgrading" the precision of an Amount appends trailing zeroes to the number.
 
 Here's an example with units:
 
 ```js
-let a = new Amount("42.7", { unit: "kg" });
+let a = new Amount(42.7, { unit: "kg" });
+a.value; // 42.7
+typeof a.value; // "number"
 a.toString(); // "42.7[kg]"
-a.toString({ numberOnly: true }); // "42.7"
+a.toLocaleString("fr"); // "42,7 kg"
 ```
 
 ### Formatting with Intl
@@ -244,18 +256,19 @@ default:
 
 ### Rounding
 
-If one downgrades the precision of an Amount, rounding will occur. (Upgrading just adds trailing zeroes.)
+If the given precision is less than that of the input value, rounding will occur.
+(Upgrading just adds trailing zeroes.)
 
 ```js
-let a = new Amount("123.456");
-a.with({ significantDigits: 5 }).toString(); // "123.46"
+let a = new Amount("123.456", { significantDigits: 5 });
+a.value; // "123.46"
 ```
 
 By default, we use the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal). One can specify a rounding mode:
 
 ```js
-let b = new Amount("123.456");
-a.with({ significantDigits: 5, roundingMode: "truncate" }).toString(); // "123.45"
+let b = new Amount("123.456", { significantDigits: 5, roundingMode: "truncate" });
+b.value; // "123.45"
 ```
 
 ### Units (including currency)
@@ -263,7 +276,7 @@ a.with({ significantDigits: 5, roundingMode: "truncate" }).toString(); // "123.4
 A core piece of functionality for the proposal is to support units (`mile`, `kilogram`, etc.) as well as currency (`EUR`, `USD`, etc.). An Amount need not have a unit/currency, and if it does, it has one or the other (not both). Example:
 
 ```js
-let a = new Amount("123.456", { unit: "kg" }); // 123.456 kilograms
+let a = new Amount(123.456, { unit: "kg" }); // 123.456 kilograms
 let b = new Amount("42.55", { unit: "EUR" }); // 42.55 Euros
 ```
 
