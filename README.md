@@ -102,6 +102,7 @@ The object prototype would provide the following methods:
   `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
   If both fraction and significant digit options are set,
   the resulting behaviour is selected by the `roundingPriority`.
+  The numerical value of the Amount resulting from unit conversion is stored as a String.
 
   Calling `convertTo()` will throw an error if conversion is not supported
   for the Amount's unit (such as currency units),
