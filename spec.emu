@@ -24,8 +24,8 @@ location: https://github.com/tc39/proposal-amount/
   <h1>The Amount Object</h1>
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
-    <p>An Amount is an object that wraps mathematical value and a precision, together with a unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a number that, so to speak, knows its own precision and what it is measuring.</p>
-    <p>The notation for mathematical values used by Amount are <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which are Strings that adhere to the <emu-xref href="#prod-DecimalLiteral">DecimalLiteral</emu-xref> production, excepting *"NaN"*, *"Infinity", and *"-Infinity"*.</p>
+    <p>An Amount is an object that wraps a mathematical value and a precision, together with a unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a number that, so to speak, knows its own precision and what it is measuring.</p>
+    <p>The notation for mathematical values used by Amount are <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which are Strings that adhere to the <emu-xref href="#prod-DecimalLiteral">DecimalLiteral</emu-xref> production, excepting *"NaN"*, *"Infinity"*, and *"-Infinity"*.</p>
     <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="dfn-amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
