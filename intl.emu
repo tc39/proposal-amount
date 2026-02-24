@@ -27,10 +27,106 @@
 
       <emu-alg>
         1. Let _O_ be the *this* value.
-        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
-        1. Return FormatNumeric(_numberFormat_, _O_.[[AmountData]]).
+        1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+        1. Let _v_ be _O_.[[Value]].
+        1. If _v_ is a String, then
+          1. Let _numValue_ be _v_.
+        1. Else if _v_ is a BigInt, then
+          1. Let _numValue_ be BigInt::toString(_v_, 10).
+        1. Else,
+          1. Assert: _v_ is a Number.
+          1. Let _numValue_ be _v_.
+        1. Let _unit_ be _O_.[[Unit]].
+        1. Let _mergedOptions_ be OrdinaryObjectCreate(*null*).
+        1. If _options_ is not *undefined*, then
+          1. Let _optionsObj_ be ? GetOptionsObject(_options_).
+          1. For each own property key _key_ of _optionsObj_, do
+            1. Let _desc_ be ? _optionsObj_.[[GetOwnProperty]](_key_).
+            1. If _desc_ is not *undefined* and _desc_.[[Enumerable]] is *true*, then
+              1. Let _val_ be ? Get(_optionsObj_, _key_).
+              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, _key_, _val_).
+        1. If _unit_ is not *undefined*, then
+          1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
+            1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
+              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"currency"*).
+              1. If ? HasProperty(_mergedOptions_, *"currency"*) is *false*, then
+                1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"currency"*, _unit_).
+            1. Else,
+              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"unit"*).
+              1. If ? HasProperty(_mergedOptions_, *"unit"*) is *false*, then
+                1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"unit"*, _unit_).
+        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, « _locales_, _mergedOptions_ »).
+        1. Return FormatNumeric(_numberFormat_, _numValue_).
       </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sup-amount.prototype.convertto">
+      <h1>Amount.prototype.convertTo ( _options_ )</h1>
+
+      <p>
+        This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.convertto"></emu-xref>.
+      </p>
+
+      <p>
+        This function performs the following steps when called:
+      </p>
+
+      <emu-alg>
+        1. Let _O_ be the *this* value.
+        1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+        1. Let _sourceUnit_ be _O_.[[Unit]].
+        1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
+        1. Let _processedOptions_ be ? GetOptionsObject(_options_).
+        1. Let _targetUnit_ be ? GetOption(_processedOptions_, *"unit"*, ~string~, ~empty~, *undefined*).
+        1. Let _locale_ be ? GetOption(_processedOptions_, *"locale"*, ~string~, ~empty~, *undefined*).
+        1. Let _usage_ be ? GetOption(_processedOptions_, *"usage"*, ~string~, ~empty~, *undefined*).
+        1. If _targetUnit_ is *undefined* and _locale_ is *undefined* and _usage_ is *undefined*, throw a *TypeError* exception.
+        1. If _targetUnit_ is not *undefined*, then
+          1. If _locale_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
+        1. Else,
+          1. If _locale_ is *undefined*, set _locale_ to DefaultLocale().
+          1. If _usage_ is *undefined*, set _usage_ to *"default"*.
+          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _locale_, _usage_).
+        1. Let _v_ be _O_.[[Value]].
+        1. If _v_ is a Number, then
+          1. Let _sourceValue_ be _v_.
+        1. Else if _v_ is a BigInt, then
+          1. Let _sourceValue_ be 𝔽(ℝ(_v_)).
+        1. Else,
+          1. Assert: _v_ is a String.
+          1. Let _sourceValue_ be StringToNumber(_v_).
+        1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
+        1. Let _digitOpts_ be ? GetConvertToDigitOptions(_processedOptions_).
+        1. Let _resultStr_ be ApplyDigitOptions(_convertedValue_, _digitOpts_).
+        1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Value]], [[Unit]] »).
+        1. Set _result_.[[Value]] to _resultStr_.
+        1. Set _result_.[[Unit]] to _targetUnit_.
+        1. Return _result_.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-resolveunitpreference" type="abstract operation">
+      <h1>ResolveUnitPreference (
+        _sourceUnit_: a String,
+        _locale_: a String,
+        _usage_: a String
+      ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the preferred target unit for _sourceUnit_ in the given _locale_ and _usage_ context, based on CLDR unit preferences data.</dd>
+      </dl>
+      <emu-alg>
+        1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
+        1. Let _category_ be _sourceConv_.[[Category]].
+        1. Let _region_ be the region subtag of the result of applying the <emu-xref href="#sec-canonicalizelocalelist">CanonicalizeLocaleList</emu-xref> algorithm to _locale_, or the likely region if no region subtag is present.
+        1. Let _preferredUnit_ be the implementation-defined preferred unit for _category_, _region_, and _usage_ based on CLDR unit preferences data.
+        1. If _preferredUnit_ is *undefined*, throw a *RangeError* exception.
+        1. Return _preferredUnit_.
+      </emu-alg>
+      <emu-note>
+        <p>Implementations should use CLDR <code>&lt;unitPreferences&gt;</code> data to determine the preferred unit. For example, for the *"length"* category with *"person"* usage in France (*"FR"* region), the preferred unit would be *"centimeter"*.</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -152,7 +248,7 @@
         </dd>
       </dl>
       <emu-alg>
-        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderAmountValueWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
+        1. <ins>If _value_ has the [[Value]] internal slot, let _primValue_ be _value_.[[Value]]; else</ins> <del>Let</del> <ins>let</ins> _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If _primValue_ is a BigInt, return ℝ(_primValue_).
         1. If _primValue_ is a String, then
           1. Let _str_ be _primValue_.
