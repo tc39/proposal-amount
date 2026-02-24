@@ -441,6 +441,7 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
       </emu-clause>
 
+      <!-- Adapted from 402's FormatNumericToString -->
       <emu-clause id="sec-amount-applydigitoptions" type="abstract operation">
         <h1>ApplyDigitOptions (
           _value_: a Number,
