@@ -397,8 +397,8 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
           1. Let _targetOffset_ be _targetConv_.[[Offset]].
-          1. Let _baseValue_ be Number::add(Number::multiply(_value_, _sourceFactor_), _sourceOffset_).
-          1. Let _result_ be Number::divide(Number::subtract(_baseValue_, _targetOffset_), _targetFactor_).
+          1. Let _baseValue_ be _value_ × _sourceFactor_ + _sourceOffset_.
+          1. Let _result_ be (_baseValue_ - _targetOffset_) / _targetFactor_.
           1. Return _result_.
         </emu-alg>
       </emu-clause>
