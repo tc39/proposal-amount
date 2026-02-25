@@ -105,7 +105,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-resolveunitpreference" type="abstract operation">
+    <emu-clause id="sec-resolveunitpreference" type="implementation-defined abstract operation">
       <h1>ResolveUnitPreference (
         _sourceUnit_: a String,
         _locale_: a String,
