@@ -115,18 +115,30 @@
       <emu-alg>
         1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
         1. Let _category_ be _sourceConv_.[[Category]].
-        1. Let _availableLocales_ be an implementation-defined Available Locales List for which unit preference data is available.
-        1. Let _localeData_ be an implementation-defined Record whose field names are the elements of _availableLocales_ and whose values are Records.
+        1. Let _availableLocales_ be the Available Locales List for locales for which the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a> includes data.
+        1. Let _localeData_ be a Record whose field names are the elements of _availableLocales_ and whose values are Records.
         1. Let _r_ be ResolveLocale(_availableLocales_, _requestedLocales_, the Record { [[localeMatcher]]: *"best fit"* }, « », _localeData_).
         1. Let _locale_ be _r_.[[Locale]].
-        1. Let _preferredUnit_ be the implementation-defined preferred unit for _category_, _locale_, and _usage_ based on CLDR unit preferences data.
+        1. Let _preferredUnit_ be the preferred unit for _category_, _locale_, and _usage_ as specified by the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.
         1. If _preferredUnit_ is *undefined*, throw a *RangeError* exception.
         1. Return _preferredUnit_.
       </emu-alg>
       <emu-note>
-        <p>Implementations should use CLDR <code>&lt;unitPreferences&gt;</code> data to determine the preferred unit. For example, for the *"length"* category with *"person"* usage in France (*"FR"* region), the preferred unit would be *"centimeter"*.</p>
+        <p>For example, for the *"length"* category with *"person"* usage in France (*"FR"* region), the preferred unit would be *"centimeter"*.</p>
       </emu-note>
     </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-amount-intl-normative-references">
+    <h1>Amendment to the Normative References of ECMA-402</h1>
+    <emu-note type="editor">
+      <p>The following entry is to be added to ECMA-402's list of referenced parts of Unicode Technical Standard #35.</p>
+    </emu-note>
+    <ul>
+      <li>
+        <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Part 6 Supplemental, Unit Preferences</a>
+      </li>
+    </ul>
   </emu-clause>
 </emu-clause>
 

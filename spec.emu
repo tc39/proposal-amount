@@ -359,7 +359,7 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
+      <emu-clause id="sec-amount-getunitconversionfactor" type="implementation-defined abstract operation">
         <h1>GetUnitConversionFactor (
           _unit_: a String
         ): either a normal completion containing a Record with fields [[Category]] (a String), [[Factor]] (a Number), and [[Offset]] (a Number) or a throw completion
@@ -369,11 +369,14 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It returns the conversion data for converting _unit_ to its base unit within its unit category.</dd>
         </dl>
         <emu-alg>
-          1. If _unit_ is not recognized as a unit for which conversion data is available, throw a *RangeError* exception.
-          1. Return an implementation-defined Record { [[Category]], [[Factor]], [[Offset]] } where [[Category]] is a String identifying the unit category of _unit_ (e.g., *"length"*, *"mass"*, *"temperature"*), [[Factor]] is a Number representing the multiplication factor for converting from _unit_ to the base unit of its category, and [[Offset]] is a Number representing the additive offset for converting from _unit_ to the base unit (*+0*<sub>𝔽</sub> for most units; non-zero for temperature units such as *"fahrenheit"*).
+          1. If _unit_ does not have a corresponding &lt;convertUnit> element in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>, throw a *RangeError* exception.
+          1. Let _category_ be the unit category of _unit_ as specified by the CLDR unit conversion data.
+          1. Let _factor_ be the Number value closest to the rational conversion factor for _unit_ as specified by the CLDR unit conversion data.
+          1. If the CLDR unit conversion data specifies a conversion offset for _unit_, let _offset_ be the Number value closest to that rational offset; otherwise, let _offset_ be *+0*<sub>𝔽</sub>.
+          1. Return the Record { [[Category]]: _category_, [[Factor]]: _factor_, [[Offset]]: _offset_ }.
         </emu-alg>
         <emu-note>
-          <p>Implementations should provide conversion data consistent with the Unicode Common Locale Data Repository (CLDR) <code>units.xml</code> supplemental data. The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
+          <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
           <p>CLDR expresses conversion factors as rational numbers (e.g., 0.3048/12 for inch-to-meter). These rational values are converted to Numbers before use, so conversion arithmetic is subject to the precision of IEEE 754 binary64. For example, converting 1.75 feet to inches yields 1.75 × 0.3048 / (0.3048 / 12) = 20.999999999999996, not exactly 21.</p>
         </emu-note>
       </emu-clause>
@@ -657,11 +660,16 @@ location: https://github.com/tc39/proposal-amount/
 
 <emu-import href="./intl.emu"></emu-import>
 
-<emu-annex id="sec-bibliography" back-matter>
-  <h1>Bibliography</h1>
-  <ol>
+<emu-clause id="sec-normative-references">
+  <h1>Normative References</h1>
+  <ul>
     <li>
-      <i>The Unicode Common Locale Data Repository</i>, available at &lt;<a href="https://cldr.unicode.org">CLDR</a>>
+      <a href="https://unicode.org/reports/tr35/">Unicode Technical Standard #35: Unicode Locale Data Markup Language (LDML)</a>
+      <ul>
+        <li>
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">Part 6 Supplemental, Unit Conversion</a>
+        </li>
+      </ul>
     </li>
-  </ol>
-</emu-annex>
+  </ul>
+</emu-clause>
