@@ -77,13 +77,6 @@
         1. Let _localeValue_ be ? Get(_processedOptions_, *"locale"*).
         1. Let _usage_ be ? GetOption(_processedOptions_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. If _targetUnit_ is *undefined* and _localeValue_ is *undefined* and _usage_ is *undefined*, throw a *TypeError* exception.
-        1. If _targetUnit_ is not *undefined*, then
-          1. If _localeValue_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
-        1. Else,
-          1. Let _matcher_ be ? GetOption(_processedOptions_, *"localeMatcher"*, ~string~, « *"lookup"*, *"best fit"* », *"best fit"*).
-          1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_localeValue_).
-          1. If _usage_ is *undefined*, set _usage_ to *"default"*.
-          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _requestedLocales_, _usage_, _matcher_).
         1. Let _v_ be _O_.[[Value]].
         1. If _v_ is a Number, then
           1. Let _sourceValue_ be _v_.
@@ -92,6 +85,13 @@
         1. Else,
           1. Assert: _v_ is a String.
           1. Let _sourceValue_ be StringToNumber(_v_).
+        1. If _targetUnit_ is not *undefined*, then
+          1. If _localeValue_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
+        1. Else,
+          1. Let _matcher_ be ? GetOption(_processedOptions_, *"localeMatcher"*, ~string~, « *"lookup"*, *"best fit"* », *"best fit"*).
+          1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_localeValue_).
+          1. If _usage_ is *undefined*, set _usage_ to *"default"*.
+          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _sourceValue_, _requestedLocales_, _usage_, _matcher_).
         1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
         1. Let _digitOpts_ be ? GetConvertToDigitOptions(_processedOptions_).
         1. Let _resultStr_ be ApplyDigitOptions(_convertedValue_, _digitOpts_).
@@ -105,6 +105,7 @@
     <emu-clause id="sec-resolveunitpreference" type="implementation-defined abstract operation">
       <h1>ResolveUnitPreference (
         _sourceUnit_: a String,
+        _sourceValue_: a Number,
         _requestedLocales_: a Language Priority List,
         _usage_: a String,
         _localeMatcher_: a String,
@@ -121,13 +122,10 @@
         1. Let _localeData_ be a Record whose field names are the elements of _availableLocales_ and whose values are Records.
         1. Let _r_ be ResolveLocale(_availableLocales_, _requestedLocales_, the Record { [[localeMatcher]]: _localeMatcher_ }, « », _localeData_).
         1. Let _locale_ be _r_.[[Locale]].
-        1. Let _preferredUnit_ be the preferred unit for _category_, _locale_, and _usage_ as specified by the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.
+        1. Let _preferredUnit_ be the preferred unit for _category_, _locale_, _usage_, and _sourceValue_ as specified by the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.
         1. If _preferredUnit_ is *undefined*, throw a *RangeError* exception.
         1. Return _preferredUnit_.
       </emu-alg>
-      <emu-note>
-        <p>For example, for the *"length"* category with *"person"* usage in France (*"FR"* region), the preferred unit would be *"centimeter"*.</p>
-      </emu-note>
     </emu-clause>
   </emu-clause>
 
