@@ -16,14 +16,9 @@
 
     <emu-clause id="sup-amount.prototype.tolocalestring">
       <h1>Amount.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring"></emu-xref>.</p>
 
-      <p>
-        This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring"></emu-xref>.
-      </p>
-
-      <p>
-       This function performs the following steps when called:
-      </p>
+      <p>This function performs the following steps when called:</p>
 
       <emu-alg>
         1. Let _O_ be the *this* value.
@@ -59,13 +54,9 @@
     <emu-clause id="sup-amount.prototype.convertto">
       <h1>Amount.prototype.convertTo ( _options_ )</h1>
 
-      <p>
-        This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.convertto"></emu-xref>.
-      </p>
+      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.convertto"></emu-xref>.</p>
 
-      <p>
-        This function performs the following steps when called:
-      </p>
+      <p>This function performs the following steps when called:</p>
 
       <emu-alg>
         1. Let _O_ be the *this* value.
