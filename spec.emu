@@ -432,7 +432,7 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
-        1. Let _hasPrecision_ be *true* if _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*; otherwise *false*.
+        1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, let _hasPrecision_ be *true*; else let _hasPrecision_ be *false*.
         1. If _hasPrecision_ is *true*, then
           1. If _x_ is a String, then
             1. Let _intlMV_ be the StringIntlMV of _parsed_.
