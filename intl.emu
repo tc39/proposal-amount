@@ -80,9 +80,10 @@
         1. If _targetUnit_ is not *undefined*, then
           1. If _localeValue_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
         1. Else,
+          1. Let _matcher_ be ? GetOption(_processedOptions_, *"localeMatcher"*, ~string~, « *"lookup"*, *"best fit"* », *"best fit"*).
           1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_localeValue_).
           1. If _usage_ is *undefined*, set _usage_ to *"default"*.
-          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _requestedLocales_, _usage_).
+          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _requestedLocales_, _usage_, _matcher_).
         1. Let _v_ be _O_.[[Value]].
         1. If _v_ is a Number, then
           1. Let _sourceValue_ be _v_.
@@ -105,7 +106,8 @@
       <h1>ResolveUnitPreference (
         _sourceUnit_: a String,
         _requestedLocales_: a Language Priority List,
-        _usage_: a String
+        _usage_: a String,
+        _localeMatcher_: a String,
       ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
@@ -117,7 +119,7 @@
         1. Let _category_ be _sourceConv_.[[Category]].
         1. Let _availableLocales_ be the Available Locales List for locales for which the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a> includes data.
         1. Let _localeData_ be a Record whose field names are the elements of _availableLocales_ and whose values are Records.
-        1. Let _r_ be ResolveLocale(_availableLocales_, _requestedLocales_, the Record { [[localeMatcher]]: *"best fit"* }, « », _localeData_).
+        1. Let _r_ be ResolveLocale(_availableLocales_, _requestedLocales_, the Record { [[localeMatcher]]: _localeMatcher_ }, « », _localeData_).
         1. Let _locale_ be _r_.[[Locale]].
         1. Let _preferredUnit_ be the preferred unit for _category_, _locale_, and _usage_ as specified by the <code>&lt;unitPreferences></code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.
         1. If _preferredUnit_ is *undefined*, throw a *RangeError* exception.
