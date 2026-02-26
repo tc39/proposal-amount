@@ -422,8 +422,8 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _mxsd_ be ? GetOption(_options_, *"maximumSignificantDigits"*, ~number~, ~empty~, *undefined*).
           1. Let _roundingMode_ be ? GetOption(_options_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
           1. Let _roundingPriority_ be ? GetOption(_options_, *"roundingPriority"*, ~string~, « *"auto"*, *"morePrecision"*, *"lessPrecision"* », *"auto"*).
-          1. Let _hasFD_ be *true* if _mnfd_ is not *undefined* or _mxfd_ is not *undefined*; otherwise *false*.
-          1. Let _hasSD_ be *true* if _mnsd_ is not *undefined* or _mxsd_ is not *undefined*; otherwise *false*.
+          1. If _mnfd_ is not *undefined* or _mxfd_ is not *undefined*, let _hasFD_ be *true*; else let _hasFD_ be *false*.
+          1. If _mnsd_ is not *undefined* or _mxsd_ is not *undefined*, let _hasSD_ be *true*; else let _hasSD_ be *false*.
           1. If _hasFD_ is *true*, then
             1. If _mnfd_ is *undefined*, set _mnfd_ to *+0*<sub>𝔽</sub>.
             1. Else if _mnfd_ is not an integral Number or ℝ(_mnfd_) &lt; 0 or ℝ(_mnfd_) > 20, throw a *RangeError* exception.
