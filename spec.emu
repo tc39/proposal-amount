@@ -653,20 +653,6 @@ location: https://github.com/tc39/proposal-amount/
       <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API supersedes this method to additionally support locale-based and usage-based unit conversion via CLDR unit preferences data. Without ECMA-402, only explicit unit-to-unit conversion (via the *"unit"* option) is supported.</p>
     </emu-note>
   </emu-clause>
-
-  <emu-clause id="sec-amount-symboltoprimitive">
-    <h1>Amount.prototype [ %Symbol.toPrimitive% ] ( _hint_ )</h1>
-    <p>This method is called by ECMAScript language operators to convert an Amount to a primitive value.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Throw a *TypeError* exception.
-    </emu-alg>
-    <emu-note>
-      <p>This method always throws. It exists to ensure that implicit coercion of an Amount via operators such as `+` always results in a *TypeError*. To obtain a string representation, call `toString()` explicitly.</p>
-    </emu-note>
-  </emu-clause>
 </emu-clause>
 
 <emu-import href="./intl.emu"></emu-import>
