@@ -40,11 +40,7 @@
         1. Let _mergedOptions_ be OrdinaryObjectCreate(*null*).
         1. If _options_ is not *undefined*, then
           1. Let _optionsObj_ be ? GetOptionsObject(_options_).
-          1. For each own property key _key_ of _optionsObj_, do
-            1. Let _desc_ be ? _optionsObj_.[[GetOwnProperty]](_key_).
-            1. If _desc_ is not *undefined* and _desc_.[[Enumerable]] is *true*, then
-              1. Let _val_ be ? Get(_optionsObj_, _key_).
-              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, _key_, _val_).
+          1. Perform ? CopyDataProperties(_mergedOptions_, _optionsObj_, « »).
         1. If _unit_ is not *undefined*, then
           1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
             1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
