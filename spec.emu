@@ -656,3 +656,12 @@ location: https://github.com/tc39/proposal-amount/
 </emu-clause>
 
 <emu-import href="./intl.emu"></emu-import>
+
+<emu-annex id="sec-bibliography" back-matter>
+  <h1>Bibliography</h1>
+  <ol>
+    <li>
+      <i>The Unicode Common Locale Data Repository</i>, available at &lt;<a href="https://cldr.unicode.org">CLDR</a>>
+    </li>
+  </ol>
+</emu-annex>
