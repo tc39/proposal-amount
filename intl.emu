@@ -74,15 +74,15 @@
         1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
         1. Let _processedOptions_ be ? GetOptionsObject(_options_).
         1. Let _targetUnit_ be ? GetOption(_processedOptions_, *"unit"*, ~string~, ~empty~, *undefined*).
-        1. Let _locale_ be ? GetOption(_processedOptions_, *"locale"*, ~string~, ~empty~, *undefined*).
+        1. Let _localeValue_ be ? Get(_processedOptions_, *"locale"*).
         1. Let _usage_ be ? GetOption(_processedOptions_, *"usage"*, ~string~, ~empty~, *undefined*).
-        1. If _targetUnit_ is *undefined* and _locale_ is *undefined* and _usage_ is *undefined*, throw a *TypeError* exception.
+        1. If _targetUnit_ is *undefined* and _localeValue_ is *undefined* and _usage_ is *undefined*, throw a *TypeError* exception.
         1. If _targetUnit_ is not *undefined*, then
-          1. If _locale_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
+          1. If _localeValue_ is not *undefined* or _usage_ is not *undefined*, throw a *TypeError* exception.
         1. Else,
-          1. If _locale_ is *undefined*, set _locale_ to DefaultLocale().
+          1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_localeValue_).
           1. If _usage_ is *undefined*, set _usage_ to *"default"*.
-          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _locale_, _usage_).
+          1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _requestedLocales_, _usage_).
         1. Let _v_ be _O_.[[Value]].
         1. If _v_ is a Number, then
           1. Let _sourceValue_ be _v_.
@@ -104,19 +104,22 @@
     <emu-clause id="sec-resolveunitpreference" type="implementation-defined abstract operation">
       <h1>ResolveUnitPreference (
         _sourceUnit_: a String,
-        _locale_: a String,
+        _requestedLocales_: a Language Priority List,
         _usage_: a String
       ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It determines the preferred target unit for _sourceUnit_ in the given _locale_ and _usage_ context, based on CLDR unit preferences data.</dd>
+        <dd>It determines the preferred target unit for _sourceUnit_ in the locale best matching _requestedLocales_ and _usage_ context, based on CLDR unit preferences data.</dd>
       </dl>
       <emu-alg>
         1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
         1. Let _category_ be _sourceConv_.[[Category]].
-        1. Let _region_ be the region subtag of the result of applying the <emu-xref href="#sec-canonicalizelocalelist">CanonicalizeLocaleList</emu-xref> algorithm to _locale_, or the likely region if no region subtag is present.
-        1. Let _preferredUnit_ be the implementation-defined preferred unit for _category_, _region_, and _usage_ based on CLDR unit preferences data.
+        1. Let _availableLocales_ be an implementation-defined Available Locales List for which unit preference data is available.
+        1. Let _localeData_ be an implementation-defined Record whose field names are the elements of _availableLocales_ and whose values are Records.
+        1. Let _r_ be ResolveLocale(_availableLocales_, _requestedLocales_, the Record { [[localeMatcher]]: *"best fit"* }, « », _localeData_).
+        1. Let _locale_ be _r_.[[Locale]].
+        1. Let _preferredUnit_ be the implementation-defined preferred unit for _category_, _locale_, and _usage_ based on CLDR unit preferences data.
         1. If _preferredUnit_ is *undefined*, throw a *RangeError* exception.
         1. Return _preferredUnit_.
       </emu-alg>
