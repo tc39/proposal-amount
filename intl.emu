@@ -245,41 +245,6 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-tointlmathematicalvalue" type="abstract operation">
-      <h1>
-        ToIntlMathematicalValue (
-          _value_: an ECMAScript language value,
-        ): either a normal completion containing an Intl mathematical value or a throw completion
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>
-          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is a mathematical value together with ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
-          This abstract operation is similar to <emu-xref href="#sec-tonumeric"></emu-xref>, but a mathematical value can be returned instead of a Number or BigInt, so that exact decimal values can be represented.
-        </dd>
-      </dl>
-      <emu-alg>
-        1. <ins>If _value_ has the [[Value]] internal slot, let _primValue_ be _value_.[[Value]]; else</ins> <del>Let</del> <ins>let</ins> _primValue_ be ? ToPrimitive(_value_, ~number~).
-        1. If _primValue_ is a BigInt, return ℝ(_primValue_).
-        1. If _primValue_ is a String, then
-          1. Let _str_ be _primValue_.
-        1. Else,
-          1. Let _x_ be ? ToNumber(_primValue_).
-          1. If _x_ is *-0*<sub>𝔽</sub>, return ~negative-zero~.
-          1. Let _str_ be Number::toString(_x_, 10).
-        1. Let _text_ be StringToCodePoints(_str_).
-        1. Let _literal_ be ParseText(_text_, |StringNumericLiteral|).
-        1. If _literal_ is a List of errors, return ~not-a-number~.
-        1. Let _intlMV_ be the StringIntlMV of _literal_.
-        1. If _intlMV_ is a mathematical value, then
-          1. Let _rounded_ be RoundMVResult(abs(_intlMV_)).
-          1. If _rounded_ is *+∞*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-infinity~.
-          1. If _rounded_ is *+∞*<sub>𝔽</sub>, return ~positive-infinity~.
-          1. If _rounded_ is *+0*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-zero~.
-          1. If _rounded_ is *+0*<sub>𝔽</sub>, return 0.
-        1. Return _intlMV_.
-      </emu-alg>
-    </emu-clause>
     <emu-clause id="sec-setnumberformatunitoptions" type="abstract operation">
       <h1>
         SetNumberFormatUnitOptions (
