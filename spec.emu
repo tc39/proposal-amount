@@ -459,8 +459,8 @@ location: https://github.com/tc39/proposal-amount/
             1. Let _amountValue_ be _intlMV_[0].
             1. Let _numFractionDigits_ be CountFractionDigits of _parsed_.
             1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, _numFractionDigits_).
-        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Value]], [[Unit]] »).
-        1. Set _O_.[[Value]] to _value_.
+        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+        1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
