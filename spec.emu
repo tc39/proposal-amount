@@ -87,10 +87,12 @@ location: https://github.com/tc39/proposal-amount/
           The conversion of a |StringNumericLiteral| to a mathematical value and a precision is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.
           The result of StringIntlMV is a List value with two elements, a mathematical value and the count of decimal digits in the source text.
         </p>
-	<p>
-	  TODO The precise runtime semantics added here follows that of proposal-intl-keep-trailing-zeros. As of writing, that proposal is at stage 2.7 and seeks to advance to stage 3. See their <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-runtime-semantics-stringintlmv">the spec text for StringIntlMV</a>.
-	</p>
         </ins>
+      </emu-note>
+      <emu-note type="editor">
+	<p>
+	  The precise runtime semantics added here follows that of proposal-intl-keep-trailing-zeros. As of writing, that proposal is at stage 2.7 and seeks to advance to stage 3. See their <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-runtime-semantics-stringintlmv">the spec text for StringIntlMV</a>. Note that that proposal adds runtime semantics to 402; we intend to promote their semantics to 262, removing <q>Intl</q> from the name.
+	</p>
       </emu-note>
     </emu-clause>
 
