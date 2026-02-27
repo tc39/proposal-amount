@@ -459,13 +459,13 @@ location: https://github.com/tc39/proposal-amount/
             1. Let _amountValue_ be _intlMV_[0].
             1. Let _numFractionDigits_ be CountFractionDigits of _parsed_.
             1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, _numFractionDigits_).
-        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Value]], [[Unit]] »).
-        1. Set _O_.[[Value]] to _value_.
+        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+        1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
-        <p>When no precision options are given, Number and BigInt arguments are stored directly in [[Value]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[Value]] always holds a String.</p>
+        <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -479,8 +479,8 @@ location: https://github.com/tc39/proposal-amount/
     <p>This accessor property, whose set accessor function is *undefined*, returns the numeric value of the Amount. Its get accessor function performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Return _O_.[[Value]].
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Return _O_.[[AmountValue]].
     </emu-alg>
     <emu-note>
       <p>The value may be a Number, BigInt, or String. It is a String when precision options were applied during construction or when the Amount is the result of unit conversion.</p>
@@ -492,7 +492,7 @@ location: https://github.com/tc39/proposal-amount/
     <p>This accessor property, whose set accessor function is *undefined*, returns a String value (or *undefined*) indicating the unit that this Amount has. Its get accessor function performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Return _O_.[[Unit]].
     </emu-alg>
   </emu-clause>
@@ -503,8 +503,8 @@ location: https://github.com/tc39/proposal-amount/
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Let _v_ be _O_.[[Value]].
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Let _v_ be _O_.[[AmountValue]].
       1. Let _u_ be _O_.[[Unit]].
       1. If _v_ is a String, then
         1. Let _valueStr_ be _v_.
@@ -524,7 +524,7 @@ location: https://github.com/tc39/proposal-amount/
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Return ? Call(%Amount.prototype.toString%, _O_, « »).
     </emu-alg>
     <p>The meanings of the optional parameters to this method are defined in the ECMA-402 specification; implementations that do not include ECMA-402 support must not use those parameter positions for anything else.</p>
@@ -536,7 +536,7 @@ location: https://github.com/tc39/proposal-amount/
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Let _sourceUnit_ be _O_.[[Unit]].
       1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
       1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
@@ -545,7 +545,7 @@ location: https://github.com/tc39/proposal-amount/
       1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
       1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
       1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
-      1. Let _v_ be _O_.[[Value]].
+      1. Let _v_ be _O_.[[AmountValue]].
       1. If _v_ is a Number, then
         1. Let _sourceValue_ be _v_.
       1. Else if _v_ is a BigInt, then
@@ -567,8 +567,8 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, ℝ(_fractionDigits_)).
       1. Else,
         1. Let _value_ be _convertedValue_.
-      1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Value]], [[Unit]] »).
-      1. Set _result_.[[Value]] to _value_.
+      1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. Set _result_.[[AmountValue]] to _value_.
       1. Set _result_.[[Unit]] to _targetUnit_.
       1. Return _result_.
     </emu-alg>
