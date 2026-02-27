@@ -87,62 +87,12 @@ location: https://github.com/tc39/proposal-amount/
           The conversion of a |StringNumericLiteral| to a mathematical value and a precision is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.
           The result of StringIntlMV is a List value with two elements, a mathematical value and the count of decimal digits in the source text.
         </p>
+	<p>
+	  TODO The precise runtime semantics added here follows that of proposal-intl-keep-trailing-zeros. As of writing, that proposal is at stage 2.7 and seeks to advance to stage 3. We refrain from copying
+	  <!-- See https://tc39.es/proposal-intl-keep-trailing-zeros/ -->
+	</p>
         </ins>
       </emu-note>
-      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
-      <emu-alg>
-        1. Return <del>0</del><ins>« 0, 0 »</ins>.
-      </emu-alg>
-      <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
-      <emu-alg>
-        1. Return StringIntlMV of |StrNumericLiteral|.
-      </emu-alg>
-      <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
-      <emu-alg>
-        1. <del>Return MV of |NonDecimalIntegerLiteral|.</del>
-        1. <ins>Let _i_ be MV of |NonDecimalIntegerLiteral|.</ins>
-        1. <ins>Return « _i_, 0 ».</ins>
-      </emu-alg>
-      <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
-      <emu-alg>
-        1. Let <del>_a_</del><ins>_x_</ins> be StringIntlMV of |StrUnsignedDecimalLiteral|.
-        1. <ins>Let _a_ be the first element of _x_.</ins>
-        1. <ins>Let _n_ be the second element of _x_.</ins>
-        1. If _a_ is 0, return <del>~negative-zero~</del><ins>« ~negative-zero~, _n_ »</ins>.
-        1. If _a_ is ~positive-infinity~, return <del>~negative-infinity~</del><ins>« ~negative-infinity~, 0 »</ins>.
-        1. Return <del>-_a_</del><ins>« -_a_, _n_ »</ins>.
-      </emu-alg>
-      <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
-      <emu-alg>
-        1. Return <del>~positive-infinity~</del><ins>« ~positive-infinity~, 0 »</ins>.
-      </emu-alg>
-      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
-      <emu-alg>
-        1. Let _a_ be MV of the first |DecimalDigits|.
-        1. <ins>Let _m_ be the number of code points in the first |DecimalDigits|.</ins>
-        1. If the second |DecimalDigits| is present, then
-          1. Let _b_ be MV of the second |DecimalDigits|.
-          1. Let _n_ be the number of code points in the second |DecimalDigits|.
-        1. Else,
-          1. Let _b_ be 0.
-          1. Let _n_ be 0.
-        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-        1. Return <ins>«</ins> (_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup><ins>, _m_ + _n_ »</ins>.
-      </emu-alg>
-      <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
-      <emu-alg>
-        1. Let _b_ be MV of |DecimalDigits|.
-        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-        1. Let _n_ be the number of code points in |DecimalDigits|.
-        1. Return <ins>«</ins> _b_ × 10<sup>_e_ - _n_</sup><ins>, _n_ ».</ins>
-      </emu-alg>
-      <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
-      <emu-alg>
-        1. Let _a_ be MV of |DecimalDigits|.
-        1. <ins>Let _m_ be the number of code points in |DecimalDigits|.</ins>
-        1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-        1. Return <ins>«</ins> _a_ × 10<sup>_e_</sup><ins>, _m_ »</ins>.
-      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics-countfractiondigits" type="sdo">

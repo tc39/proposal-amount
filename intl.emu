@@ -22,8 +22,8 @@
 
       <emu-alg>
         1. Let _O_ be the *this* value.
-        1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-        1. Let _v_ be _O_.[[Value]].
+        1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+        1. Let _v_ be _O_.[[AmountValue]].
         1. If _v_ is a String, then
           1. Let _numValue_ be _v_.
         1. Else if _v_ is a BigInt, then
@@ -60,7 +60,7 @@
 
       <emu-alg>
         1. Let _O_ be the *this* value.
-        1. Perform ? RequireInternalSlot(_O_, [[Value]]).
+        1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
         1. Let _sourceUnit_ be _O_.[[Unit]].
         1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
         1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
@@ -72,7 +72,7 @@
         1. Let _localeValue_ be ? Get(_processedOptions_, *"locale"*).
         1. Let _usage_ be ? GetOption(_processedOptions_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. If _targetUnit_ is *undefined* and _localeValue_ is *undefined* and _usage_ is *undefined*, throw a *TypeError* exception.
-        1. Let _v_ be _O_.[[Value]].
+        1. Let _v_ be _O_.[[AmountValue]].
         1. If _v_ is a Number, then
           1. Let _sourceValue_ be _v_.
         1. Else if _v_ is a BigInt, then
@@ -101,8 +101,8 @@
           1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, ℝ(_fractionDigits_)).
         1. Else,
           1. Let _value_ be _convertedValue_.
-        1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Value]], [[Unit]] »).
-        1. Set _result_.[[Value]] to _value_.
+        1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+        1. Set _result_.[[AmountValue]] to _value_.
         1. Set _result_.[[Unit]] to _targetUnit_.
         1. Return _result_.
       </emu-alg>
