@@ -97,132 +97,6 @@ location: https://github.com/tc39/proposal-amount/
     <emu-clause id="sec-amount-abstract-ops-mv">
       <h1>Abstract Operations</h1>
 
-      <emu-clause id="sec-amount-applyroundingmodetopositive" type="abstract operation">
-        <h1>ApplyRoundingModeToPositive(
-          _m_: a positive mathematical value,
-          _roundingMode_: a rounding mode
-        ): an integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest integer approximation to a given positive mathematical value, rounded according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _mLow_ be floor(_m_).
-          1. Let _fraction_ be _m_ – _mLow_.
-          1. If _fraction_ = 0, return _mLow_.
-          1. Let _mHigh_ be _mLow_ + 1.
-          1. If _roundingMode_ is *"floor"* or *"trunc"*, return _mLow_.
-          1. If _roundingMode_ is *"ceil" or *"expand"*, return _mHigh_.
-          1. If _fraction_ < 0.5, return _mLow_.
-          1. If _fraction_ > 0.5, return _mHigh_.
-          1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand"* or *"halfCeil"*, return _mHigh_.
-          1. If _mLow_ is even, return _mLow_.
-          1. Return _mHigh_.
-        </emu-alg>
-      </emu-clause>
-
-    <emu-clause id="sec-amount-reverseroundingmode" type="abstract operation">
-      <h1>ReverseRoundingMode (
-        _mode_: a rounding mode
-      ): a rounding mode
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It computes the rounding mode that would be used if we were to rounding a negative mathematical value with the given rounding mode.</dd>
-      </dl>
-      <emu-alg>
-        1. If _mode_ is *"floor"*, return *"ceil"*.
-        1. If _mode_ is *"ceil"*, return *"floor"*.
-        1. If _mode_ is *"halfCeil"*, return *"halfFloor"*.
-        1. If _mode_ is *"halfFloor"*, return *"halfCeil"*.
-        1. Otherwise, return _mode_.
-      </emu-alg>
-     </emu-clause>
-
-      <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
-        <h1>RoundAmountValueToFractionDigits(
-          _v_: a mathematical value,
-          _n_: an integer,
-          optional _roundingMode_: a rounding mode
-        ): a mathematical value
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest approximation to a given mathematical value that has at most the given number of fractional digits, rounding (if necessary) according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. If _v_ = 0, return 0.
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
-          1. If v &lt; 0, then
-            1. Let _reverseRoundingMode_ be _roundingMode_.
-            1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
-            1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
-            1. If _roundingMode_ is *"halfCeil"*, set _reverseRoundingMode_ to *"halfFloor"*.
-            1. If _roundingMode_ is *"halfFloor"*, set _reverseRoundingMode_ to *"halfCeil"*.
-            1. Let _d_ be RoundAmountValueToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
-            1. Return –_d_.
-          1. Let _m_ be _v_ × 10<sup>_n_</sup>.
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-          1. Return _rounded_ × 10<sup>-_n_</sup>.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderAmountValueWithFractionDigits (
-          _v_: an Intl mathematical value,
-          _numDigits_: an integer,
-          optional _roundingMode_: a rounding mode
-        ): a String
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It renders the given Intl mathematical value with a given number of fractional digits, rounding, if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
-        </dl>
-        <emu-alg>
-          1. If _v_ is ~not-a-number~, return *"NaN"*.
-          1. If _v_ is ~negative-infinity~, return *"-Infinity"*.
-          1. If _v_ is ~positive-infinity~, return *"Infinity"*.
-          1. If _v_ is ~minus-zero~, then
-            1. If _numDigits_ < 0, then
-              1. Let _exp_ be the unique string representation of -_numDigits_ in base 10 without duplicate leading zeros.
-              1. Return the string-concatenation of *"0"*, *"e"*, and _exp_.
-            1. Otherwise:
-              1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
-              1. Let _z_ be *"-0"*.
-              1. If _numDigits_ = 0, return _z_.
-              1. Otherwise, return the string-concatenation of _z_, *"."* and _trailingZeroes_.
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
-          1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
-          1. If _v_ < 0, then
-            1. Set _v_ to -_v_.
-            1. Set _roundingMode_ to ReverseRoundingMode(_roundingMode_).
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _roundingMode_).
-          1. todo Let _rendered_ be the result of following the algorithm in <emu-xref href="#sec-number.prototype.toexponential">Number.prototype.toExponential</emu-xref> to return a String rendering of _rounded_ in exponential notation having _numDigits_ significant digits, prefixed by _prefix_.
-          1. Return the string-concatenation of _prefix_ and _rendered_.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-SignificantToFractionDigits" type="abstract operation">
-        <h1>SignificantToFractionDigits (
-          _value_: an Intl mathematical value,
-          _significantDigits_: a positive integer
-        ): an integer
-        </h1>
-        <dl class="header"></dl>
-        <emu-alg>
-          1. If _value_ is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, then
-            1. Return 0.
-          1. If _value_ is one of 0 or ~negative-zero~, then
-            1. Let _integerDigits_ be 1.
-          1. Else,
-            1. Let _integerDigits_ be the smallest integer such that 10<sup>_integerDigits_</sup> > abs(_value_).
-          1. Assert: _significantDigits_ > 0.
-          1. Return _significantDigits_ - _integerDigits_.
-        </emu-alg>
-      </emu-clause>
-
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an Object
@@ -322,34 +196,13 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
-        1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, let _hasPrecision_ be *true*; else let _hasPrecision_ be *false*.
-        1. If _hasPrecision_ is *true*, then
-          1. If _x_ is a String, then
-            1. Let _intlMV_ be the StringIntlMV of _parsed_.
-            1. Let _amountValue_ be _intlMV_[0].
-          1. Else if _x_ is a BigInt, then
-            1. Let _amountValue_ be ℝ(_x_).
-          1. Else,
-            1. Assert: _x_ is a Number.
-            1. If _x_ is *NaN*, let _amountValue_ be ~not-a-number~.
-            1. Else if _x_ is *+∞*<sub>𝔽</sub>, let _amountValue_ be ~positive-infinity~.
-            1. Else if _x_ is *-∞*<sub>𝔽</sub>, let _amountValue_ be ~negative-infinity~.
-            1. Else if _x_ is *-0*<sub>𝔽</sub>, let _amountValue_ be ~negative-zero~.
-            1. Else, let _amountValue_ be ℝ(_x_).
-          1. If _significantDigits_ is not *undefined*, set _fractionDigits_ to 𝔽(SignificantToFractionDigits(_amountValue_, ℝ(_significantDigits_))).
-          1. If _amountValue_ is a mathematical value, then
-            1. Set _amountValue_ to RoundAmountValueToFractionDigits(_amountValue_, ℝ(_fractionDigits_), _roundingMode_).
-          1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, ℝ(_fractionDigits_)).
+        1. If _x_ is a Number or _x_ is a BigInt, then
+          1. Let _value_ be _x_.
         1. Else,
-          1. If _x_ is a Number or _x_ is a BigInt, then
-            1. Let _value_ be _x_.
-          1. Else,
-            1. Assert: _x_ is a String.
-            1. Let _intlMV_ be the StringIntlMV of _parsed_.
-            1. Let _amountValue_ be _intlMV_[0].
-            1. Let _digitCount_ be _intlMV_[1].
-            1. Set _fractionDigits_ to SignificantToFractionDigits(_amountValue_, _digitCount_).
-            1. Let _value_ be RenderAmountValueWithFractionDigits(_amountValue_, _fractionDigits_).
+          1. Assert: _x_ is a String.
+          1. todo Let _intlObject_ be an Object suitable as a first argument <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, using _fractionDigits_, _significantDigits_, and _roundingMode_.
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
+          1. Let _value_ be FormatNumericToString(_intlObject_, _intlMV_).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
