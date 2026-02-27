@@ -243,6 +243,11 @@ location: https://github.com/tc39/proposal-amount/
       <emu-note>
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
       </emu-note>
+      <emu-note type="editor">
+	<p>
+	  We intend to move 402's FormatNumericToString, and its dependent AOs, to 262, possibly renamed.
+	</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 </emu-clause>
