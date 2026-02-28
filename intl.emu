@@ -91,7 +91,7 @@
           1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _sourceValue_, _requestedLocales_, _usage_, _matcher_).
         1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
         1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
-        1. todo Let _intlObject_ be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref> that uses _minSignificantDigits_, _maxSignificantDigits_, _minFractionDigits_, _maxFractionDigits_, _roundingPriority_, and _roundingMode_.
+        1. TODO Let _intlObject_ be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref> that uses _minSignificantDigits_, _maxSignificantDigits_, _minFractionDigits_, _maxFractionDigits_, _roundingPriority_, and _roundingMode_.
         1. Let _formattedConvertedValue_ be FormatNumericToString(_intlObject_, _convertedValue_).
         1. Set _result_.[[AmountValue]] to _formattedConvertedValue_.
         1. Set _result_.[[Unit]] to _targetUnit_.
