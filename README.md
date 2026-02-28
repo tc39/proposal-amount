@@ -47,13 +47,14 @@ Amount will have the following read-only properties:
 Note: ⚠️  All property/method names up for bikeshedding.
 
 * `value` (Number or BigInt or String): The numerical value of the amount.
-  By default, the type of the value used in the constructor is retained.
+  The type of the value used in the constructor is retained,
+  except that any non-finite value is a Number (`Infinity`, `-Infinity`, or `NaN`)
+  and any value that was potentially affected by precision options and/or unit conversion is a String.
 
-  The value of an Amount constructed with precision options,
-  or one that's the result of unit conversion,
-  is always a numerical String if the value is finite,
-  using the same exponential notation as produced by [Number.p.toExponential],
-  or a Number if the value is `Infinity`, `-Infinity`, or `NaN`.
+  A String `value` is always in the format returned by [Number.p.toExponential]
+  (decimal exponential notation with an explicitly signed exponent
+  and a significand that is either exactly 0 or has a positive absolute value less than 10)
+  but not necessarily limited by the same bounds.
 * `unit` (String or not defined): The unit of measurement associated with the Amount's numerical value.
   An undefined value indicates "no unit supplied".
 
