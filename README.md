@@ -72,7 +72,7 @@ Note: ⚠️  All property/method names up for bikeshedding.
   When constructing an Amount from a String `value`,
   its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
   or a RangeError is thrown.
-  The `value` property of a String-valued Amount is not necessarily equal to the `value` its constructor was called with.
+  The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
   If either `fractionDigits` or `significantDigits` is set,
   the `value` is rounded accordingly,
