@@ -15,9 +15,16 @@ location: https://github.com/tc39/proposal-amount/
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA&#8203;-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
+  <emu-note type="editor">
+    <p>
+      The changes proposed here are stacked on top of the <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/">Keep Trailing Zeros</a> ECMA-402 proposal,
+      and include calls to ECMA-402 Abstract Operations from ECMA&#8203;-262 algorithms.
+      Where necessary, we intend to promote those semantics to ECMA&#8203;-262.
+    </p>
+  </emu-note>
 </emu-intro>
 
 <emu-clause id="sec-the-amount-object">
@@ -31,9 +38,6 @@ location: https://github.com/tc39/proposal-amount/
 
   <emu-clause id="sec-amount-abstract-operations">
     <h1>Abstract Operations</h1>
-
-    <emu-clause id="sec-operations-for-reading-options">
-      <h1>Operations for Reading Options</h1>
 
       <!-- Copied and modified from ECMA-402 GetOption -->
       <!-- The difference: -->
@@ -69,35 +73,6 @@ location: https://github.com/tc39/proposal-amount/
           1. Return _value_.
         </emu-alg>
       </emu-clause>
-    </emu-clause>
-
-    <!-- This is copied directly from proposal-intl-keep-trailing-zeros -->
-    <!-- See http://tc39.es/proposal-intl-keep-trailing-zeros/ -->
-    <emu-clause id="sec-runtime-semantics-stringintlmv" type="sdo" number="15">
-      <h1>Runtime Semantics: StringIntlMV</h1>
-      <dl class="header">
-      </dl>
-      <emu-note>
-        <del class="block">
-        <p>The
- conversion of a |StringNumericLiteral| to a Number value is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.</p>
-        </del>
-        <ins class="block">
-        <p>
-          The conversion of a |StringNumericLiteral| to a mathematical value and a precision is similar overall to the determination of the NumericValue of a |NumericLiteral| (see <emu-xref href="#sec-literals-numeric-literals"></emu-xref>), but some of the details are different.
-          The result of StringIntlMV is a List value with two elements, a mathematical value and the count of decimal digits in the source text.
-        </p>
-        </ins>
-      </emu-note>
-      <emu-note type="editor">
-	<p>
-	  The precise runtime semantics added here follows that of proposal-intl-keep-trailing-zeros. As of writing, that proposal is at stage 2.7 and seeks to advance to stage 3. See their <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-runtime-semantics-stringintlmv">the spec text for StringIntlMV</a>. Note that that proposal adds runtime semantics to 402; we intend to promote their semantics to 262, removing <q>Intl</q> from the name.
-	</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-amount-abstract-ops-mv">
-      <h1>Abstract Operations</h1>
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
@@ -205,7 +180,6 @@ location: https://github.com/tc39/proposal-amount/
           1. Return _result_.
         </emu-alg>
       </emu-clause>
-    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-the-amount-constructor">
