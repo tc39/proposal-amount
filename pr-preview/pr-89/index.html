@@ -1626,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let sdoMap = JSON.parse(`{}`);
-let biblio = JSON.parse(`{"refsByClause":{"sec-amount-getamountoptions":["_ref_0","_ref_7","_ref_8","_ref_9","_ref_10"],"sec-amount-getamountconverttooptions":["_ref_1","_ref_11","_ref_12","_ref_13","_ref_14","_ref_15","_ref_16","_ref_17","_ref_18"],"sec-amount-getunitconversionfactor":["_ref_2","_ref_3","_ref_4"],"sup-amount.prototype.tolocalestring":["_ref_5"],"sup-amount.prototype.convertto":["_ref_6","_ref_24","_ref_25","_ref_26","_ref_27"],"sec-amount-convertunitvalue":["_ref_19","_ref_20"],"sec-the-amount-constructor-value":["_ref_21"],"sec-amount.prototype.convertto":["_ref_22","_ref_23"],"sec-resolveunitpreference":["_ref_28"],"sec-setnumberformatunitoptions":["_ref_29","_ref_30","_ref_31","_ref_32","_ref_33","_ref_34"]},"entries":[{"type":"clause","id":"sec-decimal-intro-","titleHTML":"Introduction","number":""},{"type":"term","term":"decimal digit string","id":"dfn-decimal-digit-string"},{"type":"term","term":"rounding mode","id":"dfn-amount-rounding-mode","referencingIds":["_ref_0","_ref_1"]},{"type":"clause","id":"sec-amount-intro","titleHTML":"Introduction","number":""},{"type":"op","aoid":"GetOption","refId":"sec-getoption"},{"type":"clause","id":"sec-getoption","title":"GetOption ( options, property, type, values, default )","titleHTML":"GetOption ( <var>options</var>, <var>property</var>, <var>type</var>, <var>values</var>, <var>default</var> )","number":"1.1.1","referencingIds":["_ref_7","_ref_8","_ref_9","_ref_10","_ref_11","_ref_12","_ref_13","_ref_14","_ref_15","_ref_16","_ref_17","_ref_18","_ref_25","_ref_29","_ref_30","_ref_31","_ref_32","_ref_33","_ref_34"]},{"type":"op","aoid":"GetAmountOptions","refId":"sec-amount-getamountoptions"},{"type":"clause","id":"sec-amount-getamountoptions","title":"GetAmountOptions ( opts )","titleHTML":"GetAmountOptions ( <var>opts</var> )","number":"1.1.2","referencingIds":["_ref_21"]},{"type":"op","aoid":"GetAmountConvertToOptions","refId":"sec-amount-getamountconverttooptions"},{"type":"clause","id":"sec-amount-getamountconverttooptions","title":"GetAmountConvertToOptions ( opts )","titleHTML":"GetAmountConvertToOptions ( <var>opts</var> )","number":"1.1.3","referencingIds":["_ref_22","_ref_24"]},{"type":"table","id":"table-unit-conversion-factors","number":1,"caption":"Table 1: Unit Conversion Factors","referencingIds":["_ref_2","_ref_3","_ref_4"]},{"type":"op","aoid":"GetUnitConversionFactor","refId":"sec-amount-getunitconversionfactor"},{"type":"clause","id":"sec-amount-getunitconversionfactor","title":"GetUnitConversionFactor ( unit )","titleHTML":"GetUnitConversionFactor ( <var>unit</var> )","number":"1.1.4","referencingIds":["_ref_19","_ref_20","_ref_28"]},{"type":"op","aoid":"ConvertUnitValue","refId":"sec-amount-convertunitvalue"},{"type":"clause","id":"sec-amount-convertunitvalue","title":"ConvertUnitValue ( value, sourceUnit, targetUnit )","titleHTML":"ConvertUnitValue ( <var>value</var>, <var>sourceUnit</var>, <var>targetUnit</var> )","number":"1.1.5","referencingIds":["_ref_23","_ref_27"]},{"type":"clause","id":"sec-amount-abstract-operations","titleHTML":"Abstract Operations","number":"1.1"},{"type":"term","term":"%Amount%","refId":"sec-the-amount-constructor"},{"type":"clause","id":"sec-the-amount-constructor-value","title":"Amount ( x [ , opts ] )","titleHTML":"Amount ( <var>x</var> [ , <var>opts</var> ] )","number":"1.2.1"},{"type":"clause","id":"sec-the-amount-constructor","titleHTML":"The Amount Constructor","number":"1.2"},{"type":"clause","id":"sec-the-amount-object","titleHTML":"The Amount Object","number":"1"},{"type":"clause","id":"sec-amount.prototype.value","titleHTML":"get Amount.prototype.value","number":"2.1"},{"type":"clause","id":"sec-amount.prototype.unit","titleHTML":"get Amount.prototype.unit","number":"2.2"},{"type":"clause","id":"sec-amount.prototype.tostring","titleHTML":"Amount.prototype.toString ( )","number":"2.3"},{"type":"clause","id":"sec-amount.prototype.tolocalestring","title":"Amount.prototype.toLocaleString ( [ reserved1 [ , reserved2 ] ] )","titleHTML":"Amount.prototype.toLocaleString ( [ <var>reserved1</var> [ , <var>reserved2</var> ] ] )","number":"2.4","referencingIds":["_ref_5"]},{"type":"clause","id":"sec-amount.prototype.convertto","title":"Amount.prototype.convertTo ( options )","titleHTML":"Amount.prototype.convertTo ( <var>options</var> )","number":"2.5","referencingIds":["_ref_6"]},{"type":"clause","id":"sec-amount-prototype-properties","titleHTML":"Properties of the Amount Prototype","number":"2"},{"type":"clause","id":"sup-amount.prototype.tolocalestring","title":"Amount.prototype.toLocaleString ( [ locales [ , options ] ] )","titleHTML":"Amount.prototype.toLocaleString ( [ <var>locales</var> [ , <var>options</var> ] ] )","number":"3.1.1"},{"type":"clause","id":"sup-amount.prototype.convertto","title":"Amount.prototype.convertTo ( options )","titleHTML":"Amount.prototype.convertTo ( <var>options</var> )","number":"3.1.2"},{"type":"op","aoid":"ResolveUnitPreference","refId":"sec-resolveunitpreference"},{"type":"clause","id":"sec-resolveunitpreference","title":"ResolveUnitPreference ( sourceUnit, sourceValue, requestedLocales, usage, localeMatcher )","titleHTML":"ResolveUnitPreference ( <var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>localeMatcher</var> )","number":"3.1.3","referencingIds":["_ref_26"]},{"type":"clause","id":"sup-properties-of-the-amount-prototype-object","titleHTML":"Properties of the Amount Prototype Object","number":"3.1"},{"type":"clause","id":"sec-amount-intl-normative-references","titleHTML":"Amendment to the Normative References of ECMA-402","number":"3.2"},{"type":"clause","id":"sec-decimal-intl","titleHTML":"Amendments to the ECMAScript® 2024 Internationalization API Specification","number":"3"},{"type":"op","aoid":"GetNumberFormatPattern","refId":"sec-getnumberformatpattern"},{"type":"clause","id":"sec-getnumberformatpattern","title":"GetNumberFormatPattern ( numberFormat, x )","titleHTML":"GetNumberFormatPattern ( <var>numberFormat</var>, <var>x</var> )","number":"4.1.1"},{"type":"op","aoid":"SetNumberFormatUnitOptions","refId":"sec-setnumberformatunitoptions"},{"type":"clause","id":"sec-setnumberformatunitoptions","title":"SetNumberFormatUnitOptions ( intlObj, options )","titleHTML":"SetNumberFormatUnitOptions ( <var>intlObj</var>, <var>options</var> )","number":"4.1.2"},{"type":"clause","id":"sec-numberformat-abstracts","titleHTML":"Abstract Operations for NumberFormat Objects","number":"4.1"},{"type":"clause","id":"numberformat-objects","titleHTML":"NumberFormat Objects","number":"4"},{"type":"clause","id":"sec-normative-references","titleHTML":"Normative References","number":"5"},{"type":"clause","id":"sec-copyright-and-software-license","title":"Copyright & Software License","titleHTML":"Copyright &amp; Software License","number":"A"}]}`);
+let biblio = JSON.parse(`{"refsByClause":{"sec-amount-getamountoptions":["_ref_0","_ref_4","_ref_5","_ref_6","_ref_7"],"sec-amount-getamountconverttooptions":["_ref_1","_ref_8","_ref_9","_ref_10","_ref_11","_ref_12","_ref_13","_ref_14","_ref_15"],"sup-amount.prototype.tolocalestring":["_ref_2"],"sup-amount.prototype.convertto":["_ref_3","_ref_21","_ref_22","_ref_23","_ref_24"],"sec-amount-convertunitvalue":["_ref_16","_ref_17"],"sec-the-amount-constructor-value":["_ref_18"],"sec-amount.prototype.convertto":["_ref_19","_ref_20"],"sec-resolveunitpreference":["_ref_25"],"sec-setnumberformatunitoptions":["_ref_26","_ref_27","_ref_28","_ref_29","_ref_30","_ref_31"]},"entries":[{"type":"clause","id":"sec-decimal-intro-","titleHTML":"Introduction","number":""},{"type":"term","term":"decimal digit string","id":"dfn-decimal-digit-string"},{"type":"term","term":"rounding mode","id":"dfn-amount-rounding-mode","referencingIds":["_ref_0","_ref_1"]},{"type":"clause","id":"sec-amount-intro","titleHTML":"Introduction","number":""},{"type":"op","aoid":"GetOption","refId":"sec-getoption"},{"type":"clause","id":"sec-getoption","title":"GetOption ( options, property, type, values, default )","titleHTML":"GetOption ( <var>options</var>, <var>property</var>, <var>type</var>, <var>values</var>, <var>default</var> )","number":"1.1.1","referencingIds":["_ref_4","_ref_5","_ref_6","_ref_7","_ref_8","_ref_9","_ref_10","_ref_11","_ref_12","_ref_13","_ref_14","_ref_15","_ref_22","_ref_26","_ref_27","_ref_28","_ref_29","_ref_30","_ref_31"]},{"type":"op","aoid":"GetAmountOptions","refId":"sec-amount-getamountoptions"},{"type":"clause","id":"sec-amount-getamountoptions","title":"GetAmountOptions ( opts )","titleHTML":"GetAmountOptions ( <var>opts</var> )","number":"1.1.2","referencingIds":["_ref_18"]},{"type":"op","aoid":"GetAmountConvertToOptions","refId":"sec-amount-getamountconverttooptions"},{"type":"clause","id":"sec-amount-getamountconverttooptions","title":"GetAmountConvertToOptions ( opts )","titleHTML":"GetAmountConvertToOptions ( <var>opts</var> )","number":"1.1.3","referencingIds":["_ref_19","_ref_21"]},{"type":"table","id":"table-unit-conversion-factors-length","number":1,"caption":"Table 1: Unit Conversion Factors: Length (base unit: meter)"},{"type":"table","id":"table-unit-conversion-factors-mass","number":2,"caption":"Table 2: Unit Conversion Factors: Mass (base unit: kilogram)"},{"type":"table","id":"table-unit-conversion-factors-volume","number":3,"caption":"Table 3: Unit Conversion Factors: Volume (base unit: cubic-meter)"},{"type":"table","id":"table-unit-conversion-factors-temperature","number":4,"caption":"Table 4: Unit Conversion Factors: Temperature (base unit: kelvin)"},{"type":"table","id":"table-unit-conversion-factors-area","number":5,"caption":"Table 5: Unit Conversion Factors: Area (base unit: square-meter)"},{"type":"table","id":"table-unit-conversion-factors-duration","number":6,"caption":"Table 6: Unit Conversion Factors: Duration (base unit: second)"},{"type":"table","id":"table-unit-conversion-factors-year-duration","number":7,"caption":"Table 7: Unit Conversion Factors: Year Duration (base unit: year)"},{"type":"table","id":"table-unit-conversion-factors-speed","number":8,"caption":"Table 8: Unit Conversion Factors: Speed (base unit: meter-per-second)"},{"type":"table","id":"table-unit-conversion-factors-angle","number":9,"caption":"Table 9: Unit Conversion Factors: Angle (base unit: revolution)"},{"type":"table","id":"table-unit-conversion-factors-pressure","number":10,"caption":"Table 10: Unit Conversion Factors: Pressure (base unit: kilogram-per-meter-square-second)"},{"type":"table","id":"table-unit-conversion-factors-energy","number":11,"caption":"Table 11: Unit Conversion Factors: Energy (base unit: kilogram-square-meter-per-square-second)"},{"type":"table","id":"table-unit-conversion-factors-power","number":12,"caption":"Table 12: Unit Conversion Factors: Power (base unit: kilogram-square-meter-per-cubic-second)"},{"type":"table","id":"table-unit-conversion-factors-force","number":13,"caption":"Table 13: Unit Conversion Factors: Force (base unit: kilogram-meter-per-square-second)"},{"type":"table","id":"table-unit-conversion-factors-digital","number":14,"caption":"Table 14: Unit Conversion Factors: Digital (base unit: bit)"},{"type":"table","id":"table-unit-conversion-factors-portion","number":15,"caption":"Table 15: Unit Conversion Factors: Portion (base unit: part)"},{"type":"table","id":"table-unit-conversion-factors-frequency","number":16,"caption":"Table 16: Unit Conversion Factors: Frequency (base unit: revolution-per-second)"},{"type":"op","aoid":"GetUnitConversionFactor","refId":"sec-amount-getunitconversionfactor"},{"type":"clause","id":"sec-amount-getunitconversionfactor","title":"GetUnitConversionFactor ( unit )","titleHTML":"GetUnitConversionFactor ( <var>unit</var> )","number":"1.1.4","referencingIds":["_ref_16","_ref_17","_ref_25"]},{"type":"op","aoid":"ConvertUnitValue","refId":"sec-amount-convertunitvalue"},{"type":"clause","id":"sec-amount-convertunitvalue","title":"ConvertUnitValue ( value, sourceUnit, targetUnit )","titleHTML":"ConvertUnitValue ( <var>value</var>, <var>sourceUnit</var>, <var>targetUnit</var> )","number":"1.1.5","referencingIds":["_ref_20","_ref_24"]},{"type":"clause","id":"sec-amount-abstract-operations","titleHTML":"Abstract Operations","number":"1.1"},{"type":"term","term":"%Amount%","refId":"sec-the-amount-constructor"},{"type":"clause","id":"sec-the-amount-constructor-value","title":"Amount ( x [ , opts ] )","titleHTML":"Amount ( <var>x</var> [ , <var>opts</var> ] )","number":"1.2.1"},{"type":"clause","id":"sec-the-amount-constructor","titleHTML":"The Amount Constructor","number":"1.2"},{"type":"clause","id":"sec-the-amount-object","titleHTML":"The Amount Object","number":"1"},{"type":"clause","id":"sec-amount.prototype.value","titleHTML":"get Amount.prototype.value","number":"2.1"},{"type":"clause","id":"sec-amount.prototype.unit","titleHTML":"get Amount.prototype.unit","number":"2.2"},{"type":"clause","id":"sec-amount.prototype.tostring","titleHTML":"Amount.prototype.toString ( )","number":"2.3"},{"type":"clause","id":"sec-amount.prototype.tolocalestring","title":"Amount.prototype.toLocaleString ( [ reserved1 [ , reserved2 ] ] )","titleHTML":"Amount.prototype.toLocaleString ( [ <var>reserved1</var> [ , <var>reserved2</var> ] ] )","number":"2.4","referencingIds":["_ref_2"]},{"type":"clause","id":"sec-amount.prototype.convertto","title":"Amount.prototype.convertTo ( options )","titleHTML":"Amount.prototype.convertTo ( <var>options</var> )","number":"2.5","referencingIds":["_ref_3"]},{"type":"clause","id":"sec-amount-prototype-properties","titleHTML":"Properties of the Amount Prototype","number":"2"},{"type":"clause","id":"sup-amount.prototype.tolocalestring","title":"Amount.prototype.toLocaleString ( [ locales [ , options ] ] )","titleHTML":"Amount.prototype.toLocaleString ( [ <var>locales</var> [ , <var>options</var> ] ] )","number":"3.1.1"},{"type":"clause","id":"sup-amount.prototype.convertto","title":"Amount.prototype.convertTo ( options )","titleHTML":"Amount.prototype.convertTo ( <var>options</var> )","number":"3.1.2"},{"type":"op","aoid":"ResolveUnitPreference","refId":"sec-resolveunitpreference"},{"type":"clause","id":"sec-resolveunitpreference","title":"ResolveUnitPreference ( sourceUnit, sourceValue, requestedLocales, usage, localeMatcher )","titleHTML":"ResolveUnitPreference ( <var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>localeMatcher</var> )","number":"3.1.3","referencingIds":["_ref_23"]},{"type":"clause","id":"sup-properties-of-the-amount-prototype-object","titleHTML":"Properties of the Amount Prototype Object","number":"3.1"},{"type":"clause","id":"sec-amount-intl-normative-references","titleHTML":"Amendment to the Normative References of ECMA-402","number":"3.2"},{"type":"clause","id":"sec-decimal-intl","titleHTML":"Amendments to the ECMAScript® 2024 Internationalization API Specification","number":"3"},{"type":"op","aoid":"GetNumberFormatPattern","refId":"sec-getnumberformatpattern"},{"type":"clause","id":"sec-getnumberformatpattern","title":"GetNumberFormatPattern ( numberFormat, x )","titleHTML":"GetNumberFormatPattern ( <var>numberFormat</var>, <var>x</var> )","number":"4.1.1"},{"type":"op","aoid":"SetNumberFormatUnitOptions","refId":"sec-setnumberformatunitoptions"},{"type":"clause","id":"sec-setnumberformatunitoptions","title":"SetNumberFormatUnitOptions ( intlObj, options )","titleHTML":"SetNumberFormatUnitOptions ( <var>intlObj</var>, <var>options</var> )","number":"4.1.2"},{"type":"clause","id":"sec-numberformat-abstracts","titleHTML":"Abstract Operations for NumberFormat Objects","number":"4.1"},{"type":"clause","id":"numberformat-objects","titleHTML":"NumberFormat Objects","number":"4"},{"type":"clause","id":"sec-normative-references","titleHTML":"Normative References","number":"5"},{"type":"clause","id":"sec-copyright-and-software-license","title":"Copyright & Software License","titleHTML":"Copyright &amp; Software License","number":"A"}]}`);
 ;let usesMultipage = false</script><style>:root {
   --foreground-color: #111;
   --background-color: #fff;
@@ -3994,7 +3994,7 @@ p.ECMAaddress {
 </ul></div><div id="menu-toggle"><svg xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; stroke:currentColor" viewBox="0 0 120 120" width="54" height="54">
       <title>Menu</title>
       <path stroke-width="10" stroke-linecap="round" d="M30,60 h60  M30,30 m0,5 h60  M30,90 m0,-5 h60"></path>
-    </svg></div><div id="menu-spacer" class="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins<button class="unpin-all">clear</button></div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal-intro-" title="Introduction">Introduction</a></li><li><span class="item-toggle">+</span><a href="#sec-the-amount-object" title="The Amount Object"><span class="secnum">1</span> The Amount Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-amount-intro" title="Introduction">Introduction</a></li><li><span class="item-toggle">+</span><a href="#sec-amount-abstract-operations" title="Abstract Operations"><span class="secnum">1.1</span> Abstract Operations</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-getoption" title="GetOption ( options, property, type, values, default )"><span class="secnum">1.1.1</span> GetOption ( <var>options</var>, <var>property</var>, <var>type</var>, <var>values</var>, <var>default</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getamountoptions" title="GetAmountOptions ( opts )"><span class="secnum">1.1.2</span> GetAmountOptions ( <var>opts</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getamountconverttooptions" title="GetAmountConvertToOptions ( opts )"><span class="secnum">1.1.3</span> GetAmountConvertToOptions ( <var>opts</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getunitconversionfactor" title="GetUnitConversionFactor ( unit )"><span class="secnum">1.1.4</span> GetUnitConversionFactor ( <var>unit</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-convertunitvalue" title="ConvertUnitValue ( value, sourceUnit, targetUnit )"><span class="secnum">1.1.5</span> ConvertUnitValue ( <var>value</var>, <var>sourceUnit</var>, <var>targetUnit</var> )</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-the-amount-constructor" title="The Amount Constructor"><span class="secnum">1.2</span> The Amount Constructor</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-the-amount-constructor-value" title="Amount ( x [ , opts ] )"><span class="secnum">1.2.1</span> Amount ( <var>x</var> [ , <var>opts</var> ] )</a></li></ol></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-amount-prototype-properties" title="Properties of the Amount Prototype"><span class="secnum">2</span> Properties of the Amount Prototype</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.value" title="get Amount.prototype.value"><span class="secnum">2.1</span> get Amount.prototype.value</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.unit" title="get Amount.prototype.unit"><span class="secnum">2.2</span> get Amount.prototype.unit</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.tostring" title="Amount.prototype.toString ( )"><span class="secnum">2.3</span> Amount.prototype.toString ( )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.tolocalestring" title="Amount.prototype.toLocaleString ( [ reserved1 [ , reserved2 ] ] )"><span class="secnum">2.4</span> Amount.prototype.toLocaleString ( [ <var>reserved1</var> [ , <var>reserved2</var> ] ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.convertto" title="Amount.prototype.convertTo ( options )"><span class="secnum">2.5</span> Amount.prototype.convertTo ( <var>options</var> )</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-decimal-intl" title="Amendments to the ECMAScript® 2024 Internationalization API Specification"><span class="secnum">3</span> Amendments to the ECMAScript® 2024 Internationalization API Specification</a><ol class="toc"><li><span class="item-toggle">+</span><a href="#sup-properties-of-the-amount-prototype-object" title="Properties of the Amount Prototype Object"><span class="secnum">3.1</span> Properties of the Amount Prototype Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sup-amount.prototype.tolocalestring" title="Amount.prototype.toLocaleString ( [ locales [ , options ] ] )"><span class="secnum">3.1.1</span> Amount.prototype.toLocaleString ( [ <var>locales</var> [ , <var>options</var> ] ] )</a></li><li><span class="item-toggle-none"></span><a href="#sup-amount.prototype.convertto" title="Amount.prototype.convertTo ( options )"><span class="secnum">3.1.2</span> Amount.prototype.convertTo ( <var>options</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-resolveunitpreference" title="ResolveUnitPreference ( sourceUnit, sourceValue, requestedLocales, usage, localeMatcher )"><span class="secnum">3.1.3</span> ResolveUnitPreference ( <var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>localeMatcher</var> )</a></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-amount-intl-normative-references" title="Amendment to the Normative References of ECMA-402"><span class="secnum">3.2</span> Amendment to the Normative References of ECMA-402</a></li></ol></li><li><span class="item-toggle">+</span><a href="#numberformat-objects" title="NumberFormat Objects"><span class="secnum">4</span> NumberFormat Objects</a><ol class="toc"><li><span class="item-toggle">+</span><a href="#sec-numberformat-abstracts" title="Abstract Operations for NumberFormat Objects"><span class="secnum">4.1</span> Abstract Operations for NumberFormat Objects</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-getnumberformatpattern" title="GetNumberFormatPattern ( numberFormat, x )"><span class="secnum">4.1.1</span> GetNumberFormatPattern ( <var>numberFormat</var>, <var>x</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-setnumberformatunitoptions" title="SetNumberFormatUnitOptions ( intlObj, options )"><span class="secnum">4.1.2</span> SetNumberFormatUnitOptions ( <var>intlObj</var>, <var>options</var> )</a></li></ol></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-normative-references" title="Normative References"><span class="secnum">5</span> Normative References</a></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License">Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage 1 Draft / March 23, 2026</h1><h1 class="title">Amount</h1>
+    </svg></div><div id="menu-spacer" class="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins<button class="unpin-all">clear</button></div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal-intro-" title="Introduction">Introduction</a></li><li><span class="item-toggle">+</span><a href="#sec-the-amount-object" title="The Amount Object"><span class="secnum">1</span> The Amount Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-amount-intro" title="Introduction">Introduction</a></li><li><span class="item-toggle">+</span><a href="#sec-amount-abstract-operations" title="Abstract Operations"><span class="secnum">1.1</span> Abstract Operations</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-getoption" title="GetOption ( options, property, type, values, default )"><span class="secnum">1.1.1</span> GetOption ( <var>options</var>, <var>property</var>, <var>type</var>, <var>values</var>, <var>default</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getamountoptions" title="GetAmountOptions ( opts )"><span class="secnum">1.1.2</span> GetAmountOptions ( <var>opts</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getamountconverttooptions" title="GetAmountConvertToOptions ( opts )"><span class="secnum">1.1.3</span> GetAmountConvertToOptions ( <var>opts</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-getunitconversionfactor" title="GetUnitConversionFactor ( unit )"><span class="secnum">1.1.4</span> GetUnitConversionFactor ( <var>unit</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount-convertunitvalue" title="ConvertUnitValue ( value, sourceUnit, targetUnit )"><span class="secnum">1.1.5</span> ConvertUnitValue ( <var>value</var>, <var>sourceUnit</var>, <var>targetUnit</var> )</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-the-amount-constructor" title="The Amount Constructor"><span class="secnum">1.2</span> The Amount Constructor</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-the-amount-constructor-value" title="Amount ( x [ , opts ] )"><span class="secnum">1.2.1</span> Amount ( <var>x</var> [ , <var>opts</var> ] )</a></li></ol></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-amount-prototype-properties" title="Properties of the Amount Prototype"><span class="secnum">2</span> Properties of the Amount Prototype</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.value" title="get Amount.prototype.value"><span class="secnum">2.1</span> get Amount.prototype.value</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.unit" title="get Amount.prototype.unit"><span class="secnum">2.2</span> get Amount.prototype.unit</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.tostring" title="Amount.prototype.toString ( )"><span class="secnum">2.3</span> Amount.prototype.toString ( )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.tolocalestring" title="Amount.prototype.toLocaleString ( [ reserved1 [ , reserved2 ] ] )"><span class="secnum">2.4</span> Amount.prototype.toLocaleString ( [ <var>reserved1</var> [ , <var>reserved2</var> ] ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-amount.prototype.convertto" title="Amount.prototype.convertTo ( options )"><span class="secnum">2.5</span> Amount.prototype.convertTo ( <var>options</var> )</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-decimal-intl" title="Amendments to the ECMAScript® 2024 Internationalization API Specification"><span class="secnum">3</span> Amendments to the ECMAScript® 2024 Internationalization API Specification</a><ol class="toc"><li><span class="item-toggle">+</span><a href="#sup-properties-of-the-amount-prototype-object" title="Properties of the Amount Prototype Object"><span class="secnum">3.1</span> Properties of the Amount Prototype Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sup-amount.prototype.tolocalestring" title="Amount.prototype.toLocaleString ( [ locales [ , options ] ] )"><span class="secnum">3.1.1</span> Amount.prototype.toLocaleString ( [ <var>locales</var> [ , <var>options</var> ] ] )</a></li><li><span class="item-toggle-none"></span><a href="#sup-amount.prototype.convertto" title="Amount.prototype.convertTo ( options )"><span class="secnum">3.1.2</span> Amount.prototype.convertTo ( <var>options</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-resolveunitpreference" title="ResolveUnitPreference ( sourceUnit, sourceValue, requestedLocales, usage, localeMatcher )"><span class="secnum">3.1.3</span> ResolveUnitPreference ( <var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>localeMatcher</var> )</a></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-amount-intl-normative-references" title="Amendment to the Normative References of ECMA-402"><span class="secnum">3.2</span> Amendment to the Normative References of ECMA-402</a></li></ol></li><li><span class="item-toggle">+</span><a href="#numberformat-objects" title="NumberFormat Objects"><span class="secnum">4</span> NumberFormat Objects</a><ol class="toc"><li><span class="item-toggle">+</span><a href="#sec-numberformat-abstracts" title="Abstract Operations for NumberFormat Objects"><span class="secnum">4.1</span> Abstract Operations for NumberFormat Objects</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-getnumberformatpattern" title="GetNumberFormatPattern ( numberFormat, x )"><span class="secnum">4.1.1</span> GetNumberFormatPattern ( <var>numberFormat</var>, <var>x</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-setnumberformatunitoptions" title="SetNumberFormatUnitOptions ( intlObj, options )"><span class="secnum">4.1.2</span> SetNumberFormatUnitOptions ( <var>intlObj</var>, <var>options</var> )</a></li></ol></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-normative-references" title="Normative References"><span class="secnum">5</span> Normative References</a></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License">Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage 1 Draft / March 25, 2026</h1><h1 class="title">Amount</h1>
 
 <emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
@@ -4037,13 +4037,13 @@ p.ECMAaddress {
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation" aoid="GetAmountOptions">
         <h1><span class="secnum">1.1.2</span> GetAmountOptions ( <var>opts</var> )</h1>
         <p>The abstract operation GetAmountOptions takes argument <var>opts</var> (an Object) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> with fields <var class="field">[[FractionDigits]]</var> (a non-negative <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), <var class="field">[[RoundingMode]]</var> (a <emu-xref href="#dfn-amount-rounding-mode" id="_ref_0"><a href="#dfn-amount-rounding-mode">rounding mode</a></emu-xref>), <var class="field">[[SignificantDigits]]</var> (a positive <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), and <var class="field">[[Unit]]</var> (a String or <emu-val>undefined</emu-val>) or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It validates the given <var>options</var> (an ECMAScript object) for creating an Amount and returns a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> with slots set to appropriate marthematical values (or <emu-val>undefined</emu-val>). It performs the following steps when called:</p>
-        <emu-alg><ol><li>Let <var>opts</var> be ?&nbsp;<emu-xref aoid="GetOptionsObject"><a href="https://tc39.es/ecma402/#sec-getoptionsobject">GetOptionsObject</a></emu-xref>(<var>opts</var>).</li><li>Let <var>fractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_7"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"fractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>roundingMode</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_8"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingMode"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"ceil"</emu-val>, <emu-val>"floor"</emu-val>, <emu-val>"expand"</emu-val>, <emu-val>"trunc"</emu-val>, <emu-val>"halfCeil"</emu-val>, <emu-val>"halfFloor"</emu-val>, <emu-val>"halfExpand"</emu-val>, <emu-val>"halfTrunc"</emu-val>, <emu-val>"halfEven"</emu-val>&nbsp;», <emu-val>"halfEven"</emu-val>).</li><li>Let <var>significantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_9"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"significantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_10"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>If <var>fractionDigits</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>significantDigits</var> is not <emu-val>undefined</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>fractionDigits</var> is not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Else if <var>significantDigits</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>significantDigits</var> is not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>significantDigits</var> &lt; <emu-val>1</emu-val><sub>𝔽</sub>, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>If <var>unit</var> is the empty String, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[FractionDigits]]</var>: <var>fractionDigits</var>, <var class="field">[[RoundingMode]]</var>: <var>roundingMode</var>, <var class="field">[[SignificantDigits]]</var>: <var>significantDigits</var>, <var class="field">[[Unit]]</var>: <var>unit</var>&nbsp;}.</li></ol></emu-alg>
+        <emu-alg><ol><li>Let <var>opts</var> be ?&nbsp;<emu-xref aoid="GetOptionsObject"><a href="https://tc39.es/ecma402/#sec-getoptionsobject">GetOptionsObject</a></emu-xref>(<var>opts</var>).</li><li>Let <var>fractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_4"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"fractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>roundingMode</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_5"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingMode"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"ceil"</emu-val>, <emu-val>"floor"</emu-val>, <emu-val>"expand"</emu-val>, <emu-val>"trunc"</emu-val>, <emu-val>"halfCeil"</emu-val>, <emu-val>"halfFloor"</emu-val>, <emu-val>"halfExpand"</emu-val>, <emu-val>"halfTrunc"</emu-val>, <emu-val>"halfEven"</emu-val>&nbsp;», <emu-val>"halfEven"</emu-val>).</li><li>Let <var>significantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_6"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"significantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_7"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>If <var>fractionDigits</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>significantDigits</var> is not <emu-val>undefined</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>fractionDigits</var> is not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Else if <var>significantDigits</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>significantDigits</var> is not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>significantDigits</var> &lt; <emu-val>1</emu-val><sub>𝔽</sub>, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>If <var>unit</var> is the empty String, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[FractionDigits]]</var>: <var>fractionDigits</var>, <var class="field">[[RoundingMode]]</var>: <var>roundingMode</var>, <var class="field">[[SignificantDigits]]</var>: <var>significantDigits</var>, <var class="field">[[Unit]]</var>: <var>unit</var>&nbsp;}.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation" aoid="GetAmountConvertToOptions">
         <h1><span class="secnum">1.1.3</span> GetAmountConvertToOptions ( <var>opts</var> )</h1>
         <p>The abstract operation GetAmountConvertToOptions takes argument <var>opts</var> (an Object) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> with fields <var class="field">[[MinFractionDigits]]</var> (a non-negative <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), <var class="field">[[MaxFractionDigits]]</var> (a non-negative <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), <var class="field">[[RoundingMode]]</var> (a <emu-xref href="#dfn-amount-rounding-mode" id="_ref_1"><a href="#dfn-amount-rounding-mode">rounding mode</a></emu-xref>), <var class="field">[[RoundingPriority]]</var> (a String), <var class="field">[[MinSignificantDigits]]</var> (a positive <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), <var class="field">[[MaxSignificantDigits]]</var> (a positive <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> or <emu-val>undefined</emu-val>), <var class="field">[[Locale]]</var> (a String or <emu-val>undefined</emu-val>), <var class="field">[[Usage]]</var> (a String or <emu-val>undefined</emu-val>), and <var class="field">[[Unit]]</var> (a String or <emu-val>undefined</emu-val>) or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It validates the given <var>options</var> (an ECMAScript object) for converting an Amount to another Amount and returns a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> with slots set to appropriate marthematical values (or <emu-val>undefined</emu-val>). It performs the following steps when called:</p>
-        <emu-alg><ol><li>Let <var>opts</var> be ?&nbsp;<emu-xref aoid="GetOptionsObject"><a href="https://tc39.es/ecma402/#sec-getoptionsobject">GetOptionsObject</a></emu-xref>(<var>opts</var>).</li><li>Let <var>minFractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_11"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"minimumfractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>maxFractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_12"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumfractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>roundingMode</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_13"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingMode"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"ceil"</emu-val>, <emu-val>"floor"</emu-val>, <emu-val>"expand"</emu-val>, <emu-val>"trunc"</emu-val>, <emu-val>"halfCeil"</emu-val>, <emu-val>"halfFloor"</emu-val>, <emu-val>"halfExpand"</emu-val>, <emu-val>"halfTrunc"</emu-val>, <emu-val>"halfEven"</emu-val>&nbsp;», <emu-val>"halfEven"</emu-val>).</li><li>Let <var>roundingPriority</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_14"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingPriority"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>minSignificantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_15"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"minimumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>maxSignificantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_16"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>significantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_17"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_18"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>If <var>minFractionDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>maxFractionDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>minSignificantDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>maxSignificantDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>unit</var> is the empty String, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[MinimumFractionDigits]]</var>: <var>minFractionDigits</var>, <var class="field">[[MaximumFractionDigits]]</var>: <var>maxFractionDigits</var>, <var class="field">[[MinimumSignificantDigits]]</var>: <var>minSignificantDigits</var>, <var class="field">[[MaximumSignificantDigits]]</var>: <var>maxSignificantDigits</var>, <var class="field">[[RoundingMode]]</var>: <var>roundingMode</var>, <var class="field">[[RoundingPriority]]</var>: <var>roundingPriority</var>, <var class="field">[[SignificantDigits]]</var>: <var>significantDigits</var>, <var class="field">[[Unit]]</var>: <var>unit</var>&nbsp;}.</li></ol></emu-alg>
+        <emu-alg><ol><li>Let <var>opts</var> be ?&nbsp;<emu-xref aoid="GetOptionsObject"><a href="https://tc39.es/ecma402/#sec-getoptionsobject">GetOptionsObject</a></emu-xref>(<var>opts</var>).</li><li>Let <var>minFractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_8"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"minimumfractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>maxFractionDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_9"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumfractionDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>roundingMode</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_10"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingMode"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"ceil"</emu-val>, <emu-val>"floor"</emu-val>, <emu-val>"expand"</emu-val>, <emu-val>"trunc"</emu-val>, <emu-val>"halfCeil"</emu-val>, <emu-val>"halfFloor"</emu-val>, <emu-val>"halfExpand"</emu-val>, <emu-val>"halfTrunc"</emu-val>, <emu-val>"halfEven"</emu-val>&nbsp;», <emu-val>"halfEven"</emu-val>).</li><li>Let <var>roundingPriority</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_11"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"roundingPriority"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>minSignificantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_12"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"minimumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>maxSignificantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_13"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>significantDigits</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_14"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"maximumSignificantDigits"</emu-val>, <emu-const>number</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_15"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>opts</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li>If <var>minFractionDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>maxFractionDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>minSignificantDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>maxSignificantDigits</var> is not <emu-val>undefined</emu-val> and not an <emu-xref href="#integral-number"><a href="https://tc39.es/ecma262/#integral-number">integral Number</a></emu-xref>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>unit</var> is the empty String, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[MinimumFractionDigits]]</var>: <var>minFractionDigits</var>, <var class="field">[[MaximumFractionDigits]]</var>: <var>maxFractionDigits</var>, <var class="field">[[MinimumSignificantDigits]]</var>: <var>minSignificantDigits</var>, <var class="field">[[MaximumSignificantDigits]]</var>: <var>maxSignificantDigits</var>, <var class="field">[[RoundingMode]]</var>: <var>roundingMode</var>, <var class="field">[[RoundingPriority]]</var>: <var>roundingPriority</var>, <var class="field">[[SignificantDigits]]</var>: <var>significantDigits</var>, <var class="field">[[Unit]]</var>: <var>unit</var>&nbsp;}.</li></ol></emu-alg>
 	<emu-note type="editor"><span class="note">Editor's Note</span><div class="note-contents">
 	  <p>
 	    This abstract operation will need to be overridden in the 402 part because it will read additional Intl-specific properties beyond these.
@@ -4051,13 +4051,11 @@ p.ECMAaddress {
 	</div></emu-note>
       </emu-clause>
 
-      <emu-table id="table-unit-conversion-factors" caption="Unit Conversion Factors"><figure><figcaption>Table 1: Unit Conversion Factors</figcaption>
+      <emu-table id="table-unit-conversion-factors-length" caption="Unit Conversion Factors: Length (base unit: meter)"><figure><figcaption>Table 1: Unit Conversion Factors: Length (base unit: meter)</figcaption>
         <table>
           <thead>
             <tr>
               <th>Unit</th>
-              <th>Category</th>
-              <th>Base Unit</th>
               <th>Factor Numerator</th>
               <th>Factor Denominator</th>
               <th>Offset Numerator</th>
@@ -4067,8 +4065,6 @@ p.ECMAaddress {
           <tbody>
             <tr>
               <td>inch</td>
-              <td>length</td>
-              <td>meter</td>
               <td>127</td>
               <td>5000</td>
               <td>0</td>
@@ -4076,8 +4072,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>foot</td>
-              <td>length</td>
-              <td>meter</td>
               <td>381</td>
               <td>1250</td>
               <td>0</td>
@@ -4085,8 +4079,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>yard</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1143</td>
               <td>1250</td>
               <td>0</td>
@@ -4094,8 +4086,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>fathom</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1143</td>
               <td>625</td>
               <td>0</td>
@@ -4103,8 +4093,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>mile</td>
-              <td>length</td>
-              <td>meter</td>
               <td>201168</td>
               <td>125</td>
               <td>0</td>
@@ -4112,8 +4100,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>nautical-mile</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1852</td>
               <td>1</td>
               <td>0</td>
@@ -4121,8 +4107,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>centimeter</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1</td>
               <td>100</td>
               <td>0</td>
@@ -4130,8 +4114,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>millimeter</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1</td>
               <td>1000</td>
               <td>0</td>
@@ -4139,8 +4121,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>micrometer</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1</td>
               <td>1000000</td>
               <td>0</td>
@@ -4148,8 +4128,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>nanometer</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1</td>
               <td>1000000000</td>
               <td>0</td>
@@ -4157,17 +4135,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilometer</td>
-              <td>length</td>
-              <td>meter</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-mass" caption="Unit Conversion Factors: Mass (base unit: kilogram)"><figure><figcaption>Table 2: Unit Conversion Factors: Mass (base unit: kilogram)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>gram</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>1</td>
               <td>1000</td>
               <td>0</td>
@@ -4175,8 +4165,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>milligram</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>1</td>
               <td>1000000</td>
               <td>0</td>
@@ -4184,8 +4172,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>microgram</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>1</td>
               <td>1000000000</td>
               <td>0</td>
@@ -4193,8 +4179,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>carat</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>1</td>
               <td>5000</td>
               <td>0</td>
@@ -4202,8 +4186,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>grain</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>6479891</td>
               <td>100000000000</td>
               <td>0</td>
@@ -4211,8 +4193,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>ounce</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>45359237</td>
               <td>1600000000</td>
               <td>0</td>
@@ -4220,8 +4200,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>pound</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>45359237</td>
               <td>100000000</td>
               <td>0</td>
@@ -4229,8 +4207,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>stone</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>317514659</td>
               <td>50000000</td>
               <td>0</td>
@@ -4238,8 +4214,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>ton</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>45359237</td>
               <td>50000</td>
               <td>0</td>
@@ -4247,17 +4221,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>tonne</td>
-              <td>mass</td>
-              <td>kilogram</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-volume" caption="Unit Conversion Factors: Volume (base unit: cubic-meter)"><figure><figcaption>Table 3: Unit Conversion Factors: Volume (base unit: cubic-meter)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>liter</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>1</td>
               <td>1000</td>
               <td>0</td>
@@ -4265,8 +4251,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>milliliter</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>1</td>
               <td>1000000</td>
               <td>0</td>
@@ -4274,8 +4258,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>gallon</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>125000000000</td>
               <td>0</td>
@@ -4283,8 +4265,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>gallon-imperial</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>454609</td>
               <td>100000000</td>
               <td>0</td>
@@ -4292,8 +4272,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>quart</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>500000000000</td>
               <td>0</td>
@@ -4301,8 +4279,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>pint</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>1000000000000</td>
               <td>0</td>
@@ -4310,8 +4286,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>cup</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>2000000000000</td>
               <td>0</td>
@@ -4319,8 +4293,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>cup-metric</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>1</td>
               <td>4000</td>
               <td>0</td>
@@ -4328,8 +4300,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>fluid-ounce</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>16000000000000</td>
               <td>0</td>
@@ -4337,8 +4307,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>fluid-ounce-imperial</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>454609</td>
               <td>16000000000</td>
               <td>0</td>
@@ -4346,8 +4314,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>tablespoon</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>473176473</td>
               <td>32000000000000</td>
               <td>0</td>
@@ -4355,8 +4321,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>teaspoon</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>157725491</td>
               <td>32000000000000</td>
               <td>0</td>
@@ -4364,17 +4328,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>barrel</td>
-              <td>volume</td>
-              <td>cubic-meter</td>
               <td>9936705933</td>
               <td>62500000000</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-temperature" caption="Unit Conversion Factors: Temperature (base unit: kelvin)"><figure><figcaption>Table 4: Unit Conversion Factors: Temperature (base unit: kelvin)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>celsius</td>
-              <td>temperature</td>
-              <td>kelvin</td>
               <td>1</td>
               <td>1</td>
               <td>5463</td>
@@ -4382,8 +4358,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>fahrenheit</td>
-              <td>temperature</td>
-              <td>kelvin</td>
               <td>5</td>
               <td>9</td>
               <td>45967</td>
@@ -4391,17 +4365,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>rankine</td>
-              <td>temperature</td>
-              <td>kelvin</td>
               <td>5</td>
               <td>9</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-area" caption="Unit Conversion Factors: Area (base unit: square-meter)"><figure><figcaption>Table 5: Unit Conversion Factors: Area (base unit: square-meter)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>hectare</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>10000</td>
               <td>1</td>
               <td>0</td>
@@ -4409,8 +4395,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>acre</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>316160658</td>
               <td>78125</td>
               <td>0</td>
@@ -4418,8 +4402,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-kilometer</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>1000000</td>
               <td>1</td>
               <td>0</td>
@@ -4427,8 +4409,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-centimeter</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>1</td>
               <td>10000</td>
               <td>0</td>
@@ -4436,8 +4416,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-foot</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>145161</td>
               <td>1562500</td>
               <td>0</td>
@@ -4445,8 +4423,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-inch</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>16129</td>
               <td>25000000</td>
               <td>0</td>
@@ -4454,8 +4430,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-yard</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>1306449</td>
               <td>1562500</td>
               <td>0</td>
@@ -4463,17 +4437,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>square-mile</td>
-              <td>area</td>
-              <td>square-meter</td>
               <td>40468564224</td>
               <td>15625</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-duration" caption="Unit Conversion Factors: Duration (base unit: second)"><figure><figcaption>Table 6: Unit Conversion Factors: Duration (base unit: second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>millisecond</td>
-              <td>duration</td>
-              <td>second</td>
               <td>1</td>
               <td>1000</td>
               <td>0</td>
@@ -4481,8 +4467,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>microsecond</td>
-              <td>duration</td>
-              <td>second</td>
               <td>1</td>
               <td>1000000</td>
               <td>0</td>
@@ -4490,8 +4474,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>nanosecond</td>
-              <td>duration</td>
-              <td>second</td>
               <td>1</td>
               <td>1000000000</td>
               <td>0</td>
@@ -4499,8 +4481,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>minute</td>
-              <td>duration</td>
-              <td>second</td>
               <td>60</td>
               <td>1</td>
               <td>0</td>
@@ -4508,8 +4488,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>hour</td>
-              <td>duration</td>
-              <td>second</td>
               <td>3600</td>
               <td>1</td>
               <td>0</td>
@@ -4517,8 +4495,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>day</td>
-              <td>duration</td>
-              <td>second</td>
               <td>86400</td>
               <td>1</td>
               <td>0</td>
@@ -4526,17 +4502,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>week</td>
-              <td>duration</td>
-              <td>second</td>
               <td>604800</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-year-duration" caption="Unit Conversion Factors: Year Duration (base unit: year)"><figure><figcaption>Table 7: Unit Conversion Factors: Year Duration (base unit: year)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>month</td>
-              <td>year-duration</td>
-              <td>year</td>
               <td>1</td>
               <td>12</td>
               <td>0</td>
@@ -4544,8 +4532,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>decade</td>
-              <td>year-duration</td>
-              <td>year</td>
               <td>10</td>
               <td>1</td>
               <td>0</td>
@@ -4553,17 +4539,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>century</td>
-              <td>year-duration</td>
-              <td>year</td>
               <td>100</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-speed" caption="Unit Conversion Factors: Speed (base unit: meter-per-second)"><figure><figcaption>Table 8: Unit Conversion Factors: Speed (base unit: meter-per-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>kilometer-per-hour</td>
-              <td>speed</td>
-              <td>meter-per-second</td>
               <td>5</td>
               <td>18</td>
               <td>0</td>
@@ -4571,8 +4569,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>mile-per-hour</td>
-              <td>speed</td>
-              <td>meter-per-second</td>
               <td>1397</td>
               <td>3125</td>
               <td>0</td>
@@ -4580,17 +4576,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>knot</td>
-              <td>speed</td>
-              <td>meter-per-second</td>
               <td>463</td>
               <td>900</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-angle" caption="Unit Conversion Factors: Angle (base unit: revolution)"><figure><figcaption>Table 9: Unit Conversion Factors: Angle (base unit: revolution)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>degree</td>
-              <td>angle</td>
-              <td>revolution</td>
               <td>1</td>
               <td>360</td>
               <td>0</td>
@@ -4598,8 +4606,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>arc-minute</td>
-              <td>angle</td>
-              <td>revolution</td>
               <td>1</td>
               <td>21600</td>
               <td>0</td>
@@ -4607,8 +4613,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>arc-second</td>
-              <td>angle</td>
-              <td>revolution</td>
               <td>1</td>
               <td>1296000</td>
               <td>0</td>
@@ -4616,17 +4620,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>radian</td>
-              <td>angle</td>
-              <td>revolution</td>
               <td>65501488</td>
               <td>411557987</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-pressure" caption="Unit Conversion Factors: Pressure (base unit: kilogram-per-meter-square-second)"><figure><figcaption>Table 10: Unit Conversion Factors: Pressure (base unit: kilogram-per-meter-square-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>pascal</td>
-              <td>pressure</td>
-              <td>kilogram-per-meter-square-second</td>
               <td>1</td>
               <td>1</td>
               <td>0</td>
@@ -4634,8 +4650,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>hectopascal</td>
-              <td>pressure</td>
-              <td>kilogram-per-meter-square-second</td>
               <td>100</td>
               <td>1</td>
               <td>0</td>
@@ -4643,8 +4657,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilopascal</td>
-              <td>pressure</td>
-              <td>kilogram-per-meter-square-second</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
@@ -4652,8 +4664,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>bar</td>
-              <td>pressure</td>
-              <td>kilogram-per-meter-square-second</td>
               <td>100000</td>
               <td>1</td>
               <td>0</td>
@@ -4661,17 +4671,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>atmosphere</td>
-              <td>pressure</td>
-              <td>kilogram-per-meter-square-second</td>
               <td>101325</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-energy" caption="Unit Conversion Factors: Energy (base unit: kilogram-square-meter-per-square-second)"><figure><figcaption>Table 11: Unit Conversion Factors: Energy (base unit: kilogram-square-meter-per-square-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>joule</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>1</td>
               <td>1</td>
               <td>0</td>
@@ -4679,8 +4701,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilojoule</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
@@ -4688,8 +4708,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>calorie</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>523</td>
               <td>125</td>
               <td>0</td>
@@ -4697,8 +4715,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilocalorie</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>4184</td>
               <td>1</td>
               <td>0</td>
@@ -4706,8 +4722,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>foodcalorie</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>4184</td>
               <td>1</td>
               <td>0</td>
@@ -4715,17 +4729,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>british-thermal-unit</td>
-              <td>energy</td>
-              <td>kilogram-square-meter-per-square-second</td>
               <td>23722880951</td>
               <td>22500000</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-power" caption="Unit Conversion Factors: Power (base unit: kilogram-square-meter-per-cubic-second)"><figure><figcaption>Table 12: Unit Conversion Factors: Power (base unit: kilogram-square-meter-per-cubic-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>watt</td>
-              <td>power</td>
-              <td>kilogram-square-meter-per-cubic-second</td>
               <td>1</td>
               <td>1</td>
               <td>0</td>
@@ -4733,8 +4759,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilowatt</td>
-              <td>power</td>
-              <td>kilogram-square-meter-per-cubic-second</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
@@ -4742,17 +4766,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>horsepower</td>
-              <td>power</td>
-              <td>kilogram-square-meter-per-cubic-second</td>
               <td>37284993579113511</td>
               <td>50000000000000</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-force" caption="Unit Conversion Factors: Force (base unit: kilogram-meter-per-square-second)"><figure><figcaption>Table 13: Unit Conversion Factors: Force (base unit: kilogram-meter-per-square-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>newton</td>
-              <td>force</td>
-              <td>kilogram-meter-per-square-second</td>
               <td>1</td>
               <td>1</td>
               <td>0</td>
@@ -4760,17 +4796,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>pound-force</td>
-              <td>force</td>
-              <td>kilogram-meter-per-square-second</td>
               <td>8896443230521</td>
               <td>2000000000000</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-digital" caption="Unit Conversion Factors: Digital (base unit: bit)"><figure><figcaption>Table 14: Unit Conversion Factors: Digital (base unit: bit)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>byte</td>
-              <td>digital</td>
-              <td>bit</td>
               <td>8</td>
               <td>1</td>
               <td>0</td>
@@ -4778,8 +4826,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilobyte</td>
-              <td>digital</td>
-              <td>bit</td>
               <td>8000</td>
               <td>1</td>
               <td>0</td>
@@ -4787,8 +4833,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>megabyte</td>
-              <td>digital</td>
-              <td>bit</td>
               <td>8000000</td>
               <td>1</td>
               <td>0</td>
@@ -4796,8 +4840,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>gigabyte</td>
-              <td>digital</td>
-              <td>bit</td>
               <td>8000000000</td>
               <td>1</td>
               <td>0</td>
@@ -4805,17 +4847,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>terabyte</td>
-              <td>digital</td>
-              <td>bit</td>
               <td>8000000000000</td>
               <td>1</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-portion" caption="Unit Conversion Factors: Portion (base unit: part)"><figure><figcaption>Table 15: Unit Conversion Factors: Portion (base unit: part)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>percent</td>
-              <td>portion</td>
-              <td>part</td>
               <td>1</td>
               <td>100</td>
               <td>0</td>
@@ -4823,8 +4877,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>permille</td>
-              <td>portion</td>
-              <td>part</td>
               <td>1</td>
               <td>1000</td>
               <td>0</td>
@@ -4832,17 +4884,29 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>karat</td>
-              <td>portion</td>
-              <td>part</td>
               <td>1</td>
               <td>24</td>
               <td>0</td>
               <td>1</td>
             </tr>
+          </tbody>
+        </table>
+      </figure></emu-table>
+
+      <emu-table id="table-unit-conversion-factors-frequency" caption="Unit Conversion Factors: Frequency (base unit: revolution-per-second)"><figure><figcaption>Table 16: Unit Conversion Factors: Frequency (base unit: revolution-per-second)</figcaption>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Factor Numerator</th>
+              <th>Factor Denominator</th>
+              <th>Offset Numerator</th>
+              <th>Offset Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td>hertz</td>
-              <td>frequency</td>
-              <td>revolution-per-second</td>
               <td>1</td>
               <td>1</td>
               <td>0</td>
@@ -4850,8 +4914,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>kilohertz</td>
-              <td>frequency</td>
-              <td>revolution-per-second</td>
               <td>1000</td>
               <td>1</td>
               <td>0</td>
@@ -4859,8 +4921,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>megahertz</td>
-              <td>frequency</td>
-              <td>revolution-per-second</td>
               <td>1000000</td>
               <td>1</td>
               <td>0</td>
@@ -4868,8 +4928,6 @@ p.ECMAaddress {
             </tr>
             <tr>
               <td>gigahertz</td>
-              <td>frequency</td>
-              <td>revolution-per-second</td>
               <td>1000000000</td>
               <td>1</td>
               <td>0</td>
@@ -4882,19 +4940,19 @@ p.ECMAaddress {
       <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation" aoid="GetUnitConversionFactor">
         <h1><span class="secnum">1.1.4</span> GetUnitConversionFactor ( <var>unit</var> )</h1>
         <p>The abstract operation GetUnitConversionFactor takes argument <var>unit</var> (a String) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> with fields <var class="field">[[Category]]</var> (a String), <var class="field">[[FactorNumerator]]</var> (a <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref>), <var class="field">[[FactorDenominator]]</var> (a <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref>), <var class="field">[[OffsetNumerator]]</var> (a <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref>), and <var class="field">[[OffsetDenominator]]</var> (a <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref>) or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It returns the conversion data for converting <var>unit</var> to its base unit within its unit category. The conversion factor and offset are expressed as rational numbers (pairs of <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical values</a></emu-xref>) to preserve precision. It performs the following steps when called:</p>
-        <emu-alg><ol><li>If <var>unit</var> has a row in the <emu-xref href="#table-unit-conversion-factors" id="_ref_2"><a href="#table-unit-conversion-factors">Unit Conversion Factors</a></emu-xref> table, then<ol><li>Let <var>row</var> be that row.</li><li>Let <var>category</var> be the value in the Category column of <var>row</var>.</li><li>Let <var>factorNumerator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Factor Numerator column of <var>row</var>.</li><li>Let <var>factorDenominator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Factor Denominator column of <var>row</var>.</li><li>Let <var>offsetNumerator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Offset Numerator column of <var>row</var>.</li><li>Let <var>offsetDenominator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Offset Denominator column of <var>row</var>.</li></ol></li><li>Else if <var>unit</var> appears as a Base Unit value in any row of the <emu-xref href="#table-unit-conversion-factors" id="_ref_3"><a href="#table-unit-conversion-factors">Unit Conversion Factors</a></emu-xref> table, then<ol><li>Let <var>category</var> be the Category value of any such row.</li><li>Let <var>factorNumerator</var> be 1.</li><li>Let <var>factorDenominator</var> be 1.</li><li>Let <var>offsetNumerator</var> be 0.</li><li>Let <var>offsetDenominator</var> be 1.</li></ol></li><li>Else,<ol><li>Throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[Category]]</var>: <var>category</var>, <var class="field">[[FactorNumerator]]</var>: <var>factorNumerator</var>, <var class="field">[[FactorDenominator]]</var>: <var>factorDenominator</var>, <var class="field">[[OffsetNumerator]]</var>: <var>offsetNumerator</var>, <var class="field">[[OffsetDenominator]]</var>: <var>offsetDenominator</var>&nbsp;}.</li></ol></emu-alg>
+        <emu-alg><ol><li>If <var>unit</var> has a row in any of the Unit Conversion Factors tables, then<ol><li>Let <var>row</var> be that row, and let <var>table</var> be the table containing <var>row</var>.</li><li>Let <var>category</var> be the category of <var>table</var> (as given in its caption).</li><li>Let <var>factorNumerator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Factor Numerator column of <var>row</var>.</li><li>Let <var>factorDenominator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Factor Denominator column of <var>row</var>.</li><li>Let <var>offsetNumerator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Offset Numerator column of <var>row</var>.</li><li>Let <var>offsetDenominator</var> be the <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref> in the Offset Denominator column of <var>row</var>.</li></ol></li><li>Else if <var>unit</var> appears as the base unit (as given in the caption) of any of the Unit Conversion Factors tables, then<ol><li>Let <var>category</var> be the category of that table (as given in its caption).</li><li>Let <var>factorNumerator</var> be 1.</li><li>Let <var>factorDenominator</var> be 1.</li><li>Let <var>offsetNumerator</var> be 0.</li><li>Let <var>offsetDenominator</var> be 1.</li></ol></li><li>Else,<ol><li>Throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Return the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[Category]]</var>: <var>category</var>, <var class="field">[[FactorNumerator]]</var>: <var>factorNumerator</var>, <var class="field">[[FactorDenominator]]</var>: <var>factorDenominator</var>, <var class="field">[[OffsetNumerator]]</var>: <var>offsetNumerator</var>, <var class="field">[[OffsetDenominator]]</var>: <var>offsetDenominator</var>&nbsp;}.</li></ol></emu-alg>
         <emu-note><span class="note">Note</span><div class="note-contents">
           <p>The formula for converting a value in <var>unit</var> to its base unit is: <i>baseValue</i> = <i>value</i> × (<var class="field">[[FactorNumerator]]</var> / <var class="field">[[FactorDenominator]]</var>) + (<var class="field">[[OffsetNumerator]]</var> / <var class="field">[[OffsetDenominator]]</var>).</p>
-          <p>The conversion factors in the <emu-xref href="#table-unit-conversion-factors" id="_ref_4"><a href="#table-unit-conversion-factors">Unit Conversion Factors</a></emu-xref> table are derived from <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>. CLDR expresses conversion factors as rational expressions (e.g., 0.3048/12 for inch-to-meter). These are represented here as <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> numerator/denominator pairs so that intermediate arithmetic can be performed on <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical values</a></emu-xref> without precision loss.</p>
-          <p>Base units (such as meter, kilogram, and kelvin) are not listed in the table because their conversion factor is trivially 1/1 with offset 0/1. They are recognized by their appearance in the Base Unit column.</p>
-          <p>CLDR also defines nonlinear conversions via the <code>special</code> attribute (e.g., the Beaufort scale). These cannot be expressed as a linear factor and offset, so they are not included in the table.</p>
+          <p>The conversion factors in the Unit Conversion Factors tables are derived from <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>. CLDR expresses conversion factors as rational expressions (e.g., 0.3048/12 for inch-to-meter). These are represented here as <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> numerator/denominator pairs so that intermediate arithmetic can be performed on <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical values</a></emu-xref> without precision loss.</p>
+          <p>Base units (such as meter, kilogram, and kelvin) are not listed in the tables because their conversion factor is trivially 1/1 with offset 0/1. They are recognized by their appearance in the caption of each table.</p>
+          <p>CLDR also defines nonlinear conversions via the <code>special</code> attribute (e.g., the Beaufort scale). These cannot be expressed as a linear factor and offset, so they are not included in the tables.</p>
         </div></emu-note>
       </emu-clause>
 
       <emu-clause id="sec-amount-convertunitvalue" type="abstract operation" aoid="ConvertUnitValue">
         <h1><span class="secnum">1.1.5</span> ConvertUnitValue ( <var>value</var>, <var>sourceUnit</var>, <var>targetUnit</var> )</h1>
         <p>The abstract operation ConvertUnitValue takes arguments <var>value</var> (a Number), <var>sourceUnit</var> (a String), and <var>targetUnit</var> (a String) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a Number or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It converts <var>value</var> from <var>sourceUnit</var> to <var>targetUnit</var>. The conversion is performed using rational arithmetic on <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical values</a></emu-xref> to minimize precision loss; the result is the <emu-xref href="#number-value-for"><a href="https://tc39.es/ecma262/#number-value-for">Number value for</a></emu-xref> the exact rational result. It performs the following steps when called:</p>
-        <emu-alg><ol><li>If <emu-xref aoid="SameValue"><a href="https://tc39.es/ecma262/#sec-samevalue">SameValue</a></emu-xref>(<var>sourceUnit</var>, <var>targetUnit</var>) is <emu-val>true</emu-val>, return <var>value</var>.</li><li>Let <var>sourceConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_19"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>sourceUnit</var>).</li><li>Let <var>targetConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_20"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>targetUnit</var>).</li><li>If <var>sourceConv</var>.<var class="field">[[Category]]</var> is not <var>targetConv</var>.<var class="field">[[Category]]</var>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>value</var> is <emu-val>NaN</emu-val>, return <emu-val>NaN</emu-val>.</li><li>If <var>value</var> is <emu-val>+∞</emu-val><sub>𝔽</sub> or <emu-val>-∞</emu-val><sub>𝔽</sub>, return <var>value</var>.</li><li>Let <var>srcFN</var> be <var>sourceConv</var>.<var class="field">[[FactorNumerator]]</var>.</li><li>Let <var>srcFD</var> be <var>sourceConv</var>.<var class="field">[[FactorDenominator]]</var>.</li><li>Let <var>srcON</var> be <var>sourceConv</var>.<var class="field">[[OffsetNumerator]]</var>.</li><li>Let <var>srcOD</var> be <var>sourceConv</var>.<var class="field">[[OffsetDenominator]]</var>.</li><li>Let <var>tgtFN</var> be <var>targetConv</var>.<var class="field">[[FactorNumerator]]</var>.</li><li>Let <var>tgtFD</var> be <var>targetConv</var>.<var class="field">[[FactorDenominator]]</var>.</li><li>Let <var>tgtON</var> be <var>targetConv</var>.<var class="field">[[OffsetNumerator]]</var>.</li><li>Let <var>tgtOD</var> be <var>targetConv</var>.<var class="field">[[OffsetDenominator]]</var>.</li><li>If <var>srcON</var> = 0 and <var>tgtON</var> = 0, then<ol><li>Let <var>resultNumerator</var> be <var>srcFN</var> × <var>tgtFD</var>.</li><li>Let <var>resultDenominator</var> be <var>srcFD</var> × <var>tgtFN</var>.</li><li>Return <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>value</var>) × <var>resultNumerator</var> / <var>resultDenominator</var>).</li></ol></li><li>Else,<ol><li>Let <var>baseValue</var> be <emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>value</var>) × <var>srcFN</var> / <var>srcFD</var> + <var>srcON</var> / <var>srcOD</var>.</li><li>Return <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>((<var>baseValue</var> - <var>tgtON</var> / <var>tgtOD</var>) × <var>tgtFD</var> / <var>tgtFN</var>).</li></ol></li></ol></emu-alg>
+        <emu-alg><ol><li>If <emu-xref aoid="SameValue"><a href="https://tc39.es/ecma262/#sec-samevalue">SameValue</a></emu-xref>(<var>sourceUnit</var>, <var>targetUnit</var>) is <emu-val>true</emu-val>, return <var>value</var>.</li><li>Let <var>sourceConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_16"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>sourceUnit</var>).</li><li>Let <var>targetConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_17"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>targetUnit</var>).</li><li>If <var>sourceConv</var>.<var class="field">[[Category]]</var> is not <var>targetConv</var>.<var class="field">[[Category]]</var>, throw a <emu-val>RangeError</emu-val> exception.</li><li>If <var>value</var> is <emu-val>NaN</emu-val>, return <emu-val>NaN</emu-val>.</li><li>If <var>value</var> is <emu-val>+∞</emu-val><sub>𝔽</sub> or <emu-val>-∞</emu-val><sub>𝔽</sub>, return <var>value</var>.</li><li>Let <var>srcFN</var> be <var>sourceConv</var>.<var class="field">[[FactorNumerator]]</var>.</li><li>Let <var>srcFD</var> be <var>sourceConv</var>.<var class="field">[[FactorDenominator]]</var>.</li><li>Let <var>srcON</var> be <var>sourceConv</var>.<var class="field">[[OffsetNumerator]]</var>.</li><li>Let <var>srcOD</var> be <var>sourceConv</var>.<var class="field">[[OffsetDenominator]]</var>.</li><li>Let <var>tgtFN</var> be <var>targetConv</var>.<var class="field">[[FactorNumerator]]</var>.</li><li>Let <var>tgtFD</var> be <var>targetConv</var>.<var class="field">[[FactorDenominator]]</var>.</li><li>Let <var>tgtON</var> be <var>targetConv</var>.<var class="field">[[OffsetNumerator]]</var>.</li><li>Let <var>tgtOD</var> be <var>targetConv</var>.<var class="field">[[OffsetDenominator]]</var>.</li><li>If <var>srcON</var> = 0 and <var>tgtON</var> = 0, then<ol><li>Let <var>resultNumerator</var> be <var>srcFN</var> × <var>tgtFD</var>.</li><li>Let <var>resultDenominator</var> be <var>srcFD</var> × <var>tgtFN</var>.</li><li>Return <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>value</var>) × <var>resultNumerator</var> / <var>resultDenominator</var>).</li></ol></li><li>Else,<ol><li>Let <var>baseValue</var> be <emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>value</var>) × <var>srcFN</var> / <var>srcFD</var> + <var>srcON</var> / <var>srcOD</var>.</li><li>Return <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>((<var>baseValue</var> - <var>tgtON</var> / <var>tgtOD</var>) × <var>tgtFD</var> / <var>tgtFN</var>).</li></ol></li></ol></emu-alg>
         <emu-note><span class="note">Note</span><div class="note-contents">
           <p>When neither unit has an offset (the common case for all non-temperature conversions), the conversion reduces to a single multiplication by the rational number (<var>srcFN</var> × <var>tgtFD</var>) / (<var>srcFD</var> × <var>tgtFN</var>). Because this is computed as a single operation on <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical values</a></emu-xref> with a single final conversion to Number, conversions between related units produce exact results whenever the mathematical result is exactly representable as a Number.</p>
           <p>For example, converting 84 inches to feet yields exactly <emu-val>7</emu-val><sub>𝔽</sub>, because the conversion factor simplifies to exactly 1/12: <emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(84) × (127 × 1250) / (5000 × 381) = 84 × 158750 / 1905000 = 84 / 12 = 7.</p>
@@ -4914,7 +4972,7 @@ p.ECMAaddress {
     </ul>
     <emu-clause id="sec-the-amount-constructor-value">
       <h1><span class="secnum">1.2.1</span> Amount ( <var>x</var> [ , <var>opts</var> ] )</h1>
-      <emu-alg><ol><li>If NewTarget is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is not a Number</a></emu-xref>, not a BigInt, and not a String, throw a <emu-val>TypeError</emu-val> exception.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>, then<ol><li>Let <var>text</var> be <emu-xref aoid="StringToCodePoints"><a href="https://tc39.es/ecma262/#sec-stringtocodepoints">StringToCodePoints</a></emu-xref>(<var>x</var>).</li><li>Let <var>parsed</var> be <emu-xref aoid="ParseText"><a href="https://tc39.es/ecma262/#sec-parsetext">ParseText</a></emu-xref>(<var>text</var>, <emu-nt><a href="https://tc39.es/ecma262/#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt>).</li><li>If <var>parsed</var> is a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> of errors, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountOptions" id="_ref_21"><a href="#sec-amount-getamountoptions">GetAmountOptions</a></emu-xref>(<var>opts</var>).</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>fractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[FractionDigits]]</var>.</li><li>Let <var>significantDigits</var> be <var>validatedOpts</var>.<var class="field">[[SignificantDigits]]</var>.</li><li>Let <var>unit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref> or <var>x</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>value</var> be <var>x</var>.</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>x</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>TODO Let <var>intlObject</var> be an Object suitable as a first argument <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>, using <var>fractionDigits</var>, <var>significantDigits</var>, and <var>roundingMode</var>.</li><li>Let <var>intlMV</var> be !&nbsp;<emu-xref aoid="ToIntlMathematicalValue"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-tointlmathematicalvalue">ToIntlMathematicalValue</a></emu-xref>(<var>x</var>).</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>intlMV</var>.<var class="field">[[Value]]</var>, <var>intlMV</var>.<var class="field">[[StringDigitCount]]</var>).</li><li>Let <var>value</var> be <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li></ol></li><li>Let <var>O</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>Set <var>O</var>.<var class="field">[[AmountValue]]</var> to <var>value</var>.</li><li>Set <var>O</var>.<var class="field">[[Unit]]</var> to <var>unit</var>.</li><li>Return <var>O</var>.</li></ol></emu-alg>
+      <emu-alg><ol><li>If NewTarget is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is not a Number</a></emu-xref>, not a BigInt, and not a String, throw a <emu-val>TypeError</emu-val> exception.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>, then<ol><li>Let <var>text</var> be <emu-xref aoid="StringToCodePoints"><a href="https://tc39.es/ecma262/#sec-stringtocodepoints">StringToCodePoints</a></emu-xref>(<var>x</var>).</li><li>Let <var>parsed</var> be <emu-xref aoid="ParseText"><a href="https://tc39.es/ecma262/#sec-parsetext">ParseText</a></emu-xref>(<var>text</var>, <emu-nt><a href="https://tc39.es/ecma262/#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt>).</li><li>If <var>parsed</var> is a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> of errors, throw a <emu-val>RangeError</emu-val> exception.</li></ol></li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountOptions" id="_ref_18"><a href="#sec-amount-getamountoptions">GetAmountOptions</a></emu-xref>(<var>opts</var>).</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>fractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[FractionDigits]]</var>.</li><li>Let <var>significantDigits</var> be <var>validatedOpts</var>.<var class="field">[[SignificantDigits]]</var>.</li><li>Let <var>unit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>x</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref> or <var>x</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>value</var> be <var>x</var>.</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>x</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>TODO Let <var>intlObject</var> be an Object suitable as a first argument <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>, using <var>fractionDigits</var>, <var>significantDigits</var>, and <var>roundingMode</var>.</li><li>Let <var>intlMV</var> be !&nbsp;<emu-xref aoid="ToIntlMathematicalValue"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-tointlmathematicalvalue">ToIntlMathematicalValue</a></emu-xref>(<var>x</var>).</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>intlMV</var>.<var class="field">[[Value]]</var>, <var>intlMV</var>.<var class="field">[[StringDigitCount]]</var>).</li><li>Let <var>value</var> be <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li></ol></li><li>Let <var>O</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>Set <var>O</var>.<var class="field">[[AmountValue]]</var> to <var>value</var>.</li><li>Set <var>O</var>.<var class="field">[[Unit]]</var> to <var>unit</var>.</li><li>Return <var>O</var>.</li></ol></emu-alg>
       <emu-note><span class="note">Note</span><div class="note-contents">
         <p>When no precision options are given, Number and BigInt arguments are stored directly in <var class="field">[[AmountValue]]</var>, preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, <var class="field">[[AmountValue]]</var> always holds a String.</p>
       </div></emu-note>
@@ -4964,7 +5022,7 @@ p.ECMAaddress {
     <h1><span class="secnum">2.5</span> Amount.prototype.convertTo ( <var>options</var> )</h1>
     <p>This method returns a new Amount whose value is the result of converting this Amount’s value from its current unit to a target unit. The target unit is specified by <var>options</var>.</p>
     <p>It performs the following steps when called:</p>
-    <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[AmountValue]]</var>).</li><li>Let <var>sourceUnit</var> be <var>O</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>sourceUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountConvertToOptions" id="_ref_22"><a href="#sec-amount-getamountconverttooptions">GetAmountConvertToOptions</a></emu-xref>(<var>options</var>).</li><li>Let <var>targetUnit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>targetUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>roundingPriority</var> be <var>validatedOpts</var>.<var class="field">[[RoundingPriority]]</var>.</li><li>Let <var>minFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumFractionDigits]]</var>.</li><li>Let <var>maxFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumFractionDigits]]</var>.</li><li>Let <var>minSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumSignificantDigits]]</var>.</li><li>Let <var>maxSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumSignificantDigits]]</var>.</li><li>Let <var>v</var> be <var>O</var>.<var class="field">[[AmountValue]]</var>.</li><li>If <var>v</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <var>v</var>.</li></ol></li><li>Else if <var>v</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>v</var>)).</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>v</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>Let <var>sourceValue</var> be <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>v</var>).</li></ol></li><li>Let <var>convertedValue</var> be ?&nbsp;<emu-xref aoid="ConvertUnitValue" id="_ref_23"><a href="#sec-amount-convertunitvalue">ConvertUnitValue</a></emu-xref>(<var>sourceValue</var>, <var>sourceUnit</var>, <var>targetUnit</var>).</li><li>TODO Let <var>intlObject</var> be an Object suitable as the first argument of <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>, using <var>minFractionDigits</var>, <var>maxFractionDigits</var>, <var>minSignificantDigits</var>, <var>maxSignificantDigits</var>, <var>roundingPriority</var>, and <var>roundingMode</var>.</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>convertedValue</var>, 0).</li><li>Let <var>result</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>Set <var>result</var>.<var class="field">[[AmountValue]]</var> to <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li><li>Set <var>result</var>.<var class="field">[[Unit]]</var> to <var>targetUnit</var>.</li><li>Return <var>result</var>.</li></ol></emu-alg>
+    <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[AmountValue]]</var>).</li><li>Let <var>sourceUnit</var> be <var>O</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>sourceUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountConvertToOptions" id="_ref_19"><a href="#sec-amount-getamountconverttooptions">GetAmountConvertToOptions</a></emu-xref>(<var>options</var>).</li><li>Let <var>targetUnit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>targetUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>roundingPriority</var> be <var>validatedOpts</var>.<var class="field">[[RoundingPriority]]</var>.</li><li>Let <var>minFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumFractionDigits]]</var>.</li><li>Let <var>maxFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumFractionDigits]]</var>.</li><li>Let <var>minSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumSignificantDigits]]</var>.</li><li>Let <var>maxSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumSignificantDigits]]</var>.</li><li>Let <var>v</var> be <var>O</var>.<var class="field">[[AmountValue]]</var>.</li><li>If <var>v</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <var>v</var>.</li></ol></li><li>Else if <var>v</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>v</var>)).</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>v</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>Let <var>sourceValue</var> be <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>v</var>).</li></ol></li><li>Let <var>convertedValue</var> be ?&nbsp;<emu-xref aoid="ConvertUnitValue" id="_ref_20"><a href="#sec-amount-convertunitvalue">ConvertUnitValue</a></emu-xref>(<var>sourceValue</var>, <var>sourceUnit</var>, <var>targetUnit</var>).</li><li>TODO Let <var>intlObject</var> be an Object suitable as the first argument of <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>, using <var>minFractionDigits</var>, <var>maxFractionDigits</var>, <var>minSignificantDigits</var>, <var>maxSignificantDigits</var>, <var>roundingPriority</var>, and <var>roundingMode</var>.</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>convertedValue</var>, 0).</li><li>Let <var>result</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>Set <var>result</var>.<var class="field">[[AmountValue]]</var> to <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li><li>Set <var>result</var>.<var class="field">[[Unit]]</var> to <var>targetUnit</var>.</li><li>Return <var>result</var>.</li></ol></emu-alg>
     <emu-note><span class="note">Note</span><div class="note-contents">
       <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API supersedes this method to additionally support locale-based and usage-based unit conversion via CLDR unit preferences data. Without ECMA-402, only explicit unit-to-unit conversion (via the <emu-val>"unit"</emu-val> option) is supported.</p>
     </div></emu-note>
@@ -4987,7 +5045,7 @@ p.ECMAaddress {
 
     <emu-clause id="sup-amount.prototype.tolocalestring">
       <h1><span class="secnum">3.1.1</span> Amount.prototype.toLocaleString ( [ <var>locales</var> [ , <var>options</var> ] ] )</h1>
-      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring" id="_ref_5"><a href="#sec-amount.prototype.tolocalestring">2.4</a></emu-xref>.</p>
+      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring" id="_ref_2"><a href="#sec-amount.prototype.tolocalestring">2.4</a></emu-xref>.</p>
 
       <p>This function performs the following steps when called:</p>
 
@@ -4997,17 +5055,17 @@ p.ECMAaddress {
     <emu-clause id="sup-amount.prototype.convertto">
       <h1><span class="secnum">3.1.2</span> Amount.prototype.convertTo ( <var>options</var> )</h1>
 
-      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.convertto" id="_ref_6"><a href="#sec-amount.prototype.convertto">2.5</a></emu-xref>.</p>
+      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.convertto" id="_ref_3"><a href="#sec-amount.prototype.convertto">2.5</a></emu-xref>.</p>
 
       <p>This function performs the following steps when called:</p>
 
-      <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[AmountValue]]</var>).</li><li>Let <var>sourceUnit</var> be <var>O</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>sourceUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountConvertToOptions" id="_ref_24"><a href="#sec-amount-getamountconverttooptions">GetAmountConvertToOptions</a></emu-xref>(<var>options</var>).</li><li>Let <var>targetUnit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>roundingPriority</var> be <var>validatedOpts</var>.<var class="field">[[RoundingPriority]]</var>.</li><li>Let <var>minFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MiniumumFractionDigits]]</var>.</li><li>Let <var>maxFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumFractionDigits]]</var>.</li><li>Let <var>minSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumSignificantDigits]]</var>.</li><li>Let <var>maxSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumSignificantDigits]]</var>.</li><li>Let <var>locale</var> be <var>validatedOpts</var>.<var class="field">[[Locale]]</var>.</li><li>Let <var>usage</var> be <var>validatedOpts</var>.<var class="field">[[Usage]]</var>.</li><li>If <var>targetUnit</var> is <emu-val>undefined</emu-val> and <var>locale</var> is <emu-val>undefined</emu-val> and <var>usage</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>v</var> be <var>O</var>.<var class="field">[[AmountValue]]</var>.</li><li>If <var>v</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <var>v</var>.</li></ol></li><li>Else if <var>v</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>v</var>)).</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>v</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>Let <var>sourceValue</var> be <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>v</var>).</li></ol></li><li>If <var>targetUnit</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>locale</var> is not <emu-val>undefined</emu-val> or <var>usage</var> is not <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li></ol></li><li>Else,<ol><li>Let <var>matcher</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_25"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>validatedOpts</var>, <emu-val>"localeMatcher"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"lookup"</emu-val>, <emu-val>"best fit"</emu-val>&nbsp;», <emu-val>"best fit"</emu-val>).</li><li>Let <var>requestedLocales</var> be ?&nbsp;<emu-xref aoid="CanonicalizeLocaleList"><a href="https://tc39.es/ecma402/#sec-canonicalizelocalelist">CanonicalizeLocaleList</a></emu-xref>(<var>locale</var>).</li><li>If <var>usage</var> is <emu-val>undefined</emu-val>, set <var>usage</var> to <emu-val>"default"</emu-val>.</li><li>Set <var>targetUnit</var> to ?&nbsp;<emu-xref aoid="ResolveUnitPreference" id="_ref_26"><a href="#sec-resolveunitpreference">ResolveUnitPreference</a></emu-xref>(<var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>matcher</var>).</li></ol></li><li>Let <var>convertedValue</var> be ?&nbsp;<emu-xref aoid="ConvertUnitValue" id="_ref_27"><a href="#sec-amount-convertunitvalue">ConvertUnitValue</a></emu-xref>(<var>sourceValue</var>, <var>sourceUnit</var>, <var>targetUnit</var>).</li><li>Let <var>result</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>TODO Let <var>intlObject</var> be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref> that uses <var>minSignificantDigits</var>, <var>maxSignificantDigits</var>, <var>minFractionDigits</var>, <var>maxFractionDigits</var>, <var>roundingPriority</var>, and <var>roundingMode</var>.</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>convertedValue</var>, 0).</li><li>Set <var>result</var>.<var class="field">[[AmountValue]]</var> to <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li><li>Set <var>result</var>.<var class="field">[[Unit]]</var> to <var>targetUnit</var>.</li><li>Return <var>result</var>.</li></ol></emu-alg>
+      <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[AmountValue]]</var>).</li><li>Let <var>sourceUnit</var> be <var>O</var>.<var class="field">[[Unit]]</var>.</li><li>If <var>sourceUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>validatedOpts</var> be ?&nbsp;<emu-xref aoid="GetAmountConvertToOptions" id="_ref_21"><a href="#sec-amount-getamountconverttooptions">GetAmountConvertToOptions</a></emu-xref>(<var>options</var>).</li><li>Let <var>targetUnit</var> be <var>validatedOpts</var>.<var class="field">[[Unit]]</var>.</li><li>Let <var>roundingMode</var> be <var>validatedOpts</var>.<var class="field">[[RoundingMode]]</var>.</li><li>Let <var>roundingPriority</var> be <var>validatedOpts</var>.<var class="field">[[RoundingPriority]]</var>.</li><li>Let <var>minFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MiniumumFractionDigits]]</var>.</li><li>Let <var>maxFractionDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumFractionDigits]]</var>.</li><li>Let <var>minSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MinimumSignificantDigits]]</var>.</li><li>Let <var>maxSignificantDigits</var> be <var>validatedOpts</var>.<var class="field">[[MaximumSignificantDigits]]</var>.</li><li>Let <var>locale</var> be <var>validatedOpts</var>.<var class="field">[[Locale]]</var>.</li><li>Let <var>usage</var> be <var>validatedOpts</var>.<var class="field">[[Usage]]</var>.</li><li>If <var>targetUnit</var> is <emu-val>undefined</emu-val> and <var>locale</var> is <emu-val>undefined</emu-val> and <var>usage</var> is <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>v</var> be <var>O</var>.<var class="field">[[AmountValue]]</var>.</li><li>If <var>v</var> <emu-xref href="#sec-ecmascript-language-types-number-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type">is a Number</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <var>v</var>.</li></ol></li><li>Else if <var>v</var> <emu-xref href="#sec-ecmascript-language-types-bigint-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-bigint-type">is a BigInt</a></emu-xref>, then<ol><li>Let <var>sourceValue</var> be <emu-xref aoid="𝔽"><a href="https://tc39.es/ecma262/#𝔽">𝔽</a></emu-xref>(<emu-xref aoid="ℝ"><a href="https://tc39.es/ecma262/#ℝ">ℝ</a></emu-xref>(<var>v</var>)).</li></ol></li><li>Else,<ol><li><emu-xref href="#assert"><a href="https://tc39.es/ecma262/#assert">Assert</a></emu-xref>: <var>v</var> <emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type">is a String</a></emu-xref>.</li><li>Let <var>sourceValue</var> be <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>v</var>).</li></ol></li><li>If <var>targetUnit</var> is not <emu-val>undefined</emu-val>, then<ol><li>If <var>locale</var> is not <emu-val>undefined</emu-val> or <var>usage</var> is not <emu-val>undefined</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</li></ol></li><li>Else,<ol><li>Let <var>matcher</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_22"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>validatedOpts</var>, <emu-val>"localeMatcher"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"lookup"</emu-val>, <emu-val>"best fit"</emu-val>&nbsp;», <emu-val>"best fit"</emu-val>).</li><li>Let <var>requestedLocales</var> be ?&nbsp;<emu-xref aoid="CanonicalizeLocaleList"><a href="https://tc39.es/ecma402/#sec-canonicalizelocalelist">CanonicalizeLocaleList</a></emu-xref>(<var>locale</var>).</li><li>If <var>usage</var> is <emu-val>undefined</emu-val>, set <var>usage</var> to <emu-val>"default"</emu-val>.</li><li>Set <var>targetUnit</var> to ?&nbsp;<emu-xref aoid="ResolveUnitPreference" id="_ref_23"><a href="#sec-resolveunitpreference">ResolveUnitPreference</a></emu-xref>(<var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>matcher</var>).</li></ol></li><li>Let <var>convertedValue</var> be ?&nbsp;<emu-xref aoid="ConvertUnitValue" id="_ref_24"><a href="#sec-amount-convertunitvalue">ConvertUnitValue</a></emu-xref>(<var>sourceValue</var>, <var>sourceUnit</var>, <var>targetUnit</var>).</li><li>Let <var>result</var> be <emu-xref aoid="OrdinaryObjectCreate"><a href="https://tc39.es/ecma262/#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(%Amount.prototype%, « <var class="field">[[AmountValue]]</var>, <var class="field">[[Unit]]</var>&nbsp;»).</li><li>TODO Let <var>intlObject</var> be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref> that uses <var>minSignificantDigits</var>, <var>maxSignificantDigits</var>, <var>minFractionDigits</var>, <var>maxFractionDigits</var>, <var>roundingPriority</var>, and <var>roundingMode</var>.</li><li>Let <var>formatted</var> be <emu-xref aoid="FormatNumericToString"><a href="https://tc39.es/proposal-intl-keep-trailing-zeros/#sec-formatnumerictostring">FormatNumericToString</a></emu-xref>(<var>intlObject</var>, <var>convertedValue</var>, 0).</li><li>Set <var>result</var>.<var class="field">[[AmountValue]]</var> to <var>formatted</var>.<var class="field">[[FormattedString]]</var>.</li><li>Set <var>result</var>.<var class="field">[[Unit]]</var> to <var>targetUnit</var>.</li><li>Return <var>result</var>.</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-resolveunitpreference" type="implementation-defined abstract operation" aoid="ResolveUnitPreference">
       <h1><span class="secnum">3.1.3</span> ResolveUnitPreference ( <var>sourceUnit</var>, <var>sourceValue</var>, <var>requestedLocales</var>, <var>usage</var>, <var>localeMatcher</var> )</h1>
       <p>The <emu-xref href="#implementation-defined"><a href="https://tc39.es/ecma262/#implementation-defined">implementation-defined</a></emu-xref> abstract operation ResolveUnitPreference takes arguments <var>sourceUnit</var> (a String), <var>sourceValue</var> (a Number), <var>requestedLocales</var> (a <emu-xref href="#language-priority-list"><a href="https://tc39.es/ecma402/#language-priority-list">Language Priority List</a></emu-xref>), <var>usage</var> (a String), and <var>localeMatcher</var> (a String) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a String or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It determines the preferred target unit for <var>sourceUnit</var> in the locale best matching <var>requestedLocales</var> and <var>usage</var> context, based on CLDR unit preferences data. It performs the following steps when called:</p>
-      <emu-alg><ol><li>Let <var>sourceConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_28"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>sourceUnit</var>).</li><li>Let <var>category</var> be <var>sourceConv</var>.<var class="field">[[Category]]</var>.</li><li>Let <var>availableLocales</var> be the <emu-xref href="#available-locales-list"><a href="https://tc39.es/ecma402/#available-locales-list">Available Locales List</a></emu-xref> for locales for which the <code>&lt;unitPreferences&gt;</code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a> includes data.</li><li>Let <var>localeData</var> be a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> whose field names are the elements of <var>availableLocales</var> and whose values are <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Records</a></emu-xref>.</li><li>Let <var>r</var> be <emu-xref aoid="ResolveLocale"><a href="https://tc39.es/ecma402/#sec-resolvelocale">ResolveLocale</a></emu-xref>(<var>availableLocales</var>, <var>requestedLocales</var>, the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[localeMatcher]]</var>: <var>localeMatcher</var>&nbsp;}, «&nbsp;», <var>localeData</var>).</li><li>Let <var>locale</var> be <var>r</var>.<var class="field">[[Locale]]</var>.</li><li>Let <var>preferredUnit</var> be the preferred unit for <var>category</var>, <var>locale</var>, <var>usage</var>, and <var>sourceValue</var> as specified by the <code>&lt;unitPreferences&gt;</code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.</li><li>If <var>preferredUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return <var>preferredUnit</var>.</li></ol></emu-alg>
+      <emu-alg><ol><li>Let <var>sourceConv</var> be ?&nbsp;<emu-xref aoid="GetUnitConversionFactor" id="_ref_25"><a href="#sec-amount-getunitconversionfactor">GetUnitConversionFactor</a></emu-xref>(<var>sourceUnit</var>).</li><li>Let <var>category</var> be <var>sourceConv</var>.<var class="field">[[Category]]</var>.</li><li>Let <var>availableLocales</var> be the <emu-xref href="#available-locales-list"><a href="https://tc39.es/ecma402/#available-locales-list">Available Locales List</a></emu-xref> for locales for which the <code>&lt;unitPreferences&gt;</code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a> includes data.</li><li>Let <var>localeData</var> be a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> whose field names are the elements of <var>availableLocales</var> and whose values are <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Records</a></emu-xref>.</li><li>Let <var>r</var> be <emu-xref aoid="ResolveLocale"><a href="https://tc39.es/ecma402/#sec-resolvelocale">ResolveLocale</a></emu-xref>(<var>availableLocales</var>, <var>requestedLocales</var>, the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[localeMatcher]]</var>: <var>localeMatcher</var>&nbsp;}, «&nbsp;», <var>localeData</var>).</li><li>Let <var>locale</var> be <var>r</var>.<var class="field">[[Locale]]</var>.</li><li>Let <var>preferredUnit</var> be the preferred unit for <var>category</var>, <var>locale</var>, <var>usage</var>, and <var>sourceValue</var> as specified by the <code>&lt;unitPreferences&gt;</code> element data of <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">UTS #35 Part 6 Supplemental, Unit Preferences</a>.</li><li>If <var>preferredUnit</var> is <emu-val>undefined</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</li><li>Return <var>preferredUnit</var>.</li></ol></emu-alg>
     </emu-clause>
   </emu-clause>
 
@@ -5039,7 +5097,7 @@ p.ECMAaddress {
     <emu-clause id="sec-setnumberformatunitoptions" type="abstract operation" aoid="SetNumberFormatUnitOptions">
       <h1><span class="secnum">4.1.2</span> SetNumberFormatUnitOptions ( <var>intlObj</var>, <var>options</var> )</h1>
       <p>The abstract operation SetNumberFormatUnitOptions takes arguments <var>intlObj</var> (an Intl.NumberFormat) and <var>options</var> (an Object) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> <emu-const>unused</emu-const> or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It resolves the user-specified options relating to units onto <var>intlObj</var>. It performs the following steps when called:</p>
-      <emu-alg><ol><li>Let <var>style</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_29"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"style"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"decimal"</emu-val>, <emu-val>"percent"</emu-val>, <emu-val>"currency"</emu-val>, <emu-val>"unit"</emu-val>&nbsp;», <emu-val>"decimal"</emu-val>).</li><li>Set <var>intlObj</var>.<var class="field">[[Style]]</var> to <var>style</var>.</li><li>Let <var>currency</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_30"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currency"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li><del>If <var>currency</var> is <emu-val>undefined</emu-val>, then</del><ol><li><del>If <var>style</var> is <emu-val>"currency"</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</del></li></ol></li><li><del>Else,</del><ol><li><del>If <emu-xref aoid="IsWellFormedCurrencyCode"><a href="https://tc39.es/ecma402/#sec-iswellformedcurrencycode">IsWellFormedCurrencyCode</a></emu-xref>(<var>currency</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</del></li></ol></li><li><ins>If <var>currency</var> is not <emu-val>undefined</emu-val> and <emu-xref aoid="IsWellFormedCurrencyCode"><a href="https://tc39.es/ecma402/#sec-iswellformedcurrencycode">IsWellFormedCurrencyCode</a></emu-xref>(<var>currency</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</ins></li><li>Let <var>currencyDisplay</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_31"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currencyDisplay"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"code"</emu-val>, <emu-val>"symbol"</emu-val>, <emu-val>"narrowSymbol"</emu-val>, <emu-val>"name"</emu-val>&nbsp;», <emu-val>"symbol"</emu-val>).</li><li>Let <var>currencySign</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_32"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currencySign"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"standard"</emu-val>, <emu-val>"accounting"</emu-val>&nbsp;», <emu-val>"standard"</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_33"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li><del>If <var>unit</var> is <emu-val>undefined</emu-val>, then</del><ol><li><del>If <var>style</var> is <emu-val>"unit"</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</del></li></ol></li><li><del>Else,</del><ol><li><del>If <emu-xref aoid="IsWellFormedUnitIdentifier"><a href="https://tc39.es/ecma402/#sec-iswellformedunitidentifier">IsWellFormedUnitIdentifier</a></emu-xref>(<var>unit</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</del></li></ol></li><li><ins>If <var>unit</var> is not <emu-val>undefined</emu-val> and <emu-xref aoid="IsWellFormedUnitIdentifier"><a href="https://tc39.es/ecma402/#sec-iswellformedunitidentifier">IsWellFormedUnitIdentifier</a></emu-xref>(<var>unit</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</ins></li><li>Let <var>unitDisplay</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_34"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"unitDisplay"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"short"</emu-val>, <emu-val>"narrow"</emu-val>, <emu-val>"long"</emu-val>&nbsp;», <emu-val>"short"</emu-val>).</li><li>If <var>style</var> is <emu-val>"currency"</emu-val>, then<ol><li><ins>If <var>currency</var> is not <emu-val>undefined</emu-val>, set</ins> <del>Set</del> <var>intlObj</var>.<var class="field">[[Currency]]</var> to the <emu-xref href="#sec-case-sensitivity-and-case-mapping"><a href="https://tc39.es/ecma402/#sec-case-sensitivity-and-case-mapping">ASCII-uppercase</a></emu-xref> of <var>currency</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[CurrencyDisplay]]</var> to <var>currencyDisplay</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[CurrencySign]]</var> to <var>currencySign</var>.</li></ol></li><li>If <var>style</var> is <emu-val>"unit"</emu-val>, then<ol><li><ins>If <var>unit</var> is not <emu-val>undefined</emu-val>, </ins> <del>Set</del> <ins>set</ins> <var>intlObj</var>.<var class="field">[[Unit]]</var> to <var>unit</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[UnitDisplay]]</var> to <var>unitDisplay</var>.</li></ol></li><li>Return <emu-const>unused</emu-const>.</li></ol></emu-alg>
+      <emu-alg><ol><li>Let <var>style</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_26"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"style"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"decimal"</emu-val>, <emu-val>"percent"</emu-val>, <emu-val>"currency"</emu-val>, <emu-val>"unit"</emu-val>&nbsp;», <emu-val>"decimal"</emu-val>).</li><li>Set <var>intlObj</var>.<var class="field">[[Style]]</var> to <var>style</var>.</li><li>Let <var>currency</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_27"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currency"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li><del>If <var>currency</var> is <emu-val>undefined</emu-val>, then</del><ol><li><del>If <var>style</var> is <emu-val>"currency"</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</del></li></ol></li><li><del>Else,</del><ol><li><del>If <emu-xref aoid="IsWellFormedCurrencyCode"><a href="https://tc39.es/ecma402/#sec-iswellformedcurrencycode">IsWellFormedCurrencyCode</a></emu-xref>(<var>currency</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</del></li></ol></li><li><ins>If <var>currency</var> is not <emu-val>undefined</emu-val> and <emu-xref aoid="IsWellFormedCurrencyCode"><a href="https://tc39.es/ecma402/#sec-iswellformedcurrencycode">IsWellFormedCurrencyCode</a></emu-xref>(<var>currency</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</ins></li><li>Let <var>currencyDisplay</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_28"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currencyDisplay"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"code"</emu-val>, <emu-val>"symbol"</emu-val>, <emu-val>"narrowSymbol"</emu-val>, <emu-val>"name"</emu-val>&nbsp;», <emu-val>"symbol"</emu-val>).</li><li>Let <var>currencySign</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_29"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"currencySign"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"standard"</emu-val>, <emu-val>"accounting"</emu-val>&nbsp;», <emu-val>"standard"</emu-val>).</li><li>Let <var>unit</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_30"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"unit"</emu-val>, <emu-const>string</emu-const>, <emu-const>empty</emu-const>, <emu-val>undefined</emu-val>).</li><li><del>If <var>unit</var> is <emu-val>undefined</emu-val>, then</del><ol><li><del>If <var>style</var> is <emu-val>"unit"</emu-val>, throw a <emu-val>TypeError</emu-val> exception.</del></li></ol></li><li><del>Else,</del><ol><li><del>If <emu-xref aoid="IsWellFormedUnitIdentifier"><a href="https://tc39.es/ecma402/#sec-iswellformedunitidentifier">IsWellFormedUnitIdentifier</a></emu-xref>(<var>unit</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</del></li></ol></li><li><ins>If <var>unit</var> is not <emu-val>undefined</emu-val> and <emu-xref aoid="IsWellFormedUnitIdentifier"><a href="https://tc39.es/ecma402/#sec-iswellformedunitidentifier">IsWellFormedUnitIdentifier</a></emu-xref>(<var>unit</var>) is <emu-val>false</emu-val>, throw a <emu-val>RangeError</emu-val> exception.</ins></li><li>Let <var>unitDisplay</var> be ?&nbsp;<emu-xref aoid="GetOption" id="_ref_31"><a href="#sec-getoption">GetOption</a></emu-xref>(<var>options</var>, <emu-val>"unitDisplay"</emu-val>, <emu-const>string</emu-const>, « <emu-val>"short"</emu-val>, <emu-val>"narrow"</emu-val>, <emu-val>"long"</emu-val>&nbsp;», <emu-val>"short"</emu-val>).</li><li>If <var>style</var> is <emu-val>"currency"</emu-val>, then<ol><li><ins>If <var>currency</var> is not <emu-val>undefined</emu-val>, set</ins> <del>Set</del> <var>intlObj</var>.<var class="field">[[Currency]]</var> to the <emu-xref href="#sec-case-sensitivity-and-case-mapping"><a href="https://tc39.es/ecma402/#sec-case-sensitivity-and-case-mapping">ASCII-uppercase</a></emu-xref> of <var>currency</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[CurrencyDisplay]]</var> to <var>currencyDisplay</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[CurrencySign]]</var> to <var>currencySign</var>.</li></ol></li><li>If <var>style</var> is <emu-val>"unit"</emu-val>, then<ol><li><ins>If <var>unit</var> is not <emu-val>undefined</emu-val>, </ins> <del>Set</del> <ins>set</ins> <var>intlObj</var>.<var class="field">[[Unit]]</var> to <var>unit</var>.</li><li>Set <var>intlObj</var>.<var class="field">[[UnitDisplay]]</var> to <var>unitDisplay</var>.</li></ol></li><li>Return <emu-const>unused</emu-const>.</li></ol></emu-alg>
     </emu-clause>
   </emu-clause>
 </emu-clause>
