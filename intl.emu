@@ -65,7 +65,6 @@
         1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
         1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_options_).
         1. Let _targetUnit_ be _validatedOpts_.[[Unit]].
-        1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
         1. Let _roundingPriority_ be _validatedOpts_.[[RoundingPriority]].
         1. Let _minFractionDigits_ be _validatedOpts_.[[MiniumumFractionDigits]].
         1. Let _maxFractionDigits_ be _validatedOpts_.[[MaximumFractionDigits]].
@@ -91,7 +90,7 @@
           1. Set _targetUnit_ to ? ResolveUnitPreference(_sourceUnit_, _sourceValue_, _requestedLocales_, _usage_, _matcher_).
         1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
         1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
-        1. TODO Let _intlObject_ be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref> that uses _minSignificantDigits_, _maxSignificantDigits_, _minFractionDigits_, _maxFractionDigits_, _roundingPriority_, and _roundingMode_.
+        1. TODO Let _intlObject_ be an Object suitable for use as the first argument of a call to <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref> that uses _minSignificantDigits_, _maxSignificantDigits_, _minFractionDigits_, _maxFractionDigits_, and _roundingPriority_.
         1. Let _formatted_ be FormatNumericToString(_intlObject_, _convertedValue_, 0).
         1. Set _result_.[[AmountValue]] to _formatted_.[[FormattedString]].
         1. Set _result_.[[Unit]] to _targetUnit_.

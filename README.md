@@ -61,7 +61,6 @@ Note: ⚠️  All property/method names up for bikeshedding.
   * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
-  * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
 
   Attempting to construct an Amount from a `value` that is not a Number or BigInt or String will throw a TypeError.
   When constructing an Amount from a String `value`,
@@ -89,7 +88,6 @@ The object prototype would provide the following methods:
     * `maximumFractionDigits`
     * `minimumSignificantDigits`
     * `maximumSignificantDigits`
-    * `roundingMode`
     * `roundingPriority`
 
   The `options` must contain at least one of `unit`, `locale`, or `usage`.
@@ -264,12 +262,7 @@ let a = new Amount("123.456", { significantDigits: 5 });
 a.value; // "123.46"
 ```
 
-By default, we use the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal). One can specify a rounding mode:
-
-```js
-let b = new Amount("123.456", { significantDigits: 5, roundingMode: "truncate" });
-b.value; // "123.45"
-```
+All rounding uses the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal).
 
 ### Units (including currency)
 
