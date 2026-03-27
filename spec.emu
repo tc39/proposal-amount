@@ -1030,22 +1030,28 @@ location: https://github.com/tc39/proposal-amount/
           _value_: a Number,
           _conversionNumerator_: an integer mathematical value,
           _conversionDenominator_: a positive integer mathematical value,
-          _offset_: an integer mathematical value
+          _offsetNumerator_: an integer mathematical value,
+          _offsetDenominator_: a positive integer mathematical value
         ): a Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It applies the affine transformation (_value_ × _conversionNumerator_ + _offset_) / _conversionDenominator_ using Number arithmetic. The factor and offset share a common denominator, so the entire transformation is computed with a single division at the end.</dd>
+          <dd>It reduces _conversionNumerator_ / _conversionDenominator_ to lowest terms and then applies the affine transformation _value_ × _conversionNumerator_ / _conversionDenominator_ + _offsetNumerator_ / _offsetDenominator_ using Number arithmetic. When the offset is non-zero, the factor and offset are put over a common denominator so the entire transformation is computed with a single division at the end.</dd>
         </dl>
         <emu-alg>
+          1. Let _g_ be the greatest common divisor of abs(_conversionNumerator_) and _conversionDenominator_.
+          1. Set _conversionNumerator_ to _conversionNumerator_ / _g_.
+          1. Set _conversionDenominator_ to _conversionDenominator_ / _g_.
           1. Let _result_ be _value_ × 𝔽(_conversionNumerator_).
-          1. If _offset_ ≠ 0, set _result_ to _result_ + 𝔽(_offset_).
+          1. If _offsetNumerator_ ≠ 0, then
+            1. Set _result_ to _result_ × 𝔽(_offsetDenominator_).
+            1. Set _result_ to _result_ + 𝔽(_offsetNumerator_) × 𝔽(_conversionDenominator_).
+            1. Return _result_ / 𝔽(_conversionDenominator_ × _offsetDenominator_).
           1. Return _result_ / 𝔽(_conversionDenominator_).
         </emu-alg>
         <emu-note>
-          <p>The multiplication and addition operate on a Number times an integer, which are exact when the intermediates stay within 2<sup>53</sup>. The single division is the only rounding point. For non-offset conversions (the vast majority), _offset_ is 0 and the addition is skipped, making this a single multiply-then-divide.</p>
-          <p>Integer-exactness holds naturally: when _value_ is an integer and _value_ × _conversionNumerator_ + _offset_ is divisible by _conversionDenominator_ and within 2<sup>53</sup>, the result is an exact integer.</p>
-          <p>Implementations may further optimize — for example, by pre-reducing _conversionNumerator_, _offset_, and _conversionDenominator_ by their GCD to reduce intermediate magnitudes and overflow risk.</p>
+          <p>The GCD reduction ensures that _conversionNumerator_ / _conversionDenominator_ is in lowest terms before the floating-point arithmetic, minimizing intermediate magnitudes. For example, inch-to-foot would otherwise compute _value_ × 158750 / 1905000 instead of _value_ × 1 / 12.</p>
+          <p>When _offsetNumerator_ is 0, the addition is skipped and this is a single multiply-then-divide. When _offsetNumerator_ is non-zero, both terms are put over the common denominator _conversionDenominator_ × _offsetDenominator_, so the single division is still the only rounding point.</p>
         </emu-note>
       </emu-clause>
 
@@ -1114,18 +1120,19 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _tgtD_ be _targetConv_.[[Denominator]].
           1. Let _tgtON_ be _targetConv_.[[OffsetNumerator]].
           1. Let _tgtOD_ be _targetConv_.[[OffsetDenominator]].
-          1. Let _numerator_ be _srcN_ × _tgtD_ × _srcOD_ × _tgtOD_.
-          1. Let _offset_ be (_srcON_ × _tgtOD_ - _tgtON_ × _srcOD_) × _tgtD_ × _srcD_.
-          1. Let _denominator_ be _srcD_ × _srcOD_ × _tgtOD_ × _tgtN_.
+          1. Let _numerator_ be _srcN_ × _tgtD_.
+          1. Let _denominator_ be _srcD_ × _tgtN_.
+          1. Let _offsetNumerator_ be (_srcON_ × _tgtOD_ - _tgtON_ × _srcOD_) × _tgtD_.
+          1. Let _offsetDenominator_ be _srcOD_ × _tgtOD_ × _tgtN_.
           1. If _srcON_ = 0 and _tgtON_ = 0, then
             1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, return _value_.
-            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, 0).
+            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, 0, 1).
           1. Else,
             1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, let _value_ be *+0*<sub>𝔽</sub>.
-            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, _offset_).
+            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, _offsetNumerator_, _offsetDenominator_).
         </emu-alg>
         <emu-note>
-          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = (_value_ × _srcN_/_srcD_ + _srcON_/_srcOD_ − _tgtON_/_tgtOD_) × _tgtD_/_tgtN_. The factor and offset are put over the common denominator _srcD_ × _srcOD_ × _tgtOD_ × _tgtN_, yielding the affine form (_value_ × _numerator_ + _offset_) / _denominator_. For non-offset conversions (where _srcOD_ = _tgtOD_ = 1 and offsets are 0), this simplifies to _numerator_ = _srcN_ × _tgtD_ and _denominator_ = _srcD_ × _tgtN_.</p>
+          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = (_value_ × _srcN_/_srcD_ + _srcON_/_srcOD_ − _tgtON_/_tgtOD_) × _tgtD_/_tgtN_. This decomposes into a scale factor _numerator_ / _denominator_ = _srcN_ × _tgtD_ / (_srcD_ × _tgtN_) and an offset _offsetNumerator_ / _offsetDenominator_. ApplyUnitConversion puts both terms over a common denominator so that there is only a single division (and thus a single rounding point). For non-offset conversions (the vast majority), the offset is 0 and the operation reduces to a single multiply-then-divide.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
