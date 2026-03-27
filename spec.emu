@@ -1126,9 +1126,6 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
         <emu-note>
           <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = (_value_ × _srcN_/_srcD_ + _srcON_/_srcOD_ − _tgtON_/_tgtOD_) × _tgtD_/_tgtN_. The factor and offset are put over the common denominator _srcD_ × _srcOD_ × _tgtOD_ × _tgtN_, yielding the affine form (_value_ × _numerator_ + _offset_) / _denominator_. For non-offset conversions (where _srcOD_ = _tgtOD_ = 1 and offsets are 0), this simplifies to _numerator_ = _srcN_ × _tgtD_ and _denominator_ = _srcD_ × _tgtN_.</p>
-          <p>For example, converting 84 inches to feet: _numerator_ = 127 × 1250 = 158750, _denominator_ = 5000 × 381 = 1905000. ApplyUnitConversion(84, 158750, 1905000, 0) computes 84 × 158750 / 1905000 = 7 exactly.</p>
-          <p>Converting −40 degrees Fahrenheit to Celsius: after combining, _numerator_ = 5, _offset_ = −160, _denominator_ = 9 (reduced by GCD). ApplyUnitConversion(−40, 5, 9, −160) computes (−40 × 5 + (−160)) / 9 = −360 / 9 = −40 exactly.</p>
-          <p>Signed zero is preserved in the non-offset path (returned directly). In the offset path, -0 is treated as 0 before the offset is applied, so -0 degrees Celsius converts to 32 degrees Fahrenheit.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
