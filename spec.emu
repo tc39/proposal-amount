@@ -133,26 +133,964 @@ location: https://github.com/tc39/proposal-amount/
 	</emu-note>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getunitconversionfactor" type="implementation-defined abstract operation">
+      <emu-table id="table-unit-conversion-factors-length" caption="Unit Conversion Factors: Length (base unit: meter)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>point</td>
+              <td>127</td>
+              <td>360000</td>
+            </tr>
+            <tr>
+              <td>inch</td>
+              <td>127</td>
+              <td>5000</td>
+            </tr>
+            <tr>
+              <td>foot</td>
+              <td>381</td>
+              <td>1250</td>
+            </tr>
+            <tr>
+              <td>yard</td>
+              <td>1143</td>
+              <td>1250</td>
+            </tr>
+            <tr>
+              <td>fathom</td>
+              <td>1143</td>
+              <td>625</td>
+            </tr>
+            <tr>
+              <td>rod</td>
+              <td>12573</td>
+              <td>2500</td>
+            </tr>
+            <tr>
+              <td>chain</td>
+              <td>12573</td>
+              <td>625</td>
+            </tr>
+            <tr>
+              <td>furlong</td>
+              <td>25146</td>
+              <td>125</td>
+            </tr>
+            <tr>
+              <td>mile</td>
+              <td>201168</td>
+              <td>125</td>
+            </tr>
+            <tr>
+              <td>nautical-mile</td>
+              <td>1852</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>earth-radius</td>
+              <td>6378100</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>solar-radius</td>
+              <td>695700000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>astronomical-unit</td>
+              <td>149597870700</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>light-year</td>
+              <td>9460730472580800</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>parsec</td>
+              <td>12699352539696155673600000</td>
+              <td>411557987</td>
+            </tr>
+            <tr>
+              <td>centimeter</td>
+              <td>1</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>millimeter</td>
+              <td>1</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>micrometer</td>
+              <td>1</td>
+              <td>1000000</td>
+            </tr>
+            <tr>
+              <td>nanometer</td>
+              <td>1</td>
+              <td>1000000000</td>
+            </tr>
+            <tr>
+              <td>kilometer</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-mass" caption="Unit Conversion Factors: Mass (base unit: kilogram)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>gram</td>
+              <td>1</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>milligram</td>
+              <td>1</td>
+              <td>1000000</td>
+            </tr>
+            <tr>
+              <td>microgram</td>
+              <td>1</td>
+              <td>1000000000</td>
+            </tr>
+            <tr>
+              <td>carat</td>
+              <td>1</td>
+              <td>5000</td>
+            </tr>
+            <tr>
+              <td>grain</td>
+              <td>6479891</td>
+              <td>100000000000</td>
+            </tr>
+            <tr>
+              <td>ounce</td>
+              <td>45359237</td>
+              <td>1600000000</td>
+            </tr>
+            <tr>
+              <td>ounce-troy</td>
+              <td>777587</td>
+              <td>25000000</td>
+            </tr>
+            <tr>
+              <td>pound</td>
+              <td>45359237</td>
+              <td>100000000</td>
+            </tr>
+            <tr>
+              <td>stone</td>
+              <td>317514659</td>
+              <td>50000000</td>
+            </tr>
+            <tr>
+              <td>ton</td>
+              <td>45359237</td>
+              <td>50000</td>
+            </tr>
+            <tr>
+              <td>tonne</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>slug</td>
+              <td>8896443230521</td>
+              <td>609600000000</td>
+            </tr>
+            <tr>
+              <td>earth-mass</td>
+              <td>5972200000000000000000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>solar-mass</td>
+              <td>1988470000000000000000000000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>dalton</td>
+              <td>166053878283</td>
+              <td>100000000000000000000000000000000000000</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-volume" caption="Unit Conversion Factors: Volume (base unit: cubic-meter)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>liter</td>
+              <td>1</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>milliliter</td>
+              <td>1</td>
+              <td>1000000</td>
+            </tr>
+            <tr>
+              <td>gallon</td>
+              <td>473176473</td>
+              <td>125000000000</td>
+            </tr>
+            <tr>
+              <td>gallon-imperial</td>
+              <td>454609</td>
+              <td>100000000</td>
+            </tr>
+            <tr>
+              <td>quart</td>
+              <td>473176473</td>
+              <td>500000000000</td>
+            </tr>
+            <tr>
+              <td>pint</td>
+              <td>473176473</td>
+              <td>1000000000000</td>
+            </tr>
+            <tr>
+              <td>cup</td>
+              <td>473176473</td>
+              <td>2000000000000</td>
+            </tr>
+            <tr>
+              <td>cup-metric</td>
+              <td>1</td>
+              <td>4000</td>
+            </tr>
+            <tr>
+              <td>fluid-ounce</td>
+              <td>473176473</td>
+              <td>16000000000000</td>
+            </tr>
+            <tr>
+              <td>fluid-ounce-imperial</td>
+              <td>454609</td>
+              <td>16000000000</td>
+            </tr>
+            <tr>
+              <td>tablespoon</td>
+              <td>473176473</td>
+              <td>32000000000000</td>
+            </tr>
+            <tr>
+              <td>teaspoon</td>
+              <td>157725491</td>
+              <td>32000000000000</td>
+            </tr>
+            <tr>
+              <td>pint-imperial</td>
+              <td>454609</td>
+              <td>800000000</td>
+            </tr>
+            <tr>
+              <td>quart-imperial</td>
+              <td>454609</td>
+              <td>400000000</td>
+            </tr>
+            <tr>
+              <td>barrel</td>
+              <td>9936705933</td>
+              <td>62500000000</td>
+            </tr>
+            <tr>
+              <td>bushel</td>
+              <td>220244188543</td>
+              <td>6250000000000</td>
+            </tr>
+            <tr>
+              <td>drop</td>
+              <td>157725491</td>
+              <td>3072000000000000</td>
+            </tr>
+            <tr>
+              <td>pinch</td>
+              <td>473176473</td>
+              <td>2048000000000000</td>
+            </tr>
+            <tr>
+              <td>dessert-spoon</td>
+              <td>473176473</td>
+              <td>256000000000000</td>
+            </tr>
+            <tr>
+              <td>dram</td>
+              <td>473176473</td>
+              <td>128000000000000</td>
+            </tr>
+            <tr>
+              <td>fluid-ounce-metric</td>
+              <td>3</td>
+              <td>100000</td>
+            </tr>
+            <tr>
+              <td>jigger</td>
+              <td>1419529419</td>
+              <td>32000000000000</td>
+            </tr>
+            <tr>
+              <td>pint-metric</td>
+              <td>1</td>
+              <td>2000</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-temperature" caption="Unit Conversion Factors: Temperature (base unit: kelvin)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+              <th>OffsetNumerator</th>
+              <th>OffsetDenominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>celsius</td>
+              <td>1</td>
+              <td>1</td>
+              <td>5463</td>
+              <td>20</td>
+            </tr>
+            <tr>
+              <td>fahrenheit</td>
+              <td>5</td>
+              <td>9</td>
+              <td>45967</td>
+              <td>180</td>
+            </tr>
+            <tr>
+              <td>rankine</td>
+              <td>5</td>
+              <td>9</td>
+              <td>0</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-area" caption="Unit Conversion Factors: Area (base unit: square-meter)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>hectare</td>
+              <td>10000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>acre</td>
+              <td>316160658</td>
+              <td>78125</td>
+            </tr>
+            <tr>
+              <td>dunam</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>square-kilometer</td>
+              <td>1000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>square-centimeter</td>
+              <td>1</td>
+              <td>10000</td>
+            </tr>
+            <tr>
+              <td>square-foot</td>
+              <td>145161</td>
+              <td>1562500</td>
+            </tr>
+            <tr>
+              <td>square-inch</td>
+              <td>16129</td>
+              <td>25000000</td>
+            </tr>
+            <tr>
+              <td>square-yard</td>
+              <td>1306449</td>
+              <td>1562500</td>
+            </tr>
+            <tr>
+              <td>square-mile</td>
+              <td>40468564224</td>
+              <td>15625</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-duration" caption="Unit Conversion Factors: Duration (base unit: second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>millisecond</td>
+              <td>1</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>microsecond</td>
+              <td>1</td>
+              <td>1000000</td>
+            </tr>
+            <tr>
+              <td>nanosecond</td>
+              <td>1</td>
+              <td>1000000000</td>
+            </tr>
+            <tr>
+              <td>minute</td>
+              <td>60</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>hour</td>
+              <td>3600</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>day</td>
+              <td>86400</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>week</td>
+              <td>604800</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>fortnight</td>
+              <td>1209600</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-year-duration" caption="Unit Conversion Factors: Year Duration (base unit: year)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>month</td>
+              <td>1</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>decade</td>
+              <td>10</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>century</td>
+              <td>100</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>quarter</td>
+              <td>1</td>
+              <td>4</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-speed" caption="Unit Conversion Factors: Speed (base unit: meter-per-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>kilometer-per-hour</td>
+              <td>5</td>
+              <td>18</td>
+            </tr>
+            <tr>
+              <td>mile-per-hour</td>
+              <td>1397</td>
+              <td>3125</td>
+            </tr>
+            <tr>
+              <td>knot</td>
+              <td>463</td>
+              <td>900</td>
+            </tr>
+            <tr>
+              <td>light-speed</td>
+              <td>299792458</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-angle" caption="Unit Conversion Factors: Angle (base unit: revolution)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>degree</td>
+              <td>1</td>
+              <td>360</td>
+            </tr>
+            <tr>
+              <td>arc-minute</td>
+              <td>1</td>
+              <td>21600</td>
+            </tr>
+            <tr>
+              <td>arc-second</td>
+              <td>1</td>
+              <td>1296000</td>
+            </tr>
+            <tr>
+              <td>radian</td>
+              <td>65501488</td>
+              <td>411557987</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-pressure" caption="Unit Conversion Factors: Pressure (base unit: kilogram-per-meter-square-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>pascal</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>hectopascal</td>
+              <td>100</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilopascal</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>megapascal</td>
+              <td>1000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>bar</td>
+              <td>100000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>atmosphere</td>
+              <td>101325</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>gasoline-energy-density</td>
+              <td>722250000000000000</td>
+              <td>22532213</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-energy" caption="Unit Conversion Factors: Energy (base unit: kilogram-square-meter-per-square-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>joule</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilojoule</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>calorie</td>
+              <td>523</td>
+              <td>125</td>
+            </tr>
+            <tr>
+              <td>kilocalorie</td>
+              <td>4184</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>foodcalorie</td>
+              <td>4184</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>british-thermal-unit</td>
+              <td>23722880951</td>
+              <td>22500000</td>
+            </tr>
+            <tr>
+              <td>electronvolt</td>
+              <td>1602177</td>
+              <td>10000000000000000000000000</td>
+            </tr>
+            <tr>
+              <td>calorie-it</td>
+              <td>10467</td>
+              <td>2500</td>
+            </tr>
+            <tr>
+              <td>british-thermal-unit-it</td>
+              <td>52752792631</td>
+              <td>50000000</td>
+            </tr>
+            <tr>
+              <td>therm-us</td>
+              <td>105480400</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-power" caption="Unit Conversion Factors: Power (base unit: kilogram-square-meter-per-cubic-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>watt</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilowatt</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>megawatt</td>
+              <td>1000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>horsepower</td>
+              <td>37284993579113511</td>
+              <td>50000000000000</td>
+            </tr>
+            <tr>
+              <td>solar-luminosity</td>
+              <td>382800000000000000000000000</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-force" caption="Unit Conversion Factors: Force (base unit: kilogram-meter-per-square-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>newton</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilonewton</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>pound-force</td>
+              <td>8896443230521</td>
+              <td>2000000000000</td>
+            </tr>
+            <tr>
+              <td>kilogram-force</td>
+              <td>196133</td>
+              <td>20000</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-digital" caption="Unit Conversion Factors: Digital (base unit: bit)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>byte</td>
+              <td>8</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilobit</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>megabit</td>
+              <td>1000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>gigabit</td>
+              <td>1000000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilobyte</td>
+              <td>8000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>megabyte</td>
+              <td>8000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>gigabyte</td>
+              <td>8000000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>terabyte</td>
+              <td>8000000000000</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-portion" caption="Unit Conversion Factors: Portion (base unit: part)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>percent</td>
+              <td>1</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>permille</td>
+              <td>1</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>permyriad</td>
+              <td>1</td>
+              <td>10000</td>
+            </tr>
+            <tr>
+              <td>karat</td>
+              <td>1</td>
+              <td>24</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-table id="table-unit-conversion-factors-frequency" caption="Unit Conversion Factors: Frequency (base unit: revolution-per-second)">
+        <table>
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Numerator</th>
+              <th>Denominator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>hertz</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>kilohertz</td>
+              <td>1000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>megahertz</td>
+              <td>1000000</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>gigahertz</td>
+              <td>1000000000</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+      </emu-table>
+
+      <emu-clause id="sec-amount-applyunitconversion" type="abstract operation">
+        <h1>ApplyUnitConversion (
+          _value_: a Number,
+          _conversionNumerator_: an integer mathematical value,
+          _conversionDenominator_: a positive integer mathematical value,
+          _offsetNumerator_: an integer mathematical value,
+          _offsetDenominator_: a positive integer mathematical value
+        ): a Number
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It reduces _conversionNumerator_ / _conversionDenominator_ to lowest terms and then applies the affine transformation _value_ × _conversionNumerator_ / _conversionDenominator_ + _offsetNumerator_ / _offsetDenominator_ using Number arithmetic. When the offset is non-zero, the factor and offset are put over a common denominator so the entire transformation is computed with a single division at the end.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _g_ be the greatest common divisor of abs(_conversionNumerator_) and _conversionDenominator_.
+          1. Set _conversionNumerator_ to _conversionNumerator_ / _g_.
+          1. Set _conversionDenominator_ to _conversionDenominator_ / _g_.
+          1. Let _result_ be _value_ × 𝔽(_conversionNumerator_).
+          1. If _offsetNumerator_ ≠ 0, then
+            1. Set _result_ to _result_ × 𝔽(_offsetDenominator_).
+            1. Set _result_ to _result_ + 𝔽(_offsetNumerator_) × 𝔽(_conversionDenominator_).
+            1. Return _result_ / 𝔽(_conversionDenominator_ × _offsetDenominator_).
+          1. Return _result_ / 𝔽(_conversionDenominator_).
+        </emu-alg>
+        <emu-note>
+          <p>The GCD reduction ensures that _conversionNumerator_ / _conversionDenominator_ is in lowest terms before the floating-point arithmetic, minimizing intermediate magnitudes. For example, inch-to-foot would otherwise compute _value_ × 158750 / 1905000 instead of _value_ × 1 / 12.</p>
+          <p>When _offsetNumerator_ is 0, the addition is skipped and this is a single multiply-then-divide. When _offsetNumerator_ is non-zero, both terms are put over the common denominator _conversionDenominator_ × _offsetDenominator_, so the single division is still the only rounding point.</p>
+        </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
         <h1>GetUnitConversionFactor (
           _unit_: a String
-        ): either a normal completion containing a Record with fields [[Category]] (a String), [[Factor]] (a Number), and [[Offset]] (a Number) or a throw completion
+        ): either a normal completion containing a Record with fields [[Category]] (a String), [[Numerator]] (an integer mathematical value), [[Denominator]] (a positive integer mathematical value), [[OffsetNumerator]] (an integer mathematical value), and [[OffsetDenominator]] (a positive integer mathematical value) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>It returns the conversion data for converting _unit_ to its base unit within its unit category.</dd>
         </dl>
         <emu-alg>
-          1. If _unit_ does not have a corresponding &lt;convertUnit> element in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>, or if that element specifies a <code>special</code> conversion, throw a *RangeError* exception.
-          1. Let _category_ be the unit category of _unit_ as specified by the CLDR unit conversion data.
-          1. Let _factor_ be the Number value closest to the rational conversion factor for _unit_ as specified by the CLDR unit conversion data.
-          1. If the CLDR unit conversion data specifies a conversion offset for _unit_, let _offset_ be the Number value closest to that rational offset; otherwise, let _offset_ be *+0*<sub>𝔽</sub>.
-          1. Return the Record { [[Category]]: _category_, [[Factor]]: _factor_, [[Offset]]: _offset_ }.
+          1. If _unit_ has a row in any of the Unit Conversion Factors tables, then
+            1. Let _row_ be that row, and let _table_ be the table containing _row_.
+            1. Let _category_ be the category of _table_ (as given in its caption).
+            1. Let _numerator_ be the value in the Numerator column of _row_.
+            1. Let _denominator_ be the value in the Denominator column of _row_.
+            1. If _table_ has an OffsetNumerator column, then
+              1. Let _offsetNumerator_ be the value in the OffsetNumerator column of _row_.
+              1. Let _offsetDenominator_ be the value in the OffsetDenominator column of _row_.
+            1. Else,
+              1. Let _offsetNumerator_ be 0.
+              1. Let _offsetDenominator_ be 1.
+          1. Else if _unit_ appears as the base unit (as given in the caption) of any of the Unit Conversion Factors tables, then
+            1. Let _category_ be the category of that table (as given in its caption).
+            1. Let _numerator_ be 1.
+            1. Let _denominator_ be 1.
+            1. Let _offsetNumerator_ be 0.
+            1. Let _offsetDenominator_ be 1.
+          1. Else,
+            1. Throw a *RangeError* exception.
+          1. Return the Record { [[Category]]: _category_, [[Numerator]]: _numerator_, [[Denominator]]: _denominator_, [[OffsetNumerator]]: _offsetNumerator_, [[OffsetDenominator]]: _offsetDenominator_ }.
         </emu-alg>
         <emu-note>
-          <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
-          <p>CLDR expresses conversion factors as rational numbers (e.g., 0.3048/12 for inch-to-meter). These rational values are converted to Numbers before use, so conversion arithmetic is subject to the precision of IEEE 754 binary64. For example, converting 1.75 feet to inches yields 1.75 × 0.3048 / (0.3048 / 12) = 20.999999999999996, not exactly 21.</p>
-          <p>CLDR also defines nonlinear conversions via the <code>special</code> attribute (e.g., the Beaufort scale). These cannot be expressed as a linear factor and offset, so they are excluded from this operation.</p>
+          <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Numerator]] / [[Denominator]] + [[OffsetNumerator]] / [[OffsetDenominator]].</p>
+          <p>The conversion factors in the Unit Conversion Factors tables are derived from <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>. CLDR expresses conversion factors as rational expressions (e.g., 0.3048/12 for inch-to-meter). These are represented here as integer numerator/denominator pairs.</p>
+          <p>Base units (such as meter, kilogram, and kelvin) are not listed in the tables because their conversion factor is trivially 1/1 with offset 0. They are recognized by their appearance in the caption of each table.</p>
+          <p>CLDR also defines nonlinear conversions via the <code>special</code> attribute (e.g., the Beaufort scale). These cannot be expressed as a linear factor and offset, so they are not included in the tables.</p>
         </emu-note>
       </emu-clause>
 
@@ -165,20 +1103,37 @@ location: https://github.com/tc39/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It converts _value_ from _sourceUnit_ to _targetUnit_ using Number arithmetic.</dd>
+          <dd>It converts _value_ from _sourceUnit_ to _targetUnit_. The source and target conversion factors are combined into a single affine transformation over a common denominator, which is then applied using Number arithmetic.</dd>
         </dl>
         <emu-alg>
+          1. If SameValue(_sourceUnit_, _targetUnit_) is *true*, return _value_.
           1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
-          1. If SameValue(_sourceConv_.[[Category]], _targetConv_.[[Category]]) is *false*, throw a *RangeError* exception.
-          1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
-          1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
-          1. Let _targetFactor_ be _targetConv_.[[Factor]].
-          1. Let _targetOffset_ be _targetConv_.[[Offset]].
-          1. Let _baseValue_ be _value_ × _sourceFactor_ + _sourceOffset_.
-          1. Let _result_ be (_baseValue_ - _targetOffset_) / _targetFactor_.
-          1. Return _result_.
+          1. If _sourceConv_.[[Category]] is not _targetConv_.[[Category]], throw a *RangeError* exception.
+          1. If _value_ is *NaN*, return *NaN*.
+          1. If _value_ is *+∞*<sub>𝔽</sub> or *-∞*<sub>𝔽</sub>, return _value_.
+          1. Let _srcN_ be _sourceConv_.[[Numerator]].
+          1. Let _srcD_ be _sourceConv_.[[Denominator]].
+          1. Let _srcON_ be _sourceConv_.[[OffsetNumerator]].
+          1. Let _srcOD_ be _sourceConv_.[[OffsetDenominator]].
+          1. Let _tgtN_ be _targetConv_.[[Numerator]].
+          1. Let _tgtD_ be _targetConv_.[[Denominator]].
+          1. Let _tgtON_ be _targetConv_.[[OffsetNumerator]].
+          1. Let _tgtOD_ be _targetConv_.[[OffsetDenominator]].
+          1. Let _numerator_ be _srcN_ × _tgtD_.
+          1. Let _denominator_ be _srcD_ × _tgtN_.
+          1. Let _offsetNumerator_ be (_srcON_ × _tgtOD_ - _tgtON_ × _srcOD_) × _tgtD_.
+          1. Let _offsetDenominator_ be _srcOD_ × _tgtOD_ × _tgtN_.
+          1. If _srcON_ = 0 and _tgtON_ = 0, then
+            1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, return _value_.
+            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, 0, 1).
+          1. Else,
+            1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, let _value_ be *+0*<sub>𝔽</sub>.
+            1. Return ApplyUnitConversion(_value_, _numerator_, _denominator_, _offsetNumerator_, _offsetDenominator_).
         </emu-alg>
+        <emu-note>
+          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = (_value_ × _srcN_/_srcD_ + _srcON_/_srcOD_ − _tgtON_/_tgtOD_) × _tgtD_/_tgtN_. This decomposes into a scale factor _numerator_ / _denominator_ = _srcN_ × _tgtD_ / (_srcD_ × _tgtN_) and an offset _offsetNumerator_ / _offsetDenominator_. ApplyUnitConversion puts both terms over a common denominator so that there is only a single division (and thus a single rounding point). For non-offset conversions (the vast majority), the offset is 0 and the operation reduces to a single multiply-then-divide.</p>
+        </emu-note>
       </emu-clause>
   </emu-clause>
 
