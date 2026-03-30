@@ -447,9 +447,6 @@ location: https://github.com/tc39/proposal-amount/
       1. Set _result_.[[Unit]] to _targetUnit_.
       1. Return _result_.
     </emu-alg>
-    <emu-note>
-      <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API supersedes this method to additionally support locale-based and usage-based unit conversion via CLDR unit preferences data. Without ECMA-402, only explicit unit-to-unit conversion (via the *"unit"* option) is supported.</p>
-    </emu-note>
   </emu-clause>
 </emu-clause>
 
