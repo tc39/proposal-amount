@@ -151,8 +151,10 @@ location: https://github.com/tc39/proposal-amount/
           1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSd_ be *true*; else let _hasSd_ be *false*.
           1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFd_ be *true*; else let _hasFd_ be *false*.
           1. If _hasSd_ is *true*, then
-            1. Set _formatter_.[[MinimumSignificantDigits]] to _minSignificantDigits_ if _minSignificantDigits_ is not *undefined*, or 1 otherwise.
-            1. Set _formatter_.[[MaximumSignificantDigits]] to _maxSignificantDigits_ if _maxSignificantDigits_ is not *undefined*, or 21 otherwise.
+            1. If _minSignificantDigits_ is not *undefined*, let _resolvedMinSD_ be _minSignificantDigits_; else let _resolvedMinSD_ be 1.
+            1. If _maxSignificantDigits_ is not *undefined*, let _resolvedMaxSD_ be _maxSignificantDigits_; else let _resolvedMaxSD_ be 21.
+            1. Set _formatter_.[[MinimumSignificantDigits]] to _resolvedMinSD_.
+            1. Set _formatter_.[[MaximumSignificantDigits]] to _resolvedMaxSD_.
           1. Else,
             1. Set _formatter_.[[MinimumSignificantDigits]] to 1.
             1. Set _formatter_.[[MaximumSignificantDigits]] to 21.
