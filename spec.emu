@@ -126,11 +126,54 @@ location: https://github.com/tc39/proposal-amount/
           1. If _unit_ is the empty String, throw a *RangeError* exception.
           1. Return the Record { [[MinimumFractionDigits]]: _minFractionDigits_, [[MaximumFractionDigits]]: _maxFractionDigits_, [[MinimumSignificantDigits]]: _minSignificantDigits_, [[MaximumSignificantDigits]]: _maxSignificantDigits_, [[RoundingMode]]: _roundingMode_, [[RoundingPriority]]: _roundingPriority_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
         </emu-alg>
-	<emu-note type="editor">
-	  <p>
-	    This abstract operation will need to be overridden in the 402 part because it will read additional Intl-specific properties beyond these.
-	  </p>
-	</emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-createformatterobject" type="abstract operation">
+        <h1>CreateFormatterObject (
+          _roundingMode_: a String,
+          _minFractionDigits_: a non-negative integer or *undefined*,
+          _maxFractionDigits_: a non-negative integer or *undefined*,
+          _minSignificantDigits_: a positive integer or *undefined*,
+          _maxSignificantDigits_: a positive integer or *undefined*,
+          _roundingPriority_: a String or *undefined*
+        ): an Object
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It creates an object with the internal slots required by <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, configured according to the given rounding and digit options.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _formatter_ be OrdinaryObjectCreate(*null*).
+          1. Set _formatter_.[[RoundingMode]] to _roundingMode_.
+          1. Set _formatter_.[[MinimumIntegerDigits]] to 1.
+          1. Set _formatter_.[[RoundingIncrement]] to 1.
+          1. Set _formatter_.[[TrailingZeroDisplay]] to *"auto"*.
+          1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSd_ be *true*; else let _hasSd_ be *false*.
+          1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFd_ be *true*; else let _hasFd_ be *false*.
+          1. If _hasSd_ is *true*, then
+            1. If _minSignificantDigits_ is not *undefined*, let _resolvedMinSD_ be _minSignificantDigits_; else let _resolvedMinSD_ be 1.
+            1. If _maxSignificantDigits_ is not *undefined*, let _resolvedMaxSD_ be _maxSignificantDigits_; else let _resolvedMaxSD_ be 21.
+            1. Set _formatter_.[[MinimumSignificantDigits]] to _resolvedMinSD_.
+            1. Set _formatter_.[[MaximumSignificantDigits]] to _resolvedMaxSD_.
+          1. Else,
+            1. Set _formatter_.[[MinimumSignificantDigits]] to 1.
+            1. Set _formatter_.[[MaximumSignificantDigits]] to 21.
+          1. If _hasFd_ is *true*, then
+            1. If _minFractionDigits_ is not *undefined*, let _resolvedMinFD_ be _minFractionDigits_; else let _resolvedMinFD_ be 0.
+            1. If _maxFractionDigits_ is not *undefined*, let _resolvedMaxFD_ be _maxFractionDigits_; else let _resolvedMaxFD_ be 100.
+            1. Set _formatter_.[[MinimumFractionDigits]] to _resolvedMinFD_.
+            1. Set _formatter_.[[MaximumFractionDigits]] to _resolvedMaxFD_.
+          1. Else,
+            1. Set _formatter_.[[MinimumFractionDigits]] to 0.
+            1. Set _formatter_.[[MaximumFractionDigits]] to 100.
+          1. If _hasSd_ is *true* and _hasFd_ is *true*, then
+            1. If _roundingPriority_ is *"morePrecision"*, set _formatter_.[[RoundingType]] to ~more-precision~; else set _formatter_.[[RoundingType]] to ~less-precision~.
+          1. Else if _hasSd_ is *true*, then
+            1. Set _formatter_.[[RoundingType]] to ~significant-digits~.
+          1. Else,
+            1. Set _formatter_.[[RoundingType]] to ~fraction-digits~.
+          1. Return _formatter_.
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-getunitconversionfactor" type="implementation-defined abstract operation">
@@ -209,9 +252,11 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _value_ be _x_.
         1. Else,
           1. Assert: _x_ is a String.
-          1. TODO Let _intlObject_ be an Object suitable as a first argument <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, using _fractionDigits_, _significantDigits_, and _roundingMode_.
+          1. If _fractionDigits_ is not *undefined*, let _fd_ be ℝ(_fractionDigits_); else let _fd_ be *undefined*.
+          1. If _significantDigits_ is not *undefined*, let _sd_ be ℝ(_significantDigits_); else let _sd_ be *undefined*.
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fd_, _fd_, _sd_, _sd_, *undefined*).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
-          1. Let _formatted_ be FormatNumericToString(_intlObject_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+          1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
           1. Let _value_ be _formatted_.[[FormattedString]].
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
@@ -316,16 +361,17 @@ location: https://github.com/tc39/proposal-amount/
         1. Assert: _v_ is a String.
         1. Let _sourceValue_ be StringToNumber(_v_).
       1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
-      1. TODO Let _intlObject_ be an Object suitable as the first argument of <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, using _minFractionDigits_, _maxFractionDigits_, _minSignificantDigits_, _maxSignificantDigits_, _roundingPriority_, and _roundingMode_.
-      1. Let _formatted_ be FormatNumericToString(_intlObject_, _convertedValue_, 0).
+      1. If _minFractionDigits_ is not *undefined*, let _mnfd_ be ℝ(_minFractionDigits_); else let _mnfd_ be *undefined*.
+      1. If _maxFractionDigits_ is not *undefined*, let _mxfd_ be ℝ(_maxFractionDigits_); else let _mxfd_ be *undefined*.
+      1. If _minSignificantDigits_ is not *undefined*, let _mnsd_ be ℝ(_minSignificantDigits_); else let _mnsd_ be *undefined*.
+      1. If _maxSignificantDigits_ is not *undefined*, let _mxsd_ be ℝ(_maxSignificantDigits_); else let _mxsd_ be *undefined*.
+      1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _mnfd_, _mxfd_, _mnsd_, _mxsd_, _roundingPriority_).
+      1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
       1. Set _result_.[[AmountValue]] to _formatted_.[[FormattedString]].
       1. Set _result_.[[Unit]] to _targetUnit_.
       1. Return _result_.
     </emu-alg>
-    <emu-note>
-      <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API supersedes this method to additionally support locale-based and usage-based unit conversion via CLDR unit preferences data. Without ECMA-402, only explicit unit-to-unit conversion (via the *"unit"* option) is supported.</p>
-    </emu-note>
   </emu-clause>
 </emu-clause>
 
