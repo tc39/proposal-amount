@@ -157,8 +157,10 @@ location: https://github.com/tc39/proposal-amount/
             1. Set _formatter_.[[MinimumSignificantDigits]] to 1.
             1. Set _formatter_.[[MaximumSignificantDigits]] to 21.
           1. If _hasFd_ is *true*, then
-            1. Set _formatter_.[[MinimumFractionDigits]] to _minFractionDigits_ if _minFractionDigits_ is not *undefined*, or 0 otherwise.
-            1. Set _formatter_.[[MaximumFractionDigits]] to _maxFractionDigits_ if _maxFractionDigits_ is not *undefined*, or 100 otherwise.
+            1. If _minFractionDigits_ is not *undefined*, let _resolvedMinFD_ be _minFractionDigits_; else let _resolvedMinFD_ be 0.
+            1. If _maxFractionDigits_ is not *undefined*, let _resolvedMaxFD_ be _maxFractionDigits_; else let _resolvedMaxFD_ be 100.
+            1. Set _formatter_.[[MinimumFractionDigits]] to _resolvedMinFD_.
+            1. Set _formatter_.[[MaximumFractionDigits]] to _resolvedMaxFD_.
           1. Else,
             1. Set _formatter_.[[MinimumFractionDigits]] to 0.
             1. Set _formatter_.[[MaximumFractionDigits]] to 100.
