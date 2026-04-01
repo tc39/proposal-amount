@@ -163,8 +163,7 @@ location: https://github.com/tc39/proposal-amount/
             1. Set _formatter_.[[MinimumFractionDigits]] to 0.
             1. Set _formatter_.[[MaximumFractionDigits]] to 100.
           1. If _hasSd_ is *true* and _hasFd_ is *true*, then
-            1. If _roundingPriority_ is *"morePrecision"*, set _formatter_.[[RoundingType]] to ~more-precision~.
-            1. Else, set _formatter_.[[RoundingType]] to ~less-precision~.
+            1. If _roundingPriority_ is *"morePrecision"*, set _formatter_.[[RoundingType]] to ~more-precision~; else set _formatter_.[[RoundingType]] to ~less-precision~.
           1. Else if _hasSd_ is *true*, then
             1. Set _formatter_.[[RoundingType]] to ~significant-digits~.
           1. Else,
