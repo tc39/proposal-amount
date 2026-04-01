@@ -52,11 +52,6 @@
     </emu-clause>
   </emu-clause>
 
-  <emu-clause id="sec-amount-intl-unit-conversion">
-    <h1>Supplemental Unit Conversion Data</h1>
-    <p>The <emu-xref href="#sec-amount-unit-conversion-data">unit conversion data</emu-xref> defined in the base specification encompasses all <code>&lt;convertUnit&gt;</code> elements from CLDR's <code>units.xml</code>, including units for locale-specific and regional measurement systems (such as Japanese units of length and area, Scandinavian miles, and others). GetUnitConversionFactor recognizes these units in the same manner as units from any other category.</p>
-  </emu-clause>
-
   <emu-clause id="sec-amount-intl-normative-references">
     <h1>Amendment to the Normative References of ECMA-402</h1>
     <emu-note type="editor">
