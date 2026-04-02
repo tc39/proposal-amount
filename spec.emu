@@ -148,8 +148,8 @@ location: https://github.com/tc39/proposal-amount/
           1. Set _formatter_.[[MinimumIntegerDigits]] to 1.
           1. Set _formatter_.[[RoundingIncrement]] to 1.
           1. Set _formatter_.[[TrailingZeroDisplay]] to *"auto"*.
-          1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSd_ be *true*; else let _hasSd_ be *false*.
-          1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFd_ be *true*; else let _hasFd_ be *false*.
+          1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSD_ be *true*; else let _hasSD_ be *false*.
+          1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFD_ be *true*; else let _hasFD_ be *false*.
           1. If _hasSd_ is *true*, then
             1. If _minSignificantDigits_ is not *undefined*, let _resolvedMinSD_ be _minSignificantDigits_; else let _resolvedMinSD_ be 1.
             1. If _maxSignificantDigits_ is not *undefined*, let _resolvedMaxSD_ be _maxSignificantDigits_; else let _resolvedMaxSD_ be 21.
