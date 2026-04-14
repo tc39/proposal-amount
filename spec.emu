@@ -193,7 +193,7 @@ location: https://github.com/tc39/proposal-amount/
           1. If SameValue(_sourceUnit_, _targetUnit_) is *true*, return _value_.
           1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
-          1. If _sourceConv_.[[Category]] is not _targetConv_.[[Category]], throw a *RangeError* exception.
+          1. If _sourceConv_.[[Category]] is not _targetConv_.[[Category]], throw a *TypeError* exception.
           1. If _value_ is *NaN*, return *NaN*.
           1. If _value_ is *+∞*<sub>𝔽</sub> or *-∞*<sub>𝔽</sub>, return _value_.
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
