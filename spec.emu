@@ -200,14 +200,13 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
           1. Let _targetOffset_ be _targetConv_.[[Offset]].
-          1. If _sourceOffset_ = 0 and _targetOffset_ = 0, then
-            1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, return _value_.
-          1. Else,
-            1. If _value_ is *+0*<sub>𝔽</sub> or _value_ is *-0*<sub>𝔽</sub>, set _value_ to *+0*<sub>𝔽</sub>.
+          1. If _sourceOffset_ is _targetOffset_, then
+            1. NOTE: This preserves a _value_ of *-0*<sub>𝔽</sub>.
+            1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_).
           1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
         </emu-alg>
         <emu-note>
-          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = _value_ × _sourceFactor_ / _targetFactor_ + (_sourceOffset_ − _targetOffset_) / _targetFactor_. The expressions _sourceFactor_ / _targetFactor_ and (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and only the multiplication and addition are performed as Number operations. For non-offset conversions (the vast majority), the second term is 𝔽(0) = *+0*<sub>𝔽</sub> and the addition is a no-op.</p>
+          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = _value_ × (_sourceFactor_ / _targetFactor_) + (_sourceOffset_ − _targetOffset_) / _targetFactor_. The subexpressions _sourceFactor_ / _targetFactor_ and (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
