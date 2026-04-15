@@ -175,7 +175,6 @@ location: https://github.com/tc39/proposal-amount/
         </emu-alg>
         <emu-note>
           <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
-          <p>Two units are convertible if and only if they share the same [[BaseUnit]] value.</p>
         </emu-note>
       </emu-clause>
 
