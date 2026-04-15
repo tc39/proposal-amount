@@ -205,7 +205,7 @@ location: https://github.com/tc39/proposal-amount/
             1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_).
           1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
         </emu-alg>
-        <emu-note>
+        <emu-note type="editor">
           <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = _value_ × (_sourceFactor_ / _targetFactor_) + (_sourceOffset_ − _targetOffset_) / _targetFactor_. The subexpressions _sourceFactor_ / _targetFactor_ and (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
         </emu-note>
       </emu-clause>
@@ -247,7 +247,7 @@ location: https://github.com/tc39/proposal-amount/
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
-      <emu-note>
+      <emu-note type="editor">
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
       </emu-note>
       <emu-note type="editor">
@@ -270,7 +270,7 @@ location: https://github.com/tc39/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Return _O_.[[AmountValue]].
     </emu-alg>
-    <emu-note>
+    <emu-note type="editor">
       <p>The value may be a Number, BigInt, or String. It is a String when precision options were applied during construction or when the Amount is the result of unit conversion.</p>
     </emu-note>
   </emu-clause>
@@ -352,7 +352,7 @@ location: https://github.com/tc39/proposal-amount/
       1. Set _result_.[[Unit]] to _targetUnit_.
       1. Return _result_.
     </emu-alg>
-    <emu-note>
+    <emu-note type="editor">
       <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API supersedes this method to additionally support locale-based and usage-based unit conversion via CLDR unit preferences data. Without ECMA-402, only explicit unit-to-unit conversion (via the *"unit"* option) is supported.</p>
     </emu-note>
   </emu-clause>
