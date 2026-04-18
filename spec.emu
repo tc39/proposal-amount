@@ -159,7 +159,7 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It creates an object with the internal slots required by <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, configured according to the given rounding and digit options.</dd>
         </dl>
         <emu-alg>
-          1. Let _formatter_ be OrdinaryObjectCreate(*null*).
+          1. Let _formatter_ be OrdinaryObjectCreate(*null*, « [[MinimumFractionDigits]], [[MinimumIntegerDigits]], [[MinimumSignificantDigits]], [[MaximumFractionDigits]], [[MaximumSignificantDigits]], [[RoundingIncrement]], [[RoundingMode]], [[RoundingType]], [[TrailingZeroDisplay]] »).
           1. Set _formatter_.[[RoundingMode]] to _roundingMode_.
           1. Set _formatter_.[[MinimumIntegerDigits]] to 1.
           1. Set _formatter_.[[RoundingIncrement]] to 1.
