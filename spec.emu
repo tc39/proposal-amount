@@ -269,7 +269,7 @@ location: https://github.com/tc39/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Return _O_.[[AmountValue]].
     </emu-alg>
-    <emu-note type="editor">
+    <emu-note>
       <p>The value may be a Number, BigInt, or String. It is a String when precision options were applied during construction or when the Amount is the result of unit conversion.</p>
     </emu-note>
   </emu-clause>
