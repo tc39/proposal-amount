@@ -246,7 +246,7 @@ location: https://github.com/tc39/proposal-amount/
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
-      <emu-note type="editor">
+      <emu-note>
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
       </emu-note>
       <emu-note type="editor">
