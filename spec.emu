@@ -268,9 +268,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _value_ be _x_.
         1. Else,
           1. Assert: _x_ is a String.
-          1. If _fractionDigits_ is not *undefined*, let _fd_ be ℝ(_fractionDigits_); else let _fd_ be *undefined*.
-          1. If _significantDigits_ is not *undefined*, let _sd_ be ℝ(_significantDigits_); else let _sd_ be *undefined*.
-          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fd_, _fd_, _sd_, _sd_, *undefined*).
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
           1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
           1. Let _value_ be _formatted_.[[FormattedString]].
