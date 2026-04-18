@@ -375,11 +375,7 @@ location: https://github.com/tc39/proposal-amount/
         1. Assert: _v_ is a String.
         1. Let _sourceValue_ be StringToNumber(_v_).
       1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
-      1. If _minFractionDigits_ is not *undefined*, let _mnfd_ be ℝ(_minFractionDigits_); else let _mnfd_ be *undefined*.
-      1. If _maxFractionDigits_ is not *undefined*, let _mxfd_ be ℝ(_maxFractionDigits_); else let _mxfd_ be *undefined*.
-      1. If _minSignificantDigits_ is not *undefined*, let _mnsd_ be ℝ(_minSignificantDigits_); else let _mnsd_ be *undefined*.
-      1. If _maxSignificantDigits_ is not *undefined*, let _mxsd_ be ℝ(_maxSignificantDigits_); else let _mxsd_ be *undefined*.
-      1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _mnfd_, _mxfd_, _mnsd_, _mxsd_, _roundingPriority_).
+      1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _minFractionDigits_, _maxFractionDigits_, _minSignificantDigits_, _maxSignificantDigits_, _roundingPriority_).
       1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
       1. Set _result_.[[AmountValue]] to _formatted_.[[FormattedString]].
