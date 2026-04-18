@@ -205,7 +205,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
         </emu-alg>
         <emu-note type="editor">
-          <p>The conversion from _sourceUnit_ to _targetUnit_ through the base unit is: _result_ = _value_ × (_sourceFactor_ / _targetFactor_) + (_sourceOffset_ − _targetOffset_) / _targetFactor_. The subexpressions _sourceFactor_ / _targetFactor_ and (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
+          <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
