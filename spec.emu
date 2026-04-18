@@ -195,7 +195,6 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
           1. If _sourceConv_.[[BaseUnit]] is not _targetConv_.[[BaseUnit]], throw a *TypeError* exception.
           1. If _value_ is *NaN*, return *NaN*.
-          1. If _value_ is *+∞*<sub>𝔽</sub> or *-∞*<sub>𝔽</sub>, return _value_.
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
