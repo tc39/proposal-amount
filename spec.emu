@@ -133,26 +133,48 @@ location: https://github.com/tc39/proposal-amount/
 	</emu-note>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getunitconversionfactor" type="implementation-defined abstract operation">
+      <emu-clause id="sec-amount-unit-conversion-data">
+        <h1>Unit Conversion Data</h1>
+        <p>Unit conversion data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#conversion-data">Unicode Technical Standard #35 Part 6 Supplemental, Conversion Data</a>, each <code>&lt;convertUnit&gt;</code> element defines how to convert a <code>source</code> unit into a compatible <code>baseUnit</code>. An ECMAScript implementation must ignore all <code>special</code> conversions and support all conversions based on <code>factor</code> and/or <code>offset</code>, interpreting the value for each as an arithmetic expression with mathematical value operands (noting the respective defaults of 1 and 0 and the implicit presence of an identity mapping for each unit identified as the value of a <code>baseUnit</code>).</p>
+        <p>Two units are convertible if and only if they share the same <code>baseUnit</code> value in CLDR. A unit that appears as a <code>baseUnit</code> value has an implicit identity conversion (<code>factor</code> 1, <code>offset</code> 0).</p>
+        <emu-note>
+          <p>In <code>factor</code> and <code>offset</code> expressions, <code>*</code> multiplication binds more tightly than <code>/</code> division, and constants defined by <code>&lt;unitConstant&gt;</code> elements are valid operands.</p>
+          <p>For example:</p>
+          <ul>
+            <li><code>&lt;convertUnit source='celsius' baseUnit='kelvin' offset='273.15' systems="si metric"/&gt;</code> specifies that conversion from unit "celsius" to unit "kelvin" requires addition of 273.15.</li>
+            <li><code>&lt;convertUnit source='fahrenheit' baseUnit='kelvin' factor='5/9' offset='2298.35/9' systems="ussystem uksystem"/&gt;</code> specifies that conversion from unit "fahrenheit" to unit "kelvin" requires multiplication by (5 / 9) followed by addition of (2298.35 / 9).</li>
+            <li><code>&lt;convertUnit source='radian' baseUnit='revolution' factor='1/2*PI' systems="si metric"/&gt;</code> specifies that conversion from unit "radian" to unit "revolution" requires multiplication by (1 / (2 × <code>PI</code>)), which references <code>&lt;unitConstant constant="PI" value="411557987 / 131002976" status='approximate'/&gt;</code> and is thus equivalent to multiplication by (1 / (2 × (411557987 / 131002976))) = (131002976 / 823115974).</li>
+            <li><code>&lt;convertUnit source='solar-mass' baseUnit='kilogram' factor='1.98847E+30' systems="astronomical"/&gt;</code> specifies that conversion from unit "solar-mass" to unit "kilogram" requires multiplication by (1.98847 × 10<sup>30</sup>).</li>
+          </ul>
+        </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
         <h1>GetUnitConversionFactor (
           _unit_: a String
-        ): either a normal completion containing a Record with fields [[Category]] (a String), [[Factor]] (a Number), and [[Offset]] (a Number) or a throw completion
+        ): either a normal completion containing a Record with fields [[BaseUnit]] (a String), [[Factor]] (a mathematical value), and [[Offset]] (a mathematical value) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the conversion data for converting _unit_ to its base unit within its unit category.</dd>
+          <dd>It returns the conversion data for converting _unit_ to its base unit.</dd>
         </dl>
         <emu-alg>
-          1. If _unit_ does not have a corresponding &lt;convertUnit> element in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">UTS #35 Part 6 Supplemental, Unit Conversion</a>, or if that element specifies a <code>special</code> conversion, throw a *RangeError* exception.
-          1. Let _category_ be the unit category of _unit_ as specified by the CLDR unit conversion data.
-          1. Let _factor_ be the Number value closest to the rational conversion factor for _unit_ as specified by the CLDR unit conversion data.
-          1. If the CLDR unit conversion data specifies a conversion offset for _unit_, let _offset_ be the Number value closest to that rational offset; otherwise, let _offset_ be *+0*<sub>𝔽</sub>.
-          1. Return the Record { [[Category]]: _category_, [[Factor]]: _factor_, [[Offset]]: _offset_ }.
+          1. If _unit_ is the <code>source</code> of a <code>&lt;convertUnit&gt;</code> element in the <emu-xref href="#sec-amount-unit-conversion-data">unit conversion data</emu-xref>, then
+            1. Let _element_ be that <code>&lt;convertUnit&gt;</code> element.
+            1. If _element_ has an attribute <code>special</code>, throw a *TypeError* exception.
+            1. Let _baseUnit_ be the <code>baseUnit</code> of _element_.
+            1. Let _factor_ be the mathematical value of the <code>factor</code> attribute of _element_ if present, or 1 otherwise.
+            1. Let _offset_ be the mathematical value of the <code>offset</code> attribute of _element_ if present, or 0 otherwise.
+          1. Else if _unit_ is a <code>baseUnit</code> value in the <emu-xref href="#sec-amount-unit-conversion-data">unit conversion data</emu-xref>, then
+            1. Let _baseUnit_ be _unit_.
+            1. Let _factor_ be 1.
+            1. Let _offset_ be 0.
+          1. Else,
+            1. Throw a *TypeError* exception.
+          1. Return the Record { [[BaseUnit]]: _baseUnit_, [[Factor]]: _factor_, [[Offset]]: _offset_ }.
         </emu-alg>
         <emu-note>
           <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
-          <p>CLDR expresses conversion factors as rational numbers (e.g., 0.3048/12 for inch-to-meter). These rational values are converted to Numbers before use, so conversion arithmetic is subject to the precision of IEEE 754 binary64. For example, converting 1.75 feet to inches yields 1.75 × 0.3048 / (0.3048 / 12) = 20.999999999999996, not exactly 21.</p>
-          <p>CLDR also defines nonlinear conversions via the <code>special</code> attribute (e.g., the Beaufort scale). These cannot be expressed as a linear factor and offset, so they are excluded from this operation.</p>
         </emu-note>
       </emu-clause>
 
@@ -168,17 +190,23 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It converts _value_ from _sourceUnit_ to _targetUnit_ using Number arithmetic.</dd>
         </dl>
         <emu-alg>
+          1. If SameValue(_sourceUnit_, _targetUnit_) is *true*, return _value_.
           1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
-          1. If SameValue(_sourceConv_.[[Category]], _targetConv_.[[Category]]) is *false*, throw a *RangeError* exception.
+          1. If _sourceConv_.[[BaseUnit]] is not _targetConv_.[[BaseUnit]], throw a *TypeError* exception.
+          1. If _value_ is *NaN*, return *NaN*.
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
           1. Let _targetOffset_ be _targetConv_.[[Offset]].
-          1. Let _baseValue_ be _value_ × _sourceFactor_ + _sourceOffset_.
-          1. Let _result_ be (_baseValue_ - _targetOffset_) / _targetFactor_.
-          1. Return _result_.
+          1. If _sourceOffset_ is _targetOffset_, then
+            1. NOTE: This preserves a _value_ of *-0*<sub>𝔽</sub>.
+            1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_).
+          1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
         </emu-alg>
+        <emu-note>
+          <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
+        </emu-note>
       </emu-clause>
   </emu-clause>
 
