@@ -47,12 +47,18 @@ Amount will have the following read-only properties:
 Note: ⚠️  All property/method names up for bikeshedding.
 
 * `value` (Number or BigInt or String): The numerical value of the amount.
-  By default, the type of the value used in the constructor is retained.
-  The value of an Amount constructed with precision options,
-  or one that's the result of unit conversion,
-  is always a numerical string.
+  The type of the value used in the constructor is retained,
+  except that any non-finite value is a Number (`Infinity`, `-Infinity`, or `NaN`)
+  and any value that was potentially affected by precision options and/or unit conversion is a String.
+
+  A String `value` is always in the format returned by [Number.p.toExponential]
+  (decimal exponential notation with an explicitly signed exponent
+  and a significand that is either exactly 0 or has a positive absolute value less than 10)
+  but not necessarily limited by the same bounds.
 * `unit` (String or not defined): The unit of measurement associated with the Amount's numerical value.
   An undefined value indicates "no unit supplied".
+
+[Number.p.toExponential]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toExponential
 
 ### Constructor
 
@@ -67,11 +73,11 @@ Note: ⚠️  All property/method names up for bikeshedding.
   When constructing an Amount from a String `value`,
   its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
   or a RangeError is thrown.
-  The `value` property of a String-valued Amount is not necessarily equal to the `value` its constructor was called with,
-  as it is always a [StrDecimalLiteral](https://tc39.es/ecma262/#prod-StrDecimalLiteral), or `"NaN"`.
+  The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
   If either `fractionDigits` or `significantDigits` is set,
-  the `value` is rounded accordingly, and is stored as a String.
+  the `value` is rounded accordingly,
+  and is stored as a String (if finite) or Number (if not finite).
 
 The object prototype would provide the following methods:
 
@@ -102,7 +108,8 @@ The object prototype would provide the following methods:
   `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
   If both fraction and significant digit options are set,
   the resulting behaviour is selected by the `roundingPriority`.
-  The numerical value of the Amount resulting from unit conversion is stored as a String.
+  The numerical value of the Amount resulting from unit conversion is
+  stored as a String (if finite) or Number (if not finite).
 
   Calling `convertTo()` will throw an error if conversion is not supported
   for the Amount's unit (such as currency units),
