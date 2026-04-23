@@ -122,7 +122,7 @@ Unit conversion is supported for some units, the data for which is provided by t
 This file also provides the data for per-usage and per-locale unit preferences.
 
 For each unit type, the data given in CLDR defines
-a multiplication factor (and an offset for temperature untis)
+a multiplication factor (and an offset for temperature units)
 for converting from a source unit to the unit type's base unit.
 For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
 while the conversion from `inch` to `meter` is given as 0.3048/12.
