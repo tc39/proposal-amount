@@ -107,7 +107,7 @@ The object prototype would provide the following methods:
   Otherwise, the returned Amount will have a Number `value`.
   If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
 
-  Calling `convertTo()` will throw a RangeError if conversion is not supported
+  Calling `convertTo()` will throw a TypeError if conversion is not supported
   for the Amount's unit (such as currency units),
   or if the resolved conversion target is not valid for the Amount's unit
   (such as attempting to convert a mass unit into a length unit).
