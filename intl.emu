@@ -16,22 +16,52 @@
 
     <emu-clause id="sup-amount.prototype.tolocalestring">
       <h1>Amount.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+      <p>This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring"></emu-xref>.</p>
 
-      <p>
-        This definition supersedes the definition provided in es2025, <emu-xref href="#sec-amount.prototype.tolocalestring"></emu-xref>.
-      </p>
-
-      <p>
-       This function performs the following steps when called:
-      </p>
+      <p>This function performs the following steps when called:</p>
 
       <emu-alg>
         1. Let _O_ be the *this* value.
-        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
-        1. Return FormatNumeric(_numberFormat_, _O_.[[AmountData]]).
+        1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+        1. Let _v_ be _O_.[[AmountValue]].
+        1. If _v_ is a String, then
+          1. Let _numValue_ be _v_.
+        1. Else if _v_ is a BigInt, then
+          1. Let _numValue_ be BigInt::toString(_v_, 10).
+        1. Else,
+          1. Assert: _v_ is a Number.
+          1. Let _numValue_ be _v_.
+        1. Let _unit_ be _O_.[[Unit]].
+        1. Let _mergedOptions_ be OrdinaryObjectCreate(*null*).
+        1. If _options_ is not *undefined*, then
+          1. Let _optionsObj_ be ? GetOptionsObject(_options_).
+          1. Perform ? CopyDataProperties(_mergedOptions_, _optionsObj_, « »).
+        1. If _unit_ is not *undefined*, then
+          1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
+            1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
+              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"currency"*).
+              1. If ? HasProperty(_mergedOptions_, *"currency"*) is *false*, then
+                1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"currency"*, _unit_).
+            1. Else,
+              1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"unit"*).
+              1. If ? HasProperty(_mergedOptions_, *"unit"*) is *false*, then
+                1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"unit"*, _unit_).
+        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, « _locales_, _mergedOptions_ »).
+        1. Return FormatNumeric(_numberFormat_, _numValue_).
       </emu-alg>
     </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-amount-intl-normative-references">
+    <h1>Amendment to the Normative References of ECMA-402</h1>
+    <emu-note type="editor">
+      <p>The following entry is to be added to ECMA-402's list of referenced parts of Unicode Technical Standard #35.</p>
+    </emu-note>
+    <ul>
+      <li>
+        <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Part 6 Supplemental, Unit Preferences</a>
+      </li>
+    </ul>
   </emu-clause>
 </emu-clause>
 
@@ -138,41 +168,6 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-tointlmathematicalvalue" type="abstract operation">
-      <h1>
-        ToIntlMathematicalValue (
-          _value_: an ECMAScript language value,
-        ): either a normal completion containing an Intl mathematical value or a throw completion
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>
-          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is a mathematical value together with ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
-          This abstract operation is similar to <emu-xref href="#sec-tonumeric"></emu-xref>, but a mathematical value can be returned instead of a Number or BigInt, so that exact decimal values can be represented.
-        </dd>
-      </dl>
-      <emu-alg>
-        1. <ins>If _value_ has the [[Value]] and [[FractionDigits]] internal slots, let _primValue_ be RenderMVWithFractionDigits(_value_.[[Value]], _value_.[[FractionDigits]]) else</ins><del>Let</del> <ins>let</ins _primValue_ be ? ToPrimitive(_value_, ~number~).
-        1. If _primValue_ is a BigInt, return ℝ(_primValue_).
-        1. If _primValue_ is a String, then
-          1. Let _str_ be _primValue_.
-        1. Else,
-          1. Let _x_ be ? ToNumber(_primValue_).
-          1. If _x_ is *-0*<sub>𝔽</sub>, return ~negative-zero~.
-          1. Let _str_ be Number::toString(_x_, 10).
-        1. Let _text_ be StringToCodePoints(_str_).
-        1. Let _literal_ be ParseText(_text_, |StringNumericLiteral|).
-        1. If _literal_ is a List of errors, return ~not-a-number~.
-        1. Let _intlMV_ be the StringIntlMV of _literal_.
-        1. If _intlMV_ is a mathematical value, then
-          1. Let _rounded_ be RoundMVResult(abs(_intlMV_)).
-          1. If _rounded_ is *+∞*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-infinity~.
-          1. If _rounded_ is *+∞*<sub>𝔽</sub>, return ~positive-infinity~.
-          1. If _rounded_ is *+0*<sub>𝔽</sub> and _intlMV_ &lt; 0, return ~negative-zero~.
-          1. If _rounded_ is *+0*<sub>𝔽</sub>, return 0.
-        1. Return _intlMV_.
-      </emu-alg>
-    </emu-clause>
     <emu-clause id="sec-setnumberformatunitoptions" type="abstract operation">
       <h1>
         SetNumberFormatUnitOptions (

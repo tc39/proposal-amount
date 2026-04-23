@@ -8,32 +8,36 @@ title: Amount
 status: proposal
 stage: 2
 contributors: Ben Allen, Eemeli Aro, Jesse Alama
-location: https://github.com/tc39/proposal-measure/
+location: https://github.com/tc39/proposal-amount/
 </pre>
 
 <emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-measure/" title="Measure proposal (GitHub)">Measure proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA&#8203;-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
+  <emu-note type="editor">
+    <p>
+      The changes proposed here are stacked on top of the <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/">Keep Trailing Zeros</a> ECMA-402 proposal,
+      and include calls to ECMA-402 Abstract Operations from ECMA&#8203;-262 algorithms.
+      Where necessary, we intend to promote those semantics to ECMA&#8203;-262.
+    </p>
+  </emu-note>
 </emu-intro>
 
 <emu-clause id="sec-the-amount-object">
   <h1>The Amount Object</h1>
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
-    <p>An Amount is an object that wraps mathematical value and a precision, together with a unit (e.g., mile, kilogram) or currency (e.g., EUR, JPY, USD). One can intuitively understand an Amount as a number that, so to speak, knows its own precision and what it is measuring.</p>
-    <p>The notation for mathematical values used by Amount are <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which are Strings that adhere to the <emu-xref href="#prod-DecimalLiteral">DecimalLiteral</emu-xref> production, excepting *"NaN"*, *"Infinity", and *"-Infinity"*.</p>
+    <p>An Amount is an object that wraps a numeric value—as a Number, BigInt, or String—together with an optional unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a value that, so to speak, knows what it is measuring.</p>
+    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, the numeric value is stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which is a String in |StrDecimalLiteral| form or *"NaN"*. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
     <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="dfn-amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
   <emu-clause id="sec-amount-abstract-operations">
     <h1>Abstract Operations</h1>
-
-    <emu-clause id="sec-operations-for-reading-options">
-      <h1>Operations for Reading Options</h1>
 
       <!-- Copied and modified from ECMA-402 GetOption -->
       <!-- The difference: -->
@@ -69,170 +73,11 @@ location: https://github.com/tc39/proposal-measure/
           1. Return _value_.
         </emu-alg>
       </emu-clause>
-    </emu-clause>
-
-    <emu-clause id="sec-amount-abstract-ops-decimal-digit-strings">
-      <h1>Operations on Decimal Digit Strings</h1>
-
-      <emu-clause id="sec-amount-countsignificantdigits" type="abstract operation">
-        <h1>CountSignificantDigits(
-          _s_: a decimal digit String
-        ): a positive integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of significant digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _digitsToCount_ be _s_.
-          1. If _digitsToCount_ contains an *e* character, set _digitsToCount_ be the substring of _s_ before the first occurence of *"e"*.
-          1. If _digitsToCount_ contains a *"."* character, set _digitsToCount_ to the result of replacing all occurrences of *"."* in _digitsToCount_ by *""*.
-          1. Let _l_ be the length of _digitsToCount_.
-          1. Return _l_.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-countfractiondigits" type="abstract operation">
-        <h1>CountFractionDigits(
-          _s_: a decimal digit String
-        ): a non-negative integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the number of fractional digits in a given <emu-xref href="#dfn-decimal-digit-string">decimal digit String</emu-xref>.</dd>
-        </dl>
-        <emu-alg>
-          1. If _s_ contains a *"."* character, then
-            1. Let _fractionDigits_ be the substring of _s_ after the first *"."* character up to the first occurrence of *"e"* or *"E"* in _s_, if any.
-            1. Let _l_ be the length of _fractionDigits_.
-            1. Return _l_.
-          1. Otherwise:
-            1. Return 0.
-        </emu-alg>
-      </emu-clause>
-    </emu-clause>
-
-    <emu-clause id="sec-amount-abstract-ops-mv">
-      <h1>Abstract Operations</h1>
-
-      <emu-clause id="sec-amount-applyroundingmodetopositive" type="abstract operation">
-        <h1>ApplyRoundingModeToPositive(
-          _m_: a positive mathematical value,
-          _roundingMode_: a rounding mode
-        ): an integer
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest integer approximation to a given positive mathematical value, rounded according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _mLow_ be floor(_m_).
-          1. Let _fraction_ be _m_ – _mLow_.
-          1. If _fraction_ = 0, return _mLow_.
-          1. Let _mHigh_ be _mLow_ + 1.
-          1. If _roundingMode_ is *"floor"* or *"trunc"*, return _mLow_.
-          1. If _roundingMode_ is *"ceil" or *"expand"*, return _mHigh_.
-          1. If _fraction_ < 0.5, return _mLow_.
-          1. If _fraction_ > 0.5, return _mHigh_.
-          1. If _roundingMode_ is *"halfTrunc"* or *"halfFloor"*, return _mLow_.
-          1. If _roundingMode_ is *"halfExpand" or *"halfCeil"**, return _mHigh_.
-          1. If _mLow_ is even, return _mLow_.
-          1. Return _mHigh_.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
-        <h1>RoundToFractionDigits(
-          _v_: a mathematical value,
-          _n_: a non-negative integer,
-          optional _roundingMode_: a rounding mode
-        ): a mathematical value
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest approximation to a given mathematical value that has at most the given number of fractional digits, rounding (if necessary) according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
-          1. If _v_ = 0, return 0.
-          1. If v &lt; 0, then
-            1. Let _reverseRoundingMode_ be _roundingMode_.
-            1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
-            1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
-            1. If _roundingMode_ is *"halfCeil"*, set _reverseRoundingMode_ to *"halfFloor"*.
-            1. If _roundingMode_ is *"halfFloor"*, set _reverseRoundingMode_ to *"halfCeil"*.
-            1. Let _d_ be RoundToFractionDigits(–_v_, _n_, _reverseRoundingMode_).
-            1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. Let _pow_ be _e_ + _n_.
-          1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-          1. Return _rounded_ × 10<sup>_e_ + _n_</sup>.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
-        <h1>RoundToSignificantDigits(
-          _v_: a mathematical value,
-          _n_: a non-negative integer,
-          optional _roundingMode_: a rounding mode
-        ): a mathematical value
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It computes the closest approximation to a given mathematical value that has at most the given number of significant digits, rounding (if necessary) according to the given rounding mode.</dd>
-        </dl>
-        <emu-alg>
-          1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
-          1. If _v_ = 0, return 0.
-          1. If v &lt; 0, then
-            1. Let _reverseRoundingMode_ be _roundingMode_.
-            1. If _roundingMode_ is *"floor"*, set _reverseRoundingMode_ to *"ceil"*.
-            1. If _roundingMode_ is *"ceil"*, set _reverseRoundingMode_ to *"floor"*.
-            1. Let _d_ be RoundToSignificantDigits(–_v_, _n_, _reverseRoundingMode_).
-            1. Return –_d_.
-          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-          1. If _n_ ≤ _e_, then
-            1. Let _pow_ be _e_ - _n_.
-            1. Let _m_ be _v_ × 10<sup>–_pow_</sup>.
-            1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
-            1. Return _rounded_ × 10<sup>_n_ + _e_</sup>.
-          1. Otherwise:
-            1. <mark>todo</mark>.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-rendermvwithfractiondigits" type="abstract operation">
-        <h1>RenderMVWithFractionDigits(
-          _v_: a mathematical value,
-          _numDigits_: a non-negative integer,
-          optional _roundingMode_: a rounding mode
-        ): a String
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It renders the given mathematical value with a given number of fractional digits, possibly rounding if necessary, using the given rounding mode, which, if missing, is *"halfEven"*.</dd>
-        </dl>
-        <emu-alg>
-          1. If _roundingMode_ is *undefined*, let _mode_ be *"halfEven"*, else let _mode_ be _roundingMode_.
-          1. If _v_ < 0, let _prefix_ be *"-"*, else let _prefix_ be "".
-          1. If _v_ < 0, set _v_ to -_v_.
-          1. Let _rounded_ be ApplyRoundingModeToPositive(_v_ × 10<sup>_numDigits_</sup>, _mode_).
-          1. Set _v_ to _rounded_ × 10<sup>-_numDigits_</sup>.
-          1. Let _e_ be the smallest non-negative integer such that _v_ × 10<sup>-_numDigits_</sup> is an integer.
-          1. Let _s_ be the unique decimal string representation of _v_ without leading zeroes.
-          1. If _numDigits_ > _e_, then
-            1. If _v_ is an integer, return the string concatenation of _prefix, _s_, *"."*, and *"0"* repeated _numDigits_ times.
-            1. Otherwise, return the string concatenation of _prefix_, _s_ and *"0"* repeated _numDigits_ - _e_ times.
-          1. Otherwise:
-            1. Return the string concatenation of _prefix, _s_ and *"0"* repeated _e_ - _numDigits_ times.
-        </emu-alg>
-      </emu-clause>
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
-        <h1>GetAmountOptions(
+        <h1>GetAmountOptions (
           _opts_: an Object
-        ): either a normal completion containing a Record with fields [[Currency]] (a String or *undefined*), [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -240,26 +85,188 @@ location: https://github.com/tc39/proposal-measure/
         </dl>
         <emu-alg>
           1. Let _opts_ be ? GetOptionsObject(_opts_).
-          1. Let _currency_ be ? GetOption(_opts_, *"currency"*, ~string~, ~empty~, *undefined*).
           1. Let _fractionDigits_ be ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
           1. Let _roundingMode_ be ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
           1. Let _significantDigits_ be ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
           1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
-          1. If _currency_ is the empty String, throw a *RangeError* exception.
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
-            1. If _fractionDigits_ is not a non-negative integral number, throw a *RangeError* exception.
+            1. If _fractionDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _fractionDigits_ to ℝ(_fractionDigits_).
+            1. If _fractionDigits_ is not in the inclusive interval from 0 to 100, throw a *RangeError* exception.
           1. Else if _significantDigits_ is not *undefined*, then
-            1. If _significantDigits_ is not an integral number, throw a *RangeError* exception.
-            1. If ℝ(_significantDigits_) < 1, throw a *RangeError* exception.
+            1. If _significantDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _significantDigits_ to ℝ(_significantDigits_).
+            1. If _significantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
           1. If _unit_ is the empty String, throw a *RangeError* exception.
-          1. If _unit_ is not *undefined* and _currency_ is not *undefined, throw a *RangeError* exception.
-          1. If _currency_ is not *undefined*, set _currency_ to the ASCII-uppercase of _currency_.
-          1. If _unit_ is not *undefined*, set _unit_ to the ASCII-lowercase of _unit_.
-          1. Return the Record { [[Currency]]: _currency_, [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits, [[Units]]: _unit_ }.
+          1. Return the Record { [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
         </emu-alg>
       </emu-clause>
-    </emu-clause>
+
+      <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation">
+        <h1>GetAmountConvertToOptions (
+          _opts_: an Object
+        ): either a normal completion containing a Record with fields [[MinimumFractionDigits]] (a non-negative integer or *undefined*), [[MaximumFractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[RoundingPriority]] (a String), [[MinimumSignificantDigits]] (a positive integer or *undefined*), [[MaximumSignificantDigits]] (a positive integer or *undefined*), [[Locale]] (a String or *undefined*), [[Usage]] (a String or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It validates the given _options_ (an ECMAScript object) for converting an Amount to another Amount and returns a Record with slots set to appropriate marthematical values (or *undefined*).</dd>
+        </dl>
+        <emu-alg>
+          1. Let _opts_ be ? GetOptionsObject(_opts_).
+          1. Let _minFractionDigits_ be ? GetOption(_opts_, *"minimumFractionDigits"*, ~number~, ~empty~, *undefined*).
+          1. Let _maxFractionDigits_ be ? GetOption(_opts_, *"maximumFractionDigits"*, ~number~, ~empty~, *undefined*).
+          1. Let _roundingMode_ be ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
+          1. Let _roundingPriority_ be ? GetOption(_opts_, *"roundingPriority"*, ~string~, ~empty~, *undefined*).
+          1. Let _minSignificantDigits_ be ? GetOption(_opts_, *"minimumSignificantDigits"*, ~number~, ~empty~, *undefined*).
+          1. Let _maxSignificantDigits_ be ? GetOption(_opts_, *"maximumSignificantDigits"*, ~number~, ~empty~, *undefined*).
+          1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
+          1. If _minFractionDigits_ is not *undefined*, then
+            1. If _minFractionDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _minFractionDigits_ to ℝ(_minFractionDigits_).
+            1. If _minFractionDigits_ is not in the inclusive interval from 0 to 100, throw a *RangeError* exception.
+          1. If _maxFractionDigits_ is not *undefined*, then
+            1. If _maxFractionDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _maxFractionDigits_ to ℝ(_maxFractionDigits_).
+            1. If _maxFractionDigits_ is not in the inclusive interval from 0 to 100, throw a *RangeError* exception.
+          1. If _minFractionDigits_ is not *undefined* and _maxFractionDigits_ is not *undefined* and _minFractionDigits_ > _maxFractionDigits_, throw a *RangeError* exception.
+          1. If _minSignificantDigits_ is not *undefined*, then
+            1. If _minSignificantDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _minSignificantDigits_ to ℝ(_minSignificantDigits_).
+            1. If _minSignificantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
+          1. If _maxSignificantDigits_ is not *undefined*, then
+            1. If _maxSignificantDigits_ is not an integral Number, throw a *RangeError* exception.
+            1. Set _maxSignificantDigits_ to ℝ(_maxSignificantDigits_).
+            1. If _maxSignificantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
+          1. If _minSignificantDigits_ is not *undefined* and _maxSignificantDigits_ is not *undefined* and _minSignificantDigits_ > _maxSignificantDigits_, throw a *RangeError* exception.
+          1. If _unit_ is the empty String, throw a *RangeError* exception.
+          1. Return the Record { [[MinimumFractionDigits]]: _minFractionDigits_, [[MaximumFractionDigits]]: _maxFractionDigits_, [[MinimumSignificantDigits]]: _minSignificantDigits_, [[MaximumSignificantDigits]]: _maxSignificantDigits_, [[RoundingMode]]: _roundingMode_, [[RoundingPriority]]: _roundingPriority_, [[Unit]]: _unit_ }.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-createformatterobject" type="abstract operation">
+        <h1>CreateFormatterObject (
+          _roundingMode_: a String,
+          _minFractionDigits_: a non-negative integer or *undefined*,
+          _maxFractionDigits_: a non-negative integer or *undefined*,
+          _minSignificantDigits_: a positive integer or *undefined*,
+          _maxSignificantDigits_: a positive integer or *undefined*,
+          _roundingPriority_: a String or *undefined*
+        ): an Object
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It creates an object with the internal slots required by <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, configured according to the given rounding and digit options.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _formatter_ be OrdinaryObjectCreate(*null*, « [[MinimumFractionDigits]], [[MinimumIntegerDigits]], [[MinimumSignificantDigits]], [[MaximumFractionDigits]], [[MaximumSignificantDigits]], [[RoundingIncrement]], [[RoundingMode]], [[RoundingType]], [[TrailingZeroDisplay]] »).
+          1. Set _formatter_.[[RoundingMode]] to _roundingMode_.
+          1. Set _formatter_.[[MinimumIntegerDigits]] to 1.
+          1. Set _formatter_.[[RoundingIncrement]] to 1.
+          1. Set _formatter_.[[TrailingZeroDisplay]] to *"auto"*.
+          1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSD_ be *true*; else let _hasSD_ be *false*.
+          1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFD_ be *true*; else let _hasFD_ be *false*.
+          1. If _hasSD_ is *true*, then
+            1. If _minSignificantDigits_ is not *undefined*, let _resolvedMinSD_ be _minSignificantDigits_; else let _resolvedMinSD_ be 1.
+            1. If _maxSignificantDigits_ is not *undefined*, let _resolvedMaxSD_ be _maxSignificantDigits_; else let _resolvedMaxSD_ be 21.
+            1. Set _formatter_.[[MinimumSignificantDigits]] to _resolvedMinSD_.
+            1. Set _formatter_.[[MaximumSignificantDigits]] to _resolvedMaxSD_.
+          1. Else,
+            1. Set _formatter_.[[MinimumSignificantDigits]] to 1.
+            1. Set _formatter_.[[MaximumSignificantDigits]] to 21.
+          1. If _hasFD_ is *true*, then
+            1. If _minFractionDigits_ is not *undefined*, let _resolvedMinFD_ be _minFractionDigits_; else let _resolvedMinFD_ be 0.
+            1. If _maxFractionDigits_ is not *undefined*, let _resolvedMaxFD_ be _maxFractionDigits_; else let _resolvedMaxFD_ be 100.
+            1. Set _formatter_.[[MinimumFractionDigits]] to _resolvedMinFD_.
+            1. Set _formatter_.[[MaximumFractionDigits]] to _resolvedMaxFD_.
+          1. Else,
+            1. Set _formatter_.[[MinimumFractionDigits]] to 0.
+            1. Set _formatter_.[[MaximumFractionDigits]] to 100.
+          1. If _hasSD_ is *true* and _hasFD_ is *true*, then
+            1. If _roundingPriority_ is *"morePrecision"*, set _formatter_.[[RoundingType]] to ~more-precision~; else set _formatter_.[[RoundingType]] to ~less-precision~.
+          1. Else if _hasSD_ is *true*, then
+            1. Set _formatter_.[[RoundingType]] to ~significant-digits~.
+          1. Else,
+            1. Set _formatter_.[[RoundingType]] to ~fraction-digits~.
+          1. Return _formatter_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-unit-conversion-data">
+        <h1>Unit Conversion Data</h1>
+        <p>Unit conversion data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#conversion-data">Unicode Technical Standard #35 Part 6 Supplemental, Conversion Data</a>, each <code>&lt;convertUnit&gt;</code> element defines how to convert a <code>source</code> unit into a compatible <code>baseUnit</code>. An ECMAScript implementation must ignore all <code>special</code> conversions and support all conversions based on <code>factor</code> and/or <code>offset</code>, interpreting the value for each as an arithmetic expression with mathematical value operands (noting the respective defaults of 1 and 0 and the implicit presence of an identity mapping for each unit identified as the value of a <code>baseUnit</code>).</p>
+        <p>Two units are convertible if and only if they share the same <code>baseUnit</code> value in CLDR. A unit that appears as a <code>baseUnit</code> value has an implicit identity conversion (<code>factor</code> 1, <code>offset</code> 0).</p>
+        <emu-note>
+          <p>In <code>factor</code> and <code>offset</code> expressions, <code>*</code> multiplication binds more tightly than <code>/</code> division, and constants defined by <code>&lt;unitConstant&gt;</code> elements are valid operands.</p>
+          <p>For example:</p>
+          <ul>
+            <li><code>&lt;convertUnit source='celsius' baseUnit='kelvin' offset='273.15' systems="si metric"/&gt;</code> specifies that conversion from unit "celsius" to unit "kelvin" requires addition of 273.15.</li>
+            <li><code>&lt;convertUnit source='fahrenheit' baseUnit='kelvin' factor='5/9' offset='2298.35/9' systems="ussystem uksystem"/&gt;</code> specifies that conversion from unit "fahrenheit" to unit "kelvin" requires multiplication by (5 / 9) followed by addition of (2298.35 / 9).</li>
+            <li><code>&lt;convertUnit source='radian' baseUnit='revolution' factor='1/2*PI' systems="si metric"/&gt;</code> specifies that conversion from unit "radian" to unit "revolution" requires multiplication by (1 / (2 × <code>PI</code>)), which references <code>&lt;unitConstant constant="PI" value="411557987 / 131002976" status='approximate'/&gt;</code> and is thus equivalent to multiplication by (1 / (2 × (411557987 / 131002976))) = (131002976 / 823115974).</li>
+            <li><code>&lt;convertUnit source='solar-mass' baseUnit='kilogram' factor='1.98847E+30' systems="astronomical"/&gt;</code> specifies that conversion from unit "solar-mass" to unit "kilogram" requires multiplication by (1.98847 × 10<sup>30</sup>).</li>
+          </ul>
+        </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
+        <h1>GetUnitConversionFactor (
+          _unit_: a String
+        ): either a normal completion containing a Record with fields [[BaseUnit]] (a String), [[Factor]] (a mathematical value), and [[Offset]] (a mathematical value) or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns the conversion data for converting _unit_ to its base unit.</dd>
+        </dl>
+        <emu-alg>
+          1. If _unit_ is the <code>source</code> of a <code>&lt;convertUnit&gt;</code> element in the <emu-xref href="#sec-amount-unit-conversion-data">unit conversion data</emu-xref>, then
+            1. Let _element_ be that <code>&lt;convertUnit&gt;</code> element.
+            1. If _element_ has an attribute <code>special</code>, throw a *TypeError* exception.
+            1. Let _baseUnit_ be the <code>baseUnit</code> of _element_.
+            1. Let _factor_ be the mathematical value of the <code>factor</code> attribute of _element_ if present, or 1 otherwise.
+            1. Let _offset_ be the mathematical value of the <code>offset</code> attribute of _element_ if present, or 0 otherwise.
+          1. Else if _unit_ is a <code>baseUnit</code> value in the <emu-xref href="#sec-amount-unit-conversion-data">unit conversion data</emu-xref>, then
+            1. Let _baseUnit_ be _unit_.
+            1. Let _factor_ be 1.
+            1. Let _offset_ be 0.
+          1. Else,
+            1. Throw a *TypeError* exception.
+          1. Return the Record { [[BaseUnit]]: _baseUnit_, [[Factor]]: _factor_, [[Offset]]: _offset_ }.
+        </emu-alg>
+        <emu-note>
+          <p>The formula for converting a value in _unit_ to its base unit is: <i>baseValue</i> = <i>value</i> × [[Factor]] + [[Offset]].</p>
+        </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-convertunitvalue" type="abstract operation">
+        <h1>ConvertUnitValue (
+          _value_: a Number,
+          _sourceUnit_: a String,
+          _targetUnit_: a String
+        ): either a normal completion containing a Number or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It converts _value_ from _sourceUnit_ to _targetUnit_ using Number arithmetic.</dd>
+        </dl>
+        <emu-alg>
+          1. If SameValue(_sourceUnit_, _targetUnit_) is *true*, return _value_.
+          1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
+          1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
+          1. If _sourceConv_.[[BaseUnit]] is not _targetConv_.[[BaseUnit]], throw a *TypeError* exception.
+          1. If _value_ is *NaN*, return *NaN*.
+          1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
+          1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
+          1. Let _targetFactor_ be _targetConv_.[[Factor]].
+          1. Let _targetOffset_ be _targetConv_.[[Offset]].
+          1. If _sourceOffset_ is _targetOffset_, then
+            1. NOTE: This preserves a _value_ of *-0*<sub>𝔽</sub>.
+            1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_).
+          1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
+        </emu-alg>
+        <emu-note>
+          <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
+        </emu-note>
+      </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-the-amount-constructor">
@@ -275,87 +282,37 @@ location: https://github.com/tc39/proposal-measure/
       <h1>Amount ( _x_ [ , _opts_ ] )</h1>
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
-        1. Let _toParse_ be *undefined*.
-        1. If _x_ is a BigInt, set _toParse_ to BigInt::toString(_x_, 10).
-        1. Else if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
-        1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
-        1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. If _toParse_ is in « *"NaN"*, *"Infinity"*, *"-Infinity"* », throw a *RangeError* exception.
-        1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
+        1. If _x_ is not a Number, not a BigInt, and not a String, throw a *TypeError* exception.
+        1. If _x_ is a String, then
+          1. Let _text_ be StringToCodePoints(_x_).
+          1. Let _parsed_ be ParseText(_text_, |StringNumericLiteral|).
+          1. If _parsed_ is a List of errors, throw a *RangeError* exception.
         1. Let _validatedOpts_ be ? GetAmountOptions(_opts_).
-        1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
-        1. Let _amountValue_ be ? StringDecimalValue of _parseResult_.
-        1. Let _currency_ be _validatedOpts_.[[Currency]].
-        1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
+        1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
-        1. Let _roundedValue_ be _amountValue_.
-        1. Assert: If _fractionDigits_ is not *undefined*, then _significantDigits_ is *undefined*.
-        1. Assert: If _significantDigits_ is not *undefined*, then _fractionDigits_ is *undefined*.
-        1. If both _significantDigits_ and _fractionDigits_ are *undefined*, then
-          1. Set _significantDigits_ to CountSignificantDigits(_toParse_).
-          1. Set _fractionDigits_ to CountFractionDigits(_toParse_).
-        1. Else if _significantDigits_ is *undefined*, then
-          1. Set _roundedValue_ be RoundToFractionDigits(_amountValue_, _fractionDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _significantDigits_ to CountSignificantDigits(_digitStr_).
-        1. Otherwise:
-          1. Set _roundedValue_ be RoundToSignificantDigits(_amountValue_, _significantDigits_, _roundingMode_).
-          1. Let _digitStr_ be the unique decimal string representation of _roundedValue_ without leading zeroes.
-          1. Set _fractionDigits_ to CountFractionDigits(_digitStr_).
-        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[Currency]], [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
-        1. Set _O_.[[Value]] to _roundedValue_.
-        1. Set _O_.[[SignificantDigits]] to _significantDigits_.
-        1. Set _O_.[[FractionDigits]] to _fractionDigits_.
-        1. If _unit_ is not *undefined*, set _O_.[[Unit]] to _unit_.
-        1. If _currency_ is not *undefined*, set _O_.[[Currency]] to _currency_.
+        1. If _x_ is a Number or _x_ is a BigInt, then
+          1. Let _value_ be _x_.
+        1. Else,
+          1. Assert: _x_ is a String.
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
+          1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+          1. Let _value_ be _formatted_.[[FormattedString]].
+        1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+        1. Set _O_.[[AmountValue]] to _value_.
+        1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
-        <p>Given a Number argument, the constructor converts it to a String using the <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> method (with no arguments). In some cases, this may not be desired; consider passing in a String form of a Number using the <emu-xref href="#sec-number.prototype.tofixed">toFixed</emu-xref> or <emu-xref href="#sec-number.prototype.toprecision">toPrecision</emu-xref> methods.</p>
+        <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
       </emu-note>
-      <emu-clause id="sec-runtime-semantics-stringdecimalvalue" type="sdo">
-        <h1>Runtime Semantics: StringDecimalValue ( ): either a normal completion containing a mathematical value or a throw completion</h1>
-        <dl class="header">
-        </dl>
-        <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be ? StringAmountValue of |StrUnsignedDecimalLiteral|.
-          1. Assert: _a_ is finite.
-          1. Return −_a_.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
-        <emu-alg>
-          1. Throw a *RangeError* exception.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be MV of the first |DecimalDigits|.
-          1. If the second |DecimalDigits| is present, then
-            1. Let _b_ be MV of the second |DecimalDigits|.
-            1. Let _n_ be the number of code points in the second |DecimalDigits|.
-          1. Else,
-            1. Let _b_ be 0.
-            1. Let _n_ be 0.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return (_a_ + (_b_ × 10<sup>−_n_</sup>)) × 10<sup>_e_</sup>.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _b_ be MV of |DecimalDigits|.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Let _n_ be the number of code points in |DecimalDigits|.
-          1. Let _newValue_ be _b_ × 10<sup>_e_ − _n_</sup>.
-          1. Return _newValue_.
-        </emu-alg>
-        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
-        <emu-alg>
-          1. Let _a_ be MV of |DecimalDigits|.
-          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return _a_ × 10<sup>_e_</sup>.
-        </emu-alg>
-      </emu-clause>
+      <emu-note type="editor">
+	<p>
+	  We intend to move 402's FormatNumericToString, and its dependent AOs, to 262, possibly renamed.
+	</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -363,100 +320,111 @@ location: https://github.com/tc39/proposal-measure/
 <emu-clause id="sec-amount-prototype-properties">
   <h1>Properties of the Amount Prototype</h1>
 
+  <emu-clause id="sec-amount.prototype.value">
+    <h1>get Amount.prototype.value</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, returns the numeric value of the Amount. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Return _O_.[[AmountValue]].
+    </emu-alg>
+    <emu-note>
+      <p>The value may be a Number, BigInt, or String. It is a String when precision options were applied during construction or when the Amount is the result of unit conversion.</p>
+    </emu-note>
+  </emu-clause>
+
+  <emu-clause id="sec-amount.prototype.unit">
+    <h1>get Amount.prototype.unit</h1>
+    <p>This accessor property, whose set accessor function is *undefined*, returns a String value (or *undefined*) indicating the unit that this Amount has. Its get accessor function performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Return _O_.[[Unit]].
+    </emu-alg>
+  </emu-clause>
+
   <emu-clause id="sec-amount.prototype.tostring">
-    <h1>Amount.prototype.toString ( [ _options_ ] )</h1>
-    <p>This method returns a String value that renders the underlying mathematical value according to its precision, as well as any unit or currency indicators, if present.</p>
+    <h1>Amount.prototype.toString ( )</h1>
+    <p>This method returns a String representation of the Amount, including a unit indicator in bracket notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Perform ? RequireInternalSlot(_O_, [[FractionDigits]]).
-      1. Let _processedOptions_ be ? GetOptionsObject(_options_).
-      1. Let _displayUnit_ be ? GetOption(_processedOptions_, *"displayUnit"*, ~string~, « *"always"*, *"auto"*, *"never"* », *"auto"*).
-      1. Let _c_ be _O_.[[Currency]].
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Let _v_ be _O_.[[AmountValue]].
       1. Let _u_ be _O_.[[Unit]].
-      1. Let _v_ be _O_.[[Value]].
-      1. Let _fractionDigits_ be _O_.[[FractionDigits]].
-      1. Let _s_ be RenderMVWithFractionDigits(_v_, _fractionDigits_).
-      1. If _u_ is *undefined* and _c_ is *undefined*, then
-        1. If _displayUnit_ is *"always"*, return the string concatenation of _s_, *"["*, *"1"*, and *"]"*.
-        1. Else, return _s_.
-      1. Else if _u_ is *undefined*, then
-        1. If _displayUnit_ is *"never"*, return _s_.
-        1. Else, return the string concatenation of _s_, *"["*, _c_, and *"]"*.
+      1. If _v_ is a String, then
+        1. Let _valueStr_ be _v_.
+      1. Else if _v_ is a Number, then
+        1. Let _valueStr_ be Number::toString(_v_, 10).
       1. Else,
-        1. If _displayUnit_ is *"never"*, return _s_.
-        1. Else, return the string concatenation of _s_, *"["*, _u_, and *"]"*.
+        1. Assert: _v_ is a BigInt.
+        1. Let _valueStr_ be BigInt::toString(_v_, 10).
+      1. If _u_ is *undefined*, return the string-concatenation of _valueStr_ and *"[]"*.
+      1. Return the string-concatenation of _valueStr_, *"["*, _u_, and *"]"*.
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-amount.prototype.tolocalestring">
     <h1>Amount.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-      <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API must implement this method as specified in the ECMA-402 specification. If an ECMAScript implementation does not include the ECMA-402 API the following specification of this method is used:</p>
-      <p>This method produces a String value that represents this Amount object formatted according to the conventions of the host environment’s current locale. This method is implementation-defined, and it is permissible, but not encouraged, for it to return the same thing as <emu-xref href="#sec-amount.prototype.tostring">`toString`</emu-xref>.</p>
-      <p>The meanings of the optional parameters to this method are defined in the ECMA-402 specification; implementations that do not include ECMA-402 support must not use those parameter positions for anything else.</p>
-  </emu-clause>
-
-  <emu-clause id="sec-amount.prototype.with">
-    <h1>Amount.prototype.with ( _options_ )</h1>
-    <p>This method returns a fresh Amount object whose underlying mathematical value is equal to the mathematical value of the current Amount, but possibly with different precision as specified in the _options_.</p>
+    <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API must implement this method as specified in the ECMA-402 specification. If an ECMAScript implementation does not include the ECMA-402 API the following specification of this method is used:</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Currency]]).
-      1. Perform ? RequireInternalSlot(_O_, [[Unit]]).
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Let _processedOptions_ be ? GetAmountOptions(_options_).
-      1. Let _unit_ be _processedOptions_.[[Unit]].
-      1. Let _currency_ be _processedOptions_.[[Currency]].
-      1. Let _fractionDigits_ be _processedOptions_.[[FractionDigits]].
-      1. Let _significantDigits_ be _processedOptions_.[[SignificantDigits]].
-      1. Let _value_ be _O_.[[Value]].
-      1. If _fractionDigits_ is not *undefined*, set _value_ to RoundToFractionDigits(_value_, _fractionDigits_).
-      1. Else if _significantDigits_ is not *undefined*, set _value_ to RoundToSignificantDigits(_value_, _significantDigits_).
-      1. Otherwise, throw a *TypeError* exception.
-      1. Let _N_ be OrdinaryObjectCreate(*"%Amount.prototype%"*, « [[Currency]], [[FractionDigits]], [[SignificantDigits]], [[Unit]], [[Value]] »).
-      1. If _unit_ is not *undefined*, then
-        1. If _O_.[[Currency]] is not *undefined*, throw a *TypeError* exception.
-        1. If _O_.[[Unit]] is *undefined*, throw a *TypeError* exception.
-        1. If _unit_ is not string equal to _O_.[[Unit]], throw a *TypeError* exception.
-      1. If _currency_ is not *undefined*, then
-        1. If _O_.[[Unit]] is not *undefined*, throw a *TypeError* exception.
-        1. If _O_.[[Currency]] is *undefined*, throw a *TypeError* exception.
-        1. If _currency_ is not string equal to _O_.[[Currency]], throw a *TypeError* exception.
-      1. Set _N_.[[Value]] to _value_.
-      1. Set _N_.[[Unit]] to _unit_.
-      1. Set _N_.[[Currency]] to _currency_.
-      1. Set _N_.[[FractionDigits]] to ℝ(_fractionDigits_).
-      1. Set _N_.[[SignificantDigits]] to ℝ(_significantDigits_).
-      1. Return _N_.
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Return ? Call(%Amount.prototype.toString%, _O_, « »).
     </emu-alg>
+    <p>The meanings of the optional parameters to this method are defined in the ECMA-402 specification; implementations that do not include ECMA-402 support must not use those parameter positions for anything else.</p>
   </emu-clause>
 
-  <emu-clause id="sec-amount-symboltoprimitive">
-    <h1>Amount.prototype [ %Symbol.toPrimitive% ] ( _hint_ )</h1>
-    <p>This method is called by ECMAScript language operators to convert an Amount to a primitive value. The allowed values are *"default"*, *"number"*, and *"string"*. The default is *"number."*</p>
+  <emu-clause id="sec-amount.prototype.convertto">
+    <h1>Amount.prototype.convertTo ( _options_ )</h1>
+    <p>This method returns a new Amount whose value is the result of converting this Amount’s value from its current unit to a target unit. The target unit is specified by _options_.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
-      1. Let _O_ be the the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Value]]).
-      1. Perform ? RequireInternalSlot(_O_, [[FractionDigits]]).
-      1. Perform ? RequireInternalSlot(_O_, [[Unit]]).
-      1. Perform ? RequireInternalSlot(_O_, [[Currency]]).
-      1. If _hint_ is not in « *"default"*, *"number"*, *"string"* », throw a *RangeError* exception.
-      1. Let _mv_ be _O_.[[Value]].
-      1. If _hint_ is *"string"*, then
-        1. Let _fractionDigits_ be _O_.[[FractionDigits]].
-        1. Let _str_ be RenderMVWithFractionDigits(_mv_, _fractionDigits_).
-        1. If _O_.[[Unit]] is *undefined* and _O_.[[Currency]] is *undefined*, return _str_.
-        1. Else if _O_.[[Unit]] is *undefined*, return the string concatenation of _str_, *"["*, _O_.[[Currency]], and *"]"*.
-        1. Otherwise, return the string concatenation of _str_, *"["*, _O_.[[Unit]], and *"]"*.
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
+      1. Let _sourceUnit_ be _O_.[[Unit]].
+      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
+      1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_options_).
+      1. Let _targetUnit_ be _validatedOpts_.[[Unit]].
+      1. If _targetUnit_ is *undefined*, throw a *TypeError* exception.
+      1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
+      1. Let _roundingPriority_ be _validatedOpts_.[[RoundingPriority]].
+      1. Let _minFractionDigits_ be _validatedOpts_.[[MinimumFractionDigits]].
+      1. Let _maxFractionDigits_ be _validatedOpts_.[[MaximumFractionDigits]].
+      1. Let _minSignificantDigits_ be _validatedOpts_.[[MinimumSignificantDigits]].
+      1. Let _maxSignificantDigits_ be _validatedOpts_.[[MaximumSignificantDigits]].
+      1. Let _v_ be _O_.[[AmountValue]].
+      1. If _v_ is a Number, then
+        1. Let _sourceValue_ be _v_.
+      1. Else if _v_ is a BigInt, then
+        1. Let _sourceValue_ be 𝔽(ℝ(_v_)).
       1. Else,
-        1. If _O_.[[Unit]] is not *undefined*, throw a *TypeError* exception.
-        1. If _O_.[[Currency]] is not *undefined*, throw a *TypeError* exception.
-        1. Return the Number value for _mv_.
+        1. Assert: _v_ is a String.
+        1. Let _sourceValue_ be StringToNumber(_v_).
+      1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
+      1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _minFractionDigits_, _maxFractionDigits_, _minSignificantDigits_, _maxSignificantDigits_, _roundingPriority_).
+      1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
+      1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. Set _result_.[[AmountValue]] to _formatted_.[[FormattedString]].
+      1. Set _result_.[[Unit]] to _targetUnit_.
+      1. Return _result_.
     </emu-alg>
   </emu-clause>
 </emu-clause>
 
 <emu-import href="./intl.emu"></emu-import>
+
+<emu-clause id="sec-normative-references">
+  <h1>Normative References</h1>
+  <ul>
+    <li>
+      <a href="https://unicode.org/reports/tr35/">Unicode Technical Standard #35: Unicode Locale Data Markup Language (LDML)</a>
+      <ul>
+        <li>
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">Part 6 Supplemental, Unit Conversion</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</emu-clause>
