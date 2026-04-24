@@ -113,10 +113,10 @@ The object prototype would provide the following methods:
   (such as attempting to convert a mass unit into a length unit).
 
 * `toString()`: A string representation of the Amount.
-  Returns an exponential notation digit string together with the unit,
-  surrounded by square brackets (for example, `"[1.23+0 kilogram]"`).
+  Returns a canonical exponential notation digit string together with the unit,
+  surrounded by square brackets (for example, `"[1.23e+0 kilogram]"`).
   If the Amount does not have a unit,
-  the null sign `∅` (U+2205) is used in place of the unit (for example, `"[4.2+1 ∅]"`).
+  the null sign `∅` (U+2205) is used in place of the unit (for example, `"[4.2e+1 ∅]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
 appropriate to the locale (for example, `"1,23 kg"` in a locale that uses a comma as a fraction separator).
