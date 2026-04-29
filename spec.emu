@@ -196,8 +196,8 @@ location: https://github.com/tc39/proposal-amount/
         </emu-note>
       </emu-clause>
 
-      <emu-clause id="sec-amount-renderstringinexponentialnotation" type="abstract operation">
-        <h1>RenderStringInExponentialNotation (
+      <emu-clause id="sec-amount-renderdigitstringinexponentialnotation" type="abstract operation">
+        <h1>RenderDigitStringInExponentialNotation (
           _v_: a String
         ): a String
         </h1>
@@ -354,7 +354,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
           1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
-          1. Let _value_ be RenderStringInExponentialNotation(_formatted_.[[FormattedString]]).
+          1. Let _value_ be RenderDigitStringInExponentialNotation(_formatted_.[[FormattedString]]).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
@@ -459,7 +459,7 @@ location: https://github.com/tc39/proposal-amount/
       1. If _convertedValue_ is finite and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
-        1. Set _result_.[[AmountValue]] to RenderStringInExponentialNotation(_formatted_.[[FormattedString]]).
+        1. Set _result_.[[AmountValue]] to RenderDigitStringInExponentialNotation(_formatted_.[[FormattedString]]).
       1. Else,
         1. Set _result_.[[AmountValue]] to _convertedValue_.
       1. Set _result_.[[Unit]] to _targetUnit_.
