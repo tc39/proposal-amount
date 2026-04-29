@@ -113,11 +113,13 @@ The object prototype would provide the following methods:
   (such as attempting to convert a mass unit into a length unit).
 
 * `toString()`: A string representation of the Amount.
-  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have a unit;
-  otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
+  Returns a canonical exponential notation digit string together with the unit,
+  surrounded by square brackets (for example, `"[1.23e+0 kilogram]"`).
+  If the Amount does not have a unit,
+  the tilde `~` (U+007E) is used in place of the unit (for example, `"[4.2+1 ~]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
-appropriate to the locale (e.g., `"1,23 kg"` in a locale that uses a comma as a fraction separator).
+appropriate to the locale (for example, `"1,23 kg"` in a locale that uses a comma as a fraction separator).
 The options are a subset of the Intl.NumberFormat constructor options.
 
 ### Unit conversion
@@ -170,19 +172,19 @@ First, an Amount with only a value:
 
 ```js
 let a = new Amount(123.456, { fractionDigits: 4 });
-a.value; // "123.4560"
+a.value; // "1.234560e+2"
 typeof a.value; // "string"
-a.toString(); // "123.4560[]"
+a.toString(); // "[1.234560e+2 ~]"
 a.toLocaleString("fr"); // "123,4560"
 ```
 
 Here's an example with units:
 
 ```js
-let a = new Amount(42.7, { unit: "kg" });
+let a = new Amount(42.7, { unit: "kilogram" });
 a.value; // 42.7
 typeof a.value; // "number"
-a.toString(); // "42.7[kg]"
+a.toString(); // "[4.27e+1 kilogram]"
 a.toLocaleString("fr"); // "42,7 kg"
 ```
 
@@ -270,14 +272,14 @@ If the given precision is less than that of the input value, rounding will occur
 
 ```js
 let a = new Amount("123.456", { significantDigits: 5 });
-a.value; // "123.46"
+a.value; // "1.2346e+2"
 ```
 
 By default, we use the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal). One can specify a rounding mode:
 
 ```js
 let b = new Amount("123.456", { significantDigits: 5, roundingMode: "truncate" });
-b.value; // "123.45"
+b.value; // "1.2345e+2"
 ```
 
 ### Units (including currency)
@@ -285,7 +287,7 @@ b.value; // "123.45"
 A core piece of functionality for the proposal is to support units (`mile`, `kilogram`, etc.) as well as currency (`EUR`, `USD`, etc.). An Amount need not have a unit/currency, and if it does, it has one or the other (not both). Example:
 
 ```js
-let a = new Amount(123.456, { unit: "kg" }); // 123.456 kilograms
+let a = new Amount(123.456, { unit: "kilogram" }); // 123.456 kilograms
 let b = new Amount("42.55", { unit: "EUR" }); // 42.55 Euros
 ```
 
