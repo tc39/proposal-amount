@@ -116,7 +116,7 @@ The object prototype would provide the following methods:
   Returns a canonical exponential notation digit string together with the unit,
   surrounded by square brackets (for example, `"[1.23e+0 kilogram]"`).
   If the Amount does not have a unit,
-  the null sign `∅` (U+2205) is used in place of the unit (for example, `"[4.2e+1 ∅]"`).
+  the tilde `~` (U+007E) is used in place of the unit (for example, `"[4.2+1 ~]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
 appropriate to the locale (for example, `"1,23 kg"` in a locale that uses a comma as a fraction separator).
@@ -174,7 +174,7 @@ First, an Amount with only a value:
 let a = new Amount(123.456, { fractionDigits: 4 });
 a.value; // "1.234560e+2"
 typeof a.value; // "string"
-a.toString(); // "[1.234560e+2 ∅]"
+a.toString(); // "[1.234560e+2 ~]"
 a.toLocaleString("fr"); // "123,4560"
 ```
 
