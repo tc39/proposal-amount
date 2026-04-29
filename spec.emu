@@ -218,13 +218,12 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It returns _v_ rendered in canonical exponential notation: an optional minus sign, a mantissa with one non-zero integer digit (or *"0"*), an optional fractional part, *"e"*, an explicit sign, and an unpadded base-10 exponent. The number of significant digits in the result equals the number of significant digits in _v_. If _v_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, it is returned unchanged.</dd>
         </dl>
         <emu-alg>
-          1. If _v_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _v_.
-          1. Let _text_ be StringToCodePoints(_v_).
-          1. Let _literal_ be ParseText(_text_, |StrDecimalLiteral|).
-          1. Assert: _literal_ is not a List of errors.
-          1. Let _stringData_ be StringIntlMV of _literal_.
-          1. Let _value_ be _stringData_[0].
-          1. Let _digitCount_ be _stringData_[1].
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_v_).
+          1. Let _value_ be _intlMV_.[[Value]].
+          1. If _value_ is ~not-a-number~, return *"NaN"*.
+          1. If _value_ is ~positive-infinity~, return *"Infinity"*.
+          1. If _value_ is ~negative-infinity~, return *"-Infinity"*.
+          1. Let _digitCount_ be _intlMV_.[[StringDigitCount]].
           1. Let _sign_ be the empty String.
           1. If _value_ is ~negative-zero~, then
             1. Set _sign_ to *"-"*.
