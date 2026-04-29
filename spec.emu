@@ -241,9 +241,6 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _expStr_ be the unique base-10 String representation of abs(_exponent_) with no leading zeros.
           1. Return the string-concatenation of _sign_, _mantissaStr_, *"e"*, _expSign_, and _expStr_.
         </emu-alg>
-        <emu-note>
-          <p>The mantissa is always in the half-open interval [1, 10), so it has exactly one integer digit. Configuring the formatter with <emu-eqn>_digitCount_ - 1</emu-eqn> minimum and maximum fraction digits yields exactly _digitCount_ significant digits in the formatted mantissa, preserving the precision implied by the input. Using fraction digits (rather than significant digits) sidesteps the upper bound of 21 on <emu-xref href="#sec-amount-createformatterobject">CreateFormatterObject</emu-xref>'s significant-digit slots.</p>
-        </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-amount-renderbigintinexponentialnotation" type="abstract operation">
