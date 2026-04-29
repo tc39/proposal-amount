@@ -49,7 +49,7 @@ Note: ⚠️  All property/method names up for bikeshedding.
 * `value` (Number or BigInt or String): The numerical value of the amount.
   The type of the value used in the constructor is retained,
   except that any non-finite value is a Number (`Infinity`, `-Infinity`, or `NaN`)
-  and any value that was potentially affected by precision options and/or unit conversion is a String.
+  and any value that was potentially affected by precision options is a String.
 
   A String `value` is always in the format returned by [Number.p.toExponential]
   (decimal exponential notation with an explicitly signed exponent
@@ -78,6 +78,7 @@ Note: ⚠️  All property/method names up for bikeshedding.
   If either `fractionDigits` or `significantDigits` is set,
   the `value` is rounded accordingly,
   and is stored as a String (if finite) or Number (if not finite).
+  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
 
 The object prototype would provide the following methods:
 
@@ -89,29 +90,24 @@ The object prototype would provide the following methods:
   * `locale` (String or Array of Strings or undefined):
     The locale for which the preferred unit of the corresponding category is determined.
   * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
-  * Optional properties with the same meanings as the corresponding
-    Intl.NumberFormat constructor [digit options]:
-    * `minimumFractionDigits`
-    * `maximumFractionDigits`
-    * `minimumSignificantDigits`
-    * `maximumSignificantDigits`
+  * Optional properties with the same meanings as in the Amount constructor:
+    * `fractionDigits`
+    * `significantDigits`
     * `roundingMode`
-    * `roundingPriority`
 
   The `options` must contain at least one of `unit`, `locale`, or `usage`.
   If the `options` contains an explicit `unit` value, it must not contain `locale` or `usage`.
   If `locale` is set and `usage` is undefined, the `"default"` usage is assumed.
   If `usage` is set and `locale` is undefined, the default locale is assumed.
 
-  The result of unit conversion will be rounded according to the digit options.
-  By default, if no rounding options are set,
-  `{ minimumFractionDigits: 0, maximumFractionDigits: 3}` is used.
-  If both fraction and significant digit options are set,
-  the resulting behaviour is selected by the `roundingPriority`.
-  The numerical value of the Amount resulting from unit conversion is
-  stored as a String (if finite) or Number (if not finite).
+  If the result of unit conversion is finite and either the
+  `fractionDigits` or `significantDigits` options are set,
+  the result will be rounded according to the precision options,
+  and the returned Amount will have a String `value`.
+  Otherwise, the returned Amount will have a Number `value`.
+  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
 
-  Calling `convertTo()` will throw an error if conversion is not supported
+  Calling `convertTo()` will throw a TypeError if conversion is not supported
   for the Amount's unit (such as currency units),
   or if the resolved conversion target is not valid for the Amount's unit
   (such as attempting to convert a mass unit into a length unit).
@@ -136,15 +132,23 @@ for converting from a source unit to the unit type's base unit.
 For example, the base unit for length is `meter`, and the conversion from `foot` to `meter` is given as 0.3048,
 while the conversion from `inch` to `meter` is given as 0.3048/12.
 
-Unit conversions with Amount work by first converting the source unit to the base unit,
-and then to the target unit.
-Each of these operations is done with Number operations.
+To avoid rounding, the conversion is applied as
+> _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
+
+where the factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_
+are computed as mathematical values, and then converted to Number values for the multiplication and addition.
+For non-offset conversions (the vast majority), the offset term is 0
+and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.
+
 For example, to convert 1.75 feet to inches, the following mathematical operations are performed internally:
+
 ```js
-1.75 * 0.3048 / (0.3048 / 12) = 20.999999999999996
+1.75 × 𝔽(0.3048 / (0.3048 / 12))
+= 1.75 × 𝔽(12)
+= 21
 ```
 
-Rounding is applied only to the final result, according to the [digit options]
+Rounding is applied only to the final result, according to the precision options (if any)
 set in the conversion method's `options`.
 The precision of the source Amount is not retained,
 and the precision of the result is capped by the precision of Number.
@@ -157,10 +161,8 @@ For example:
 ```js
 let feet = new Amount(1.75, { unit: "foot" });
 feet.convertTo({ unit: "inch" }); // 21 inches
-feet.convertTo({ locale: "fr", usage: "person", maximumSignificantDigits: 3 }); // 53.3 cm
+feet.convertTo({ locale: "fr", usage: "person", significantDigits: 3 }); // 53.3 cm
 ```
-
-[digit options]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#digit_options
 
 ## Examples
 
