@@ -426,8 +426,8 @@ location: https://github.com/tc39/proposal-amount/
       1. Else,
         1. Assert: _v_ is a BigInt.
         1. Let _valueStr_ be RenderBigIntInExponentialNotation(_v_).
-      1. If _u_ is *undefined*, return the string-concatenation of *"["*, _valueStr_, and *" ∅]"*.
-      1. Return the string-concatenation of *"["*, _valueStr_, *" "*, _u_, and *"]"*.
+      1. If _u_ is *undefined*, return the string-concatenation of _valueStr_ and *"[]"*.
+      1. Return the string-concatenation of _valueStr_, *"["*, _u_, and *"]"*.
     </emu-alg>
   </emu-clause>
 
