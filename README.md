@@ -113,7 +113,7 @@ The object prototype would provide the following methods:
   (such as attempting to convert a mass unit into a length unit).
 
 * `toString()`: A string representation of the Amount.
-  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kg]`) if the Amount does have a unit;
+  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kilogram]`) if the Amount does have a unit;
   otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
