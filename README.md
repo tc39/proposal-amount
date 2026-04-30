@@ -172,7 +172,7 @@ First, an Amount with only a value:
 let a = new Amount(123.456, { fractionDigits: 4 });
 a.value; // "1.234560e+2"
 typeof a.value; // "string"
-a.toString(); // "[1.234560e+2 ∅]"
+a.toString(); // "1.234560e+2[]"
 a.toLocaleString("fr"); // "123,4560"
 ```
 
@@ -182,7 +182,7 @@ Here's an example with units:
 let a = new Amount(42.7, { unit: "kilogram" });
 a.value; // 42.7
 typeof a.value; // "number"
-a.toString(); // "[4.27e+1 kilogram]"
+a.toString(); // "4.27e+1[kilogram]"
 a.toLocaleString("fr"); // "42,7 kg"
 ```
 
