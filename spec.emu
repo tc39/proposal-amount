@@ -198,17 +198,20 @@ location: https://github.com/tc39/proposal-amount/
 
       <emu-clause id="sec-amount-renderinexponentialnotation" type="abstract operation">
         <h1>RenderInExponentialNotation (
-          _v_: a mathematical value,
+          _v_: a mathematical value or ~negative-zero~,
           _sigDigits_: a positive integer
         ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent.</dd>
+          <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent. The sign of negative zero is preserved.</dd>
         </dl>
         <emu-alg>
           1. Let _sign_ be the empty String.
-          1. If _v_ &lt; 0, then
+          1. If _v_ is ~negative-zero~, then
+            1. Set _sign_ to *"-"*.
+            1. Set _v_ to 0.
+          1. Else if _v_ &lt; 0, then
             1. Set _sign_ to *"-"*.
             1. Set _v_ to -_v_.
           1. If _v_ = 0, then
@@ -334,9 +337,7 @@ location: https://github.com/tc39/proposal-amount/
             1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
             1. Let _formatted_ be FormatNumericToString(_formatter_, _mv_, _intlMV_.[[StringDigitCount]]).
             1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
-            1. Let _resolvedValue_ be _formattedMV_.[[Value]].
-            1. If _resolvedValue_ is ~negative-zero~, set _resolvedValue_ to 0.
-            1. Let _value_ be RenderInExponentialNotation(_resolvedValue_, _formattedMV_.[[StringDigitCount]]).
+            1. Let _value_ be RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
@@ -344,9 +345,6 @@ location: https://github.com/tc39/proposal-amount/
       </emu-alg>
       <emu-note>
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
-      </emu-note>
-      <emu-note>
-        <p>The canonical exponential representation does not preserve the sign of negative zero. Both <code>new Amount(-0).toString()</code> and <code>new Amount("-0").toString()</code> return *"0e+0[]"*.</p>
       </emu-note>
       <emu-note type="editor">
 	<p>
@@ -404,7 +402,9 @@ location: https://github.com/tc39/proposal-amount/
         1. Else,
           1. Let _decimalStr_ be Number::toString(_v_, 10).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
-          1. Let _valueStr_ be RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+          1. Let _mv_ be _intlMV_.[[Value]].
+          1. If _v_ is *-0*<sub>𝔽</sub>, set _mv_ to ~negative-zero~.
+          1. Let _valueStr_ be RenderInExponentialNotation(_mv_, _intlMV_.[[StringDigitCount]]).
       1. Else,
         1. Assert: _v_ is a BigInt.
         1. Let _digits_ be BigInt::toString(_v_, 10).
@@ -456,9 +456,7 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
         1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
-        1. Let _resolvedValue_ be _formattedMV_.[[Value]].
-        1. If _resolvedValue_ is ~negative-zero~, set _resolvedValue_ to 0.
-        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_resolvedValue_, _formattedMV_.[[StringDigitCount]]).
+        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
       1. Else,
         1. Set _result_.[[AmountValue]] to _convertedValue_.
       1. Set _result_.[[Unit]] to _targetUnit_.
