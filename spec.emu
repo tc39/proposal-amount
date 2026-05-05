@@ -198,7 +198,7 @@ location: https://github.com/tc39/proposal-amount/
 
       <emu-clause id="sec-amount-renderinexponentialnotation" type="abstract operation">
         <h1>RenderInExponentialNotation (
-          _v_: a mathematical value, ~negative-zero~, ~positive-infinity~, ~negative-infinity~, or ~not-a-number~,
+          _v_: a mathematical value,
           _sigDigits_: a positive integer
         ): a String
         </h1>
@@ -207,12 +207,8 @@ location: https://github.com/tc39/proposal-amount/
           <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent.</dd>
         </dl>
         <emu-alg>
-          1. Assert: _v_ is a mathematical value or ~negative-zero~.
           1. Let _sign_ be the empty String.
-          1. If _v_ is ~negative-zero~, then
-            1. Set _sign_ to *"-"*.
-            1. Set _v_ to 0.
-          1. Else if _v_ &lt; 0, then
+          1. If _v_ &lt; 0, then
             1. Set _sign_ to *"-"*.
             1. Set _v_ to -_v_.
           1. If _v_ = 0, then
@@ -338,7 +334,9 @@ location: https://github.com/tc39/proposal-amount/
             1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
             1. Let _formatted_ be FormatNumericToString(_formatter_, _mv_, _intlMV_.[[StringDigitCount]]).
             1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
-            1. Let _value_ be RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
+            1. Let _resolvedValue_ be _formattedMV_.[[Value]].
+            1. If _resolvedValue_ is ~negative-zero~, set _resolvedValue_ to 0.
+            1. Let _value_ be RenderInExponentialNotation(_resolvedValue_, _formattedMV_.[[StringDigitCount]]).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
@@ -455,7 +453,9 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
         1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
-        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
+        1. Let _resolvedValue_ be _formattedMV_.[[Value]].
+        1. If _resolvedValue_ is ~negative-zero~, set _resolvedValue_ to 0.
+        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_resolvedValue_, _formattedMV_.[[StringDigitCount]]).
       1. Else,
         1. Set _result_.[[AmountValue]] to _convertedValue_.
       1. Set _result_.[[Unit]] to _targetUnit_.
