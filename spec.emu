@@ -345,6 +345,9 @@ location: https://github.com/tc39/proposal-amount/
       <emu-note>
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
       </emu-note>
+      <emu-note>
+        <p>The canonical exponential representation does not preserve the sign of negative zero. Both <code>new Amount(-0).toString()</code> and <code>new Amount("-0").toString()</code> return *"0e+0[]"*.</p>
+      </emu-note>
       <emu-note type="editor">
 	<p>
 	  We intend to move 402's FormatNumericToString, and its dependent AOs, to 262, possibly renamed.
