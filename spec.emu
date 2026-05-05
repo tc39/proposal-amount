@@ -226,6 +226,9 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _expStr_ be the unique base-10 String representation of abs(_exponent_) with no leading zeros.
           1. Return the string-concatenation of _sign_, _mantissaStr_, *"e"*, _expSign_, and _expStr_.
         </emu-alg>
+        <emu-note type="editor">
+          <p>TODO: this algorithm performs essentially the same work as the latter portion of <emu-xref href="#sec-number.prototype.toexponential">Number.prototype.toExponential</emu-xref> (the part following its initial argument-coercion and special-value handling). We should extract a shared abstract operation from that algorithm and use it both there and here, to ensure the two stay in sync.</p>
+        </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-amount-renderbigintinexponentialnotation" type="abstract operation">
