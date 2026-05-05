@@ -32,7 +32,7 @@ location: https://github.com/tc39/proposal-amount/
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
     <p>An Amount is an object that wraps a numeric value—as a Number, BigInt, or String—together with an optional unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a value that, so to speak, knows what it is measuring.</p>
-    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, the numeric value is stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which is a String in |StrDecimalLiteral| form or *"NaN"*. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
+    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, finite numeric values are stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
     <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="dfn-amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
@@ -203,14 +203,11 @@ location: https://github.com/tc39/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns _v_ rendered in canonical exponential notation: an optional minus sign, a mantissa with one non-zero integer digit (or *"0"*), an optional fractional part, *"e"*, an explicit sign, and an unpadded base-10 exponent. The number of significant digits in the result equals the number of significant digits in _v_. If _v_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, it is returned unchanged.</dd>
+          <dd>It returns _v_ rendered in canonical exponential notation: an optional minus sign, a mantissa with one non-zero integer digit (or *"0"*), an optional fractional part, *"e"*, an explicit sign, and an unpadded base-10 exponent. The number of significant digits in the result equals the number of significant digits in _v_.</dd>
         </dl>
         <emu-alg>
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_v_).
           1. Let _value_ be _intlMV_.[[Value]].
-          1. If _value_ is ~not-a-number~, return *"NaN"*.
-          1. If _value_ is ~positive-infinity~, return *"Infinity"*.
-          1. If _value_ is ~negative-infinity~, return *"-Infinity"*.
           1. Let _digitCount_ be _intlMV_.[[StringDigitCount]].
           1. Let _sign_ be the empty String.
           1. If _value_ is ~negative-zero~, then
@@ -351,10 +348,16 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _value_ be _x_.
         1. Else,
           1. Assert: _x_ is a String.
-          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
-          1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
-          1. Let _value_ be RenderDigitStringInExponentialNotation(_formatted_.[[FormattedString]]).
+          1. Let _mv_ be _intlMV_.[[Value]].
+          1. If _mv_ is ~positive-infinity~, then
+            1. Let _value_ be *+&infin;*<sub>𝔽</sub>.
+          1. Else if _mv_ is ~negative-infinity~, then
+            1. Let _value_ be *-&infin;*<sub>𝔽</sub>.
+          1. Else,
+            1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+            1. Let _formatted_ be FormatNumericToString(_formatter_, _mv_, _intlMV_.[[StringDigitCount]]).
+            1. Let _value_ be RenderDigitStringInExponentialNotation(_formatted_.[[FormattedString]]).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
