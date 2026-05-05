@@ -353,7 +353,9 @@ location: https://github.com/tc39/proposal-amount/
           1. Assert: _x_ is a String.
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
           1. Let _mv_ be _intlMV_.[[Value]].
-          1. If _mv_ is ~positive-infinity~, then
+          1. If _mv_ is ~not-a-number~, then
+            1. Let _value_ be *NaN*.
+          1. Else if _mv_ is ~positive-infinity~, then
             1. Let _value_ be *+&infin;*<sub>𝔽</sub>.
           1. Else if _mv_ is ~negative-infinity~, then
             1. Let _value_ be *-&infin;*<sub>𝔽</sub>.
