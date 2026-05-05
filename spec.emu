@@ -418,7 +418,15 @@ location: https://github.com/tc39/proposal-amount/
       1. If _v_ is a String, then
         1. Let _valueStr_ be _v_.
       1. Else if _v_ is a Number, then
-        1. Let _valueStr_ be ! Call(%Number.prototype.toExponential%, _v_, « »).
+        1. If _v_ is *NaN*, then
+          1. Let _valueStr_ be *"NaN"*.
+        1. Else if _v_ is *+&infin;*<sub>𝔽</sub>, then
+          1. Let _valueStr_ be *"Infinity"*.
+        1. Else if _v_ is *-&infin;*<sub>𝔽</sub>, then
+          1. Let _valueStr_ be *"-Infinity"*.
+        1. Else,
+          1. Let _decimalStr_ be Number::toString(_v_, 10).
+          1. Let _valueStr_ be RenderDigitStringInExponentialNotation(_decimalStr_).
       1. Else,
         1. Assert: _v_ is a BigInt.
         1. Let _valueStr_ be RenderBigIntInExponentialNotation(_v_).
