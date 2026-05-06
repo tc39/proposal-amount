@@ -32,7 +32,7 @@ location: https://github.com/tc39/proposal-amount/
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
     <p>An Amount is an object that wraps a numeric value—as a Number, BigInt, or String—together with an optional unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a value that, so to speak, knows what it is measuring.</p>
-    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, the numeric value is stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>, which is a String in |StrDecimalLiteral| form or *"NaN"*. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
+    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, finite numeric values are stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
     <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="dfn-amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
@@ -196,6 +196,47 @@ location: https://github.com/tc39/proposal-amount/
         </emu-note>
       </emu-clause>
 
+      <emu-clause id="sec-amount-renderinexponentialnotation" type="abstract operation">
+        <h1>RenderInExponentialNotation (
+          _v_: a mathematical value or ~negative-zero~,
+          _sigDigits_: a positive integer
+        ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent. The sign of negative zero is preserved.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _sign_ be the empty String.
+          1. If _v_ is ~negative-zero~, then
+            1. Set _sign_ to *"-"*.
+            1. Set _v_ to 0.
+          1. Else if _v_ &lt; 0, then
+            1. Set _sign_ to *"-"*.
+            1. Set _v_ to -_v_.
+          1. If _v_ = 0, then
+            1. Let _exponent_ be 0.
+            1. Let _mantissaInt_ be 0.
+          1. Else,
+            1. Let _exponent_ be the unique integer such that 10<sup>_exponent_</sup> ≤ _v_ &lt; 10<sup>_exponent_ + 1</sup>.
+            1. Let _mantissaInt_ be _v_ × 10<sup>_sigDigits_ - 1 - _exponent_</sup>.
+          1. Assert: _mantissaInt_ is a non-negative integer with at most _sigDigits_ decimal digits.
+          1. Let _intStr_ be the base-10 String representation of _mantissaInt_ with no leading zeros, or *"0"* if _mantissaInt_ is 0.
+          1. Repeat, while the length of _intStr_ is less than _sigDigits_,
+            1. Set _intStr_ to the string-concatenation of *"0"* and _intStr_.
+          1. If _sigDigits_ = 1, then
+            1. Let _mantissaStr_ be _intStr_.
+          1. Else,
+            1. Let _mantissaStr_ be the string-concatenation of the substring of _intStr_ from 0 to 1, *"."*, and the substring of _intStr_ from 1.
+          1. If _exponent_ ≥ 0, let _expSign_ be *"+"*; else let _expSign_ be *"-"*.
+          1. Let _expStr_ be the unique base-10 String representation of abs(_exponent_) with no leading zeros.
+          1. Return the string-concatenation of _sign_, _mantissaStr_, *"e"*, _expSign_, and _expStr_.
+        </emu-alg>
+        <emu-note type="editor">
+          <p>TODO: this algorithm performs essentially the same work as the latter portion of <emu-xref href="#sec-number.prototype.toexponential">Number.prototype.toExponential</emu-xref> (the part following its initial argument-coercion and special-value handling). We should extract a shared abstract operation from that algorithm and use it both there and here, to ensure the two stay in sync.</p>
+        </emu-note>
+      </emu-clause>
+
       <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
         <h1>GetUnitConversionFactor (
           _unit_: a String
@@ -284,17 +325,26 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _value_ be _x_.
         1. Else,
           1. Assert: _x_ is a String.
-          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_x_).
-          1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
-          1. Let _value_ be _formatted_.[[FormattedString]].
+          1. Let _mv_ be _intlMV_.[[Value]].
+          1. If _mv_ is ~not-a-number~, then
+            1. Let _value_ be *NaN*.
+          1. Else if _mv_ is ~positive-infinity~, then
+            1. Let _value_ be *+&infin;*<sub>𝔽</sub>.
+          1. Else if _mv_ is ~negative-infinity~, then
+            1. Let _value_ be *-&infin;*<sub>𝔽</sub>.
+          1. Else,
+            1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+            1. Let _formatted_ be FormatNumericToString(_formatter_, _mv_, _intlMV_.[[StringDigitCount]]).
+            1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
+            1. Let _value_ be RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
         1. Set _O_.[[AmountValue]] to _value_.
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
-        <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments are normalized to StrDecimalLiteral form. When precision options are specified, [[AmountValue]] always holds a String.</p>
+        <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
       </emu-note>
       <emu-note type="editor">
 	<p>
@@ -343,10 +393,23 @@ location: https://github.com/tc39/proposal-amount/
       1. If _v_ is a String, then
         1. Let _valueStr_ be _v_.
       1. Else if _v_ is a Number, then
-        1. Let _valueStr_ be Number::toString(_v_, 10).
+        1. If _v_ is *NaN*, then
+          1. Let _valueStr_ be *"NaN"*.
+        1. Else if _v_ is *+&infin;*<sub>𝔽</sub>, then
+          1. Let _valueStr_ be *"Infinity"*.
+        1. Else if _v_ is *-&infin;*<sub>𝔽</sub>, then
+          1. Let _valueStr_ be *"-Infinity"*.
+        1. Else,
+          1. Let _decimalStr_ be Number::toString(_v_, 10).
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
+          1. Let _mv_ be _intlMV_.[[Value]].
+          1. If _v_ is *-0*<sub>𝔽</sub>, set _mv_ to ~negative-zero~.
+          1. Let _valueStr_ be RenderInExponentialNotation(_mv_, _intlMV_.[[StringDigitCount]]).
       1. Else,
         1. Assert: _v_ is a BigInt.
-        1. Let _valueStr_ be BigInt::toString(_v_, 10).
+        1. Let _digits_ be BigInt::toString(_v_, 10).
+        1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
+        1. Let _valueStr_ be RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
       1. If _u_ is *undefined*, return the string-concatenation of _valueStr_ and *"[]"*.
       1. Return the string-concatenation of _valueStr_, *"["*, _u_, and *"]"*.
     </emu-alg>
@@ -392,7 +455,8 @@ location: https://github.com/tc39/proposal-amount/
       1. If _convertedValue_ is finite and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
-        1. Set _result_.[[AmountValue]] to _formatted_.[[FormattedString]].
+        1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
+        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
       1. Else,
         1. Set _result_.[[AmountValue]] to _convertedValue_.
       1. Set _result_.[[Unit]] to _targetUnit_.
