@@ -410,8 +410,8 @@ location: https://github.com/tc39/proposal-amount/
         1. Let _digits_ be BigInt::toString(_v_, 10).
         1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
         1. Let _valueStr_ be RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
-      1. If _u_ is *undefined*, return the string-concatenation of _valueStr_ and *"[]"*.
-      1. Return the string-concatenation of _valueStr_, *"["*, _u_, and *"]"*.
+      1. If _u_ is *undefined*, return the string-concatenation of *"["*, _valueStr_, and *" ~]"*.
+      1. Return the string-concatenation of *"["*, _valueStr_, *" "*, _u_, and *"]"*.
     </emu-alg>
   </emu-clause>
 

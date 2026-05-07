@@ -113,8 +113,9 @@ The object prototype would provide the following methods:
   (such as attempting to convert a mass unit into a length unit).
 
 * `toString()`: A string representation of the Amount.
-  Returns a digit string together with the unit in square brackets (e.g., `"1.23[kilogram]`) if the Amount does have a unit;
-  otherwise, the digit string is suffixed with empty square brackets `[]` (e.g., `"42[]"`).
+  Returns a digit string together with the unit, surrounded by square brackets (for example, `"[1.23+e0 kilogram]"`).
+  If the Amount does not have a unit,
+  the tilde `~` (U+007E) is used in place of the unit (for example, `"[4.2+e1 ~]"`).
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
 appropriate to the locale (for example, `"1,23 kg"` in a locale that uses a comma as a fraction separator).
@@ -172,7 +173,7 @@ First, an Amount with only a value:
 let a = new Amount(123.456, { fractionDigits: 4 });
 a.value; // "1.234560e+2"
 typeof a.value; // "string"
-a.toString(); // "1.234560e+2[]"
+a.toString(); // "[1.234560e+2 ~]"
 a.toLocaleString("fr"); // "123,4560"
 ```
 
@@ -182,7 +183,7 @@ Here's an example with units:
 let a = new Amount(42.7, { unit: "kilogram" });
 a.value; // 42.7
 typeof a.value; // "number"
-a.toString(); // "4.27e+1[kilogram]"
+a.toString(); // "[4.27e+1 kilogram]"
 a.toLocaleString("fr"); // "42,7 kg"
 ```
 
