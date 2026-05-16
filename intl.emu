@@ -11,6 +11,54 @@
     </p>
   </emu-note>
 
+  <emu-clause id="sup-amount-abstract-operations">
+    <h1>Abstract Operations of the Amount Object</h1>
+
+    <emu-clause id="sup-amount-getamountconverttounit" type="abstract operation">
+      <h1>
+        GetAmountConvertToUnit (
+          _options_: an Object,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the appropriate unit identifier to use as the conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountconverttounit"></emu-xref>.</p>
+      <emu-alg>
+        1. Let _unit_ be ? GetOption(_options_, *"unit"*, ~string~, ~empty~, *undefined*).
+        1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
+        1. Let _locale_ be ? Get(_options_, *"locale"*).
+        1. If _unit_ is a String, then
+          1. If _usage_ is not *undefined*, throw a *TypeError* exception.
+          1. If _locale_ is not *undefined*, throw a *TypeError* exception.
+          1. If _unit_ is the empty String, throw a *RangeError* exception.
+          1. Return _unit_.
+        1. If _usage_ is *undefined*, then
+          1. If _locale_ is *undefined*, throw a *TypeError* exception.
+          1. Set _usage_ to *"default"*.
+        1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
+        1. Return ? GetPreferredAmountUnit(_requestedLocales_, _usage_).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-amount-getpreferredamountunit" type="abstract operation">
+      <h1>
+        GetPreferredAmountUnit (
+          _requestedLocales_: a List,
+          _usage_: a String,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the preferred unit identifier to use for the given locale and usage.</dd>
+      </dl>
+      <p>TODO: Implement, using data from the CLDR units.xml file.</p>
+    </emu-clause>
+  </emu-clause>
+
   <emu-clause id="sup-properties-of-the-amount-prototype-object">
     <h1>Properties of the Amount Prototype Object</h1>
 
