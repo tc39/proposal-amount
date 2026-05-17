@@ -17,6 +17,7 @@
     <emu-clause id="sup-amount-getamountconverttounit" type="abstract operation">
       <h1>
         GetAmountConvertToUnit (
+          _sourceValue_: a Number,
           _sourceUnit_: a String,
           _options_: an Object,
         ): either a normal completion containing a String or a throw completion
@@ -45,13 +46,14 @@
         1. Let _maximalLocale_ be the result of the <a href="https://unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags</a> algorithm applied to _resolvedLocale_. If an error is signaled, set _maximalLocale_ to _resolvedLocale_.
         1. Let _region_ be GetLocaleRegion(_maximalLocale_).
         1. If _region_ is *undefined*, set _region_ to *"001"*.
-        1. Return ? GetPreferredAmountUnit(_sourceUnit_, _region_, _usage_).
+        1. Return ? GetPreferredAmountUnit(_sourceValue_, _sourceUnit_, _region_, _usage_).
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-amount-getpreferredamountunit" type="abstract operation">
       <h1>
         GetPreferredAmountUnit (
+          _sourceValue_: a Number,
           _sourceUnit_: a String,
           _region_: a String,
           _usage_: a String,
