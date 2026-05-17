@@ -104,6 +104,7 @@ location: https://github.com/tc39/proposal-amount/
 
       <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation">
         <h1>GetAmountConvertToOptions (
+          _sourceValue_: a Number,
           _sourceUnit_: a String,
           _options_: an ECMAScript language value,
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
@@ -117,7 +118,7 @@ location: https://github.com/tc39/proposal-amount/
           1. Let _fractionDigits_ be ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
           1. Let _roundingMode_ be ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
           1. Let _significantDigits_ be ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
-          1. Let _unit_ be ? GetAmountConvertToUnit(_sourceUnit_, _opts_).
+          1. Let _unit_ be ? GetAmountConvertToUnit(_sourceValue_, _sourceUnit_, _opts_).
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
             1. If _fractionDigits_ is not an integral Number, throw a *RangeError* exception.
@@ -134,6 +135,7 @@ location: https://github.com/tc39/proposal-amount/
       <emu-clause id="sec-amount-getamountconverttounit" type="abstract operation">
         <h1>
           GetAmountConvertToUnit (
+            _sourceValue_: a Number,
             _sourceUnit_: a String,
             _options_: an Object,
           ): either a normal completion containing a String or a throw completion
@@ -458,13 +460,6 @@ location: https://github.com/tc39/proposal-amount/
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
-      1. Let _sourceUnit_ be _O_.[[Unit]].
-      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_sourceUnit_, _options_).
-      1. Let _targetUnit_ be _validatedOpts_.[[Unit]].
-      1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
-      1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
-      1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
       1. Let _v_ be _O_.[[AmountValue]].
       1. If _v_ is a Number, then
         1. Let _sourceValue_ be _v_.
@@ -473,9 +468,16 @@ location: https://github.com/tc39/proposal-amount/
       1. Else,
         1. Assert: _v_ is a String.
         1. Let _sourceValue_ be StringToNumber(_v_).
+      1. Let _sourceUnit_ be _O_.[[Unit]].
+      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
+      1. Let _opts_ be ? GetAmountConvertToOptions(_sourceValue_, _sourceUnit_, _options_).
+      1. Let _targetUnit_ be _opts_.[[Unit]].
       1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+      1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
       1. If _convertedValue_ is finite and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
+        1. Let _roundingMode_ be _opts_.[[RoundingMode]].
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _formatted_ be FormatNumericToString(_formatter_, ℝ(_convertedValue_), 0).
         1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
