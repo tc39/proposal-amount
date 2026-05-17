@@ -141,6 +141,7 @@ location: https://tc39.es/proposal-amount/
 
       <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation">
         <h1>GetAmountConvertToOptions (
+          _sourceUnit_: a String,
           _opts_: an ECMAScript language value
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
@@ -159,7 +160,7 @@ location: https://tc39.es/proposal-amount/
             1. Set _fractionDigits_ to ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
             1. Set _roundingMode_ to ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
             1. Set _significantDigits_ to ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
-            1. Let _unit_ be ? GetAmountConvertToUnit(_opts_).
+            1. Let _unit_ be ? GetAmountConvertToUnit(_sourceUnit_, _opts_).
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
             1. If _fractionDigits_ is not an integral Number, throw a *RangeError* exception.
@@ -178,6 +179,7 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-getamountconverttounit" type="abstract operation">
         <h1>
           GetAmountConvertToUnit (
+            _sourceUnit_: a String,
             _options_: an Object,
           ): either a normal completion containing a String or a throw completion
         </h1>
@@ -505,7 +507,7 @@ location: https://tc39.es/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Let _sourceUnit_ be _O_.[[Unit]].
       1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_options_).
+      1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_sourceUnit_, _options_).
       1. Let _targetUnit_ be _validatedOpts_.[[Unit]].
       1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
       1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].

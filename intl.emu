@@ -17,6 +17,7 @@
     <emu-clause id="sup-amount-getamountconverttounit" type="abstract operation">
       <h1>
         GetAmountConvertToUnit (
+          _sourceUnit_: a String,
           _options_: an Object,
         ): either a normal completion containing a String or a throw completion
       </h1>
@@ -40,14 +41,19 @@
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
           1. Set _usage_ to *"default"*.
         1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
-        1. Return ? GetPreferredAmountUnit(_requestedLocales_, _usage_).
+        1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
+        1. Let _maximalLocale_ be the result of the <a href="https://unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags</a> algorithm applied to _resolvedLocale_. If an error is signaled, set _maximalLocale_ to _resolvedLocale_.
+        1. Let _region_ be GetLocaleRegion(_maximalLocale_).
+        1. If _region_ is *undefined*, set _region_ to *"001"*.
+        1. Return ? GetPreferredAmountUnit(_sourceUnit_, _region_, _usage_).
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-amount-getpreferredamountunit" type="abstract operation">
       <h1>
         GetPreferredAmountUnit (
-          _requestedLocales_: a List,
+          _sourceUnit_: a String,
+          _region_: a String,
           _usage_: a String,
         ): either a normal completion containing a String or a throw completion
       </h1>
@@ -115,8 +121,10 @@
 
 <emu-clause id="numberformat-objects">
   <h1>NumberFormat Objects</h1>
+
   <emu-clause id="sec-numberformat-abstracts">
     <h1>Abstract Operations for NumberFormat Objects</h1>
+
     <emu-clause id="sec-getnumberformatpattern" type="abstract operation">
       <h1>
         GetNumberFormatPattern (
@@ -250,7 +258,7 @@
           1. Set _intlObj_.[[CurrencyDisplay]] to _currencyDisplay_.
           1. Set _intlObj_.[[CurrencySign]] to _currencySign_.
         1. If _style_ is *"unit"*, then
-          1. <ins>If _unit_ is not *undefined*, </ins> <del>Set</del> <ins>set</ins> _intlObj_.[[Unit]] to _unit_.
+          1. <ins>If _unit_ is not *undefined*,</ins> <del>Set</del> <ins>set</ins> _intlObj_.[[Unit]] to _unit_.
           1. Set _intlObj_.[[UnitDisplay]] to _unitDisplay_.
         1. Return ~unused~.
       </emu-alg>
