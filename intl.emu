@@ -19,16 +19,16 @@
       <p>
         Unit category data is derived from CLDR file
         <a href="https://github.com/unicode-org/cldr/blob/main/common/validity/unit.xml"><code>validity/unit.xml</code></a>.
-        As described in <a href="https://unicode.org/reports/tr35/tr35.html#Validity_Data">Unicode Technical Standard #35 Part 1, Validity Data</a>,
+        As described in <a href="https://unicode.org/reports/tr35/tr35.html#Validity_Data">Unicode Technical Standard #35 Part 1 Core, Validity Data</a>,
         the body of the <code>&lt;id type='unit' idStatus='regular'></code> element contains
-        the supported units, represented as a whitespace-delimited list of sequences of subtags.
-        For each unit, the first subtag provides the unit's category, and the remaining subtags are the unit identifier.
+        the supported units, represented as a whitespace-separated list in which each element is a sequence of subtags separated by *"-"* (U+002D HYPHEN-MINUS) characters.
+        For each unit, the first subtag provides the <dfn variants="unit categories">unit category</dfn>, and the remaining subtags are the unit identifier.
       </p>
     </emu-clause>
 
     <emu-clause id="sec-amount-unit-preference-data">
       <h1>Unit Preference Data</h1>
-      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-delimited list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
+      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
     </emu-clause>
 
     <emu-clause id="sup-amount-getamountconverttounit" type="abstract operation">
@@ -48,12 +48,11 @@
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountconverttounit"></emu-xref>.</p>
       <emu-alg>
         1. Let _unit_ be ? GetOption(_options_, *"unit"*, ~string~, ~empty~, *undefined*).
+        1. If _unit_ is the empty String, throw a *RangeError* exception.
         1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. Let _locale_ be ? Get(_options_, *"locale"*).
         1. If _unit_ is a String, then
-          1. If _usage_ is not *undefined*, throw a *TypeError* exception.
-          1. If _locale_ is not *undefined*, throw a *TypeError* exception.
-          1. If _unit_ is the empty String, throw a *RangeError* exception.
+          1. If _usage_ is not *undefined* or _locale_ is not *undefined*, throw a *TypeError* exception.
           1. Return _unit_.
         1. If _usage_ is *undefined*, then
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
@@ -70,7 +69,7 @@
           1. Set _unit_ to _entry_.[[Unit]].
           1. Let _threshold_ be _entry_.[[Threshold]].
           1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
-          1. If _convertedValue_ is not finite or _convertedValue_ ≥ _threshold_, return _unit_.
+          1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _threshold_, return _unit_.
           1. Remove the first element of _preferredUnits_.
         1. Assert: _preferredUnits_ has exactly one element.
         1. Let _entry_ be the first element of _preferredUnits_.
@@ -112,7 +111,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It determines the preferred units to use for the given category, usage, and region.</dd>
+        <dd>It determines the preferred units to use for the given category, usage, and region, and returns them ordered by descending threshold.</dd>
       </dl>
       <emu-alg>
         1. If _category_ is the <code>category</code> and _usage_ is the <code>usage</code> of a <code>&lt;unitPreferences&gt;</code> element in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref>, then
@@ -136,6 +135,9 @@
         1. Assert: _fallback_ is not empty.
         1. Return _fallback_.
       </emu-alg>
+      <emu-note>
+        <p><a href="https://unicode.org/reports/tr35/tr35-info.html#constraints">Unicode Technical Standard #35 Part 1, Unit Preferences Constraints</a> specifies that the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> for a given category, usage, and region-set is already in descending order [by threshold].</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
