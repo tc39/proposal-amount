@@ -4231,7 +4231,20 @@ p.ECMAaddress {
       <p>The abstract operation GetPreferredUnitElements takes arguments <var>category</var> (a String) and <var>usage</var> (a String) and returns either a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">normal completion containing</a></emu-xref> a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> or a <emu-xref href="#sec-completion-record-specification-type"><a href="https://tc39.es/ecma262/#sec-completion-record-specification-type">throw completion</a></emu-xref>. It determines the <code>&lt;unitPreference&gt;</code> elements in the <emu-xref href="#sec-amount-unit-preference-data" id="_ref_8"><a href="#sec-amount-unit-preference-data">unit preference data</a></emu-xref> that match the given category and usage. It performs the following steps when called:</p>
       <emu-alg><ol><li>Repeat,<ol><li>If <var>category</var> is the <code>category</code> and <var>usage</var> is the <code>usage</code> of a <code>&lt;unitPreferences&gt;</code> element in the <emu-xref href="#sec-amount-unit-preference-data" id="_ref_9"><a href="#sec-amount-unit-preference-data">unit preference data</a></emu-xref>, then<ol><li>Let <var>unitPreferencesParent</var> be that element.</li><li>Let <var>unitPreferenceElements</var> be the <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> of <code>&lt;unitPreference&gt;</code> elements in <var>unitPreferencesParent</var>.</li><li>Return <var>unitPreferenceElements</var>.</li></ol></li><li>Else if <var>usage</var> is not <emu-val>"default"</emu-val>, then<ol><li>Let <var>len</var> be the length of <var>usage</var>.</li><li>Let <var>idx</var> be <emu-xref aoid="StringLastIndexOf"><a href="https://tc39.es/ecma262/#sec-stringlastindexof">StringLastIndexOf</a></emu-xref>(<var>usage</var>, <emu-val>"-"</emu-val>, <var>len</var> - 1).</li><li>If <var>idx</var> is <emu-const>not-found</emu-const> or <var>idx</var> = 0, set <var>usage</var> to <emu-val>"default"</emu-val>; else set <var>usage</var> to the <emu-xref href="#substring"><a href="https://tc39.es/ecma262/#substring">substring</a></emu-xref> of <var>usage</var> from 0 to <var>idx</var>.</li></ol></li><li>Else,<ol><li>Throw a <emu-val>RangeError</emu-val> exception.</li></ol></li></ol></li></ol></emu-alg>
       <emu-note><span class="note">Note</span><div class="note-contents">
-        <p>This abstract operation implements the first two steps of the <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a> algorithm specified in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6, Supplemental, Unit Preferences</a>.</p>
+        <p>
+          This abstract operation implements the first two steps of the
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a>
+          algorithm specified in
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6, Supplemental, Unit Preferences</a>.
+        </p>
+      </div></emu-note>
+      <emu-note type="editor"><span class="note">Editor's Note</span><div class="note-contents">
+        <p>
+          TODO: The UTS #35 algorithm includes fallbacking for regions based on
+          <a href="https://www.unicode.org/cldr/charts/latest/supplemental/territory_containment_un_m_49.html">UN M.49 territory containment</a>,
+          but the unit preference data does not (yet) include any other numeric regions than 001.
+          We'll probably need to implement that in order to be compatible with possible future CLDR updates.
+        </p>
       </div></emu-note>
     </emu-clause>
   </emu-clause>
