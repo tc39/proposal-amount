@@ -112,16 +112,12 @@
         <dd>It determines the preferred units to use for the given category, usage, and region, and returns them ordered by descending threshold.</dd>
       </dl>
       <emu-alg>
-        1. If _category_ is the <code>category</code> and _usage_ is the <code>usage</code> of a <code>&lt;unitPreferences&gt;</code> element in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref>, then
-          1. Let _unitPreferencesParent_ be that element.
-        1. Else,
-          1. Throw a *RangeError* exception.
+        1. Let _unitPreferenceElements_ be ? GetPreferredUnitElements(_category_, _usage_).
         1. Assert: _region_ can be matched by the <code>unicode_region_id</code> Unicode locale nonterminal.
         1. Set _region_ to the ASCII-uppercase of _region_.
         1. Let _fallback_ be an empty List.
         1. Let _match_ be an empty List.
-        1. Let _unitPreferences_ be the List of <code>&lt;unitPreference&gt;</code> elements in _unitPreferencesParent_.
-        1. For each element _unitPreference_ of _unitPreferences_, do
+        1. For each element _unitPreference_ of _unitPreferenceElements_, do
           1. Assert: _unitPreference_ has an attribute <code>regions</code>.
           1. Let _regionsAttr_ be the String value of the <code>regions</code> attribute of _unitPreference_.
           1. Let _regions_ be StringSplitToList(_regionsAttr_, *" "*).
@@ -135,6 +131,35 @@
       </emu-alg>
       <emu-note>
         <p><a href="https://unicode.org/reports/tr35/tr35-info.html#constraints">Unicode Technical Standard #35 Part 1, Unit Preferences Constraints</a> specifies that the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> for a given category, usage, and region-set is already in descending order [by threshold].</p>
+      </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-amount-getpreferredunitelements" type="abstract operation">
+      <h1>
+        GetPreferredUnitElements (
+          _category_: a String,
+          _usage_: a String,
+        ): either a normal completion containing a List or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the <code>&lt;unitPreference&gt;</code> elements in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> that match the given category and usage.</dd>
+      </dl>
+      <emu-alg>
+        1. Repeat,
+          1. If _category_ is the <code>category</code> and _usage_ is the <code>usage</code> of a <code>&lt;unitPreferences&gt;</code> element in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref>, then
+            1. Let _unitPreferencesParent_ be that element.
+            1. Let _unitPreferenceElements_ be the List of <code>&lt;unitPreference&gt;</code> elements in _unitPreferencesParent_.
+            1. Return _unitPreferenceElements_.
+          1. Else if _usage_ is not *"default"*, then
+            1. Let _len_ be the length of _usage_.
+            1. Let _idx_ be StringLastIndexOf(_usage_, *"-"*, _len_ - 1).
+            1. If _idx_ is ~not-found~ or _idx_ = 0, set _usage_ to *"default"*; else set _usage_ to the substring of _usage_ from 0 to _idx_.
+          1. Else,
+            1. Throw a *RangeError* exception.
+      </emu-alg>
+      <emu-note>
+        <p>This abstract operation implements the first two steps of the <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a> algorithm specified in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6, Supplemental, Unit Preferences</a>.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
