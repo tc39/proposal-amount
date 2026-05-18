@@ -159,7 +159,20 @@
             1. Throw a *RangeError* exception.
       </emu-alg>
       <emu-note>
-        <p>This abstract operation implements the first two steps of the <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a> algorithm specified in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6, Supplemental, Unit Preferences</a>.</p>
+        <p>
+          This abstract operation implements the first two steps of the
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a>
+          algorithm specified in
+          <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6, Supplemental, Unit Preferences</a>.
+        </p>
+      </emu-note>
+      <emu-note type="editor">
+        <p>
+          TODO: The UTS #35 algorithm includes fallbacking for regions based on
+          <a href="https://www.unicode.org/cldr/charts/latest/supplemental/territory_containment_un_m_49.html">UN M.49 territory containment</a>,
+          but the unit preference data does not (yet) include any other numeric regions than 001.
+          We'll probably need to implement that in order to be compatible with possible future CLDR updates.
+        </p>
       </emu-note>
     </emu-clause>
   </emu-clause>
