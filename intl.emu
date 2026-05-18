@@ -37,6 +37,7 @@
           _sourceValue_: a Number,
           _sourceUnit_: a String,
           _options_: an Object,
+          _unitOption_: a String or *undefined*,
         ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
@@ -47,13 +48,11 @@
       </dl>
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountconverttounit"></emu-xref>.</p>
       <emu-alg>
-        1. Let _unit_ be ? GetOption(_options_, *"unit"*, ~string~, ~empty~, *undefined*).
-        1. If _unit_ is the empty String, throw a *RangeError* exception.
         1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. Let _locale_ be ? Get(_options_, *"locale"*).
-        1. If _unit_ is a String, then
+        1. If _unitOption_ is a String, then
           1. If _usage_ is not *undefined* or _locale_ is not *undefined*, throw a *TypeError* exception.
-          1. Return _unit_.
+          1. Return _unitOption_.
         1. If _usage_ is *undefined*, then
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
           1. Set _usage_ to *"default"*.
@@ -64,16 +63,15 @@
         1. Let _region_ be GetLocaleRegion(_maximalLocale_).
         1. If _region_ is *undefined*, set _region_ to *"001"*.
         1. Let _preferredUnits_ be ? GetPreferredUnits(_category_, _usage_, _region_).
+        1. Let _entry_ be the first element of _preferredUnits_.
+        1. Let _unit_ be _entry_.[[Unit]].
         1. Repeat, while _preferredUnits_ has more than one element,
-          1. Let _entry_ be the first element of _preferredUnits_.
-          1. Set _unit_ to _entry_.[[Unit]].
           1. Let _threshold_ be _entry_.[[Threshold]].
           1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
           1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _threshold_, return _unit_.
           1. Remove the first element of _preferredUnits_.
-        1. Assert: _preferredUnits_ has exactly one element.
-        1. Let _entry_ be the first element of _preferredUnits_.
-        1. Set _unit_ to _entry_.[[Unit]].
+          1. Set _entry_ to the first element of _preferredUnits_.
+          1. Set _unit_ to _entry_.[[Unit]].
         1. Return _unit_.
       </emu-alg>
     </emu-clause>
