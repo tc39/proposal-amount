@@ -335,8 +335,8 @@ location: https://github.com/tc39/proposal-amount/
         1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
           1. If _value_ is not a Number or _value_ is a finite Number, then
             1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
-            1. Let _fmtMV_ be the MV of _value_.
-            1. Let _fmt_ be FormatNumericToString(_formatter_, _fmtMV_, 0).
+            1. Let _intlMV_ be ! ToIntlMathematicalValue(_value_).
+            1. Let _fmt_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0).
             1. Let _fmtParsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
             1. Assert: _fmtParsed_ is an instance of |StringNumericLiteral|.
             1. Let _fmtIntlMV_ be the StringIntlMV of _fmtParsed_.
