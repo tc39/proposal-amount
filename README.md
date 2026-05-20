@@ -1,6 +1,6 @@
 # Representing Amounts
 
-**Stage**: 1
+**Stage**: 2
 
 **Champion**: Jesse Alama [@jessealama](https://github.com/jessealama)
 
