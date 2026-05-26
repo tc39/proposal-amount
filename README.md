@@ -357,5 +357,5 @@ Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant 
 
 A [polyfill](https://www.npmjs.com/package/proposal-amount)
 is available for testing. Since this proposal is still at
-stage 1, expect breaking changes; in general, it is not
+stage 2, expect breaking changes; in general, it is not
 suitable for production use.
