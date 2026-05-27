@@ -349,6 +349,7 @@ Existing ECMA-262 and ECMA-402 APIs deal with precision in terms of significant 
 
 ## Related/See also
 
+* [Amount element explainer](https://github.com/mozilla/explainers/blob/main/amount.md) — Mozilla proposal/incubation for an HTML `<amount>` element
 * [Smart Units](https://github.com/tc39/proposal-smart-unit-preferences) (mentioned several times as a natural follow-on proposal to this one)
 * [Decimal](https://github.com/tc39/proposal-decimal) for exact decimal arithmetic
 * [Keep trailing zeroes](https://github.com/tc39/proposal-intl-keep-trailing-zeros) to ensure that when Intl handles digit strings, it doesn't automatically strip trailing zeroes (e.g., silently normalize "1.20" to "1.2").
