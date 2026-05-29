@@ -2,13 +2,11 @@
 
 **Stage**: 2
 
-**Champion**: Jesse Alama [@jessealama](https://github.com/jessealama)
+**Champions**:
+- Jesse Alama [@jessealama](https://github.com/jessealama)
+- Eemeli Aro [@eemeli](https://github.com/eemeli)
 
-**Author**: Ben Allen [@ben-allen](https://github.com/ben-allen)
-
-**Former champions**
-
-* Ben Allen
+**Author and former champion**: Ben Allen [@ben-allen](https://github.com/ben-allen)
 
 **TC39 discussions**:
 
