@@ -76,15 +76,15 @@ location: https://tc39.es/proposal-amount/
 
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
-          _opts_: an Object
+          _options_: an ECMAScript language value,
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _options_ (an ECMAScript object) for creating an Amount and returns a Record with slots set to appropriate marthematical values (or *undefined*).</dd>
+          <dd>It validates the given _options_ for creating an Amount and returns a Record with slots set to appropriate marthematical values (or *undefined*).</dd>
         </dl>
         <emu-alg>
-          1. Let _opts_ be ? GetOptionsObject(_opts_).
+          1. Let _opts_ be ? GetOptionsObject(_options_).
           1. Let _fractionDigits_ be ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
           1. Let _roundingMode_ be ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
           1. Let _significantDigits_ be ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
@@ -105,30 +105,47 @@ location: https://tc39.es/proposal-amount/
 
       <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation">
         <h1>GetAmountConvertToOptions (
-          _opts_: an Object
+          _sourceValue_: a Number,
+          _sourceUnit_: a String,
+          _options_: an ECMAScript language value,
         ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _options_ (an ECMAScript object) for converting an Amount to another Amount and returns a Record with slots set to appropriate marthematical values (or *undefined*).</dd>
+          <dd>It validates the given _options_ for converting an Amount to another Amount and returns a Record with slots set to appropriate marthematical values (or *undefined*).</dd>
         </dl>
         <emu-alg>
-          1. Let _opts_ be ? GetOptionsObject(_opts_).
-          1. Let _fractionDigits_ be ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
-          1. Let _roundingMode_ be ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
-          1. Let _significantDigits_ be ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
-          1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
-          1. If _fractionDigits_ is not *undefined*, then
-            1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
-            1. If _fractionDigits_ is not an integral Number, throw a *RangeError* exception.
-            1. Set _fractionDigits_ to ℝ(_fractionDigits_).
-            1. If _fractionDigits_ is not in the inclusive interval from 0 to 100, throw a *RangeError* exception.
-          1. Else if _significantDigits_ is not *undefined*, then
-            1. If _significantDigits_ is not an integral Number, throw a *RangeError* exception.
-            1. Set _significantDigits_ to ℝ(_significantDigits_).
-            1. If _significantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
-          1. If _unit_ is the empty String, throw a *RangeError* exception.
-          1. Return the Record { [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
+          1. If _options_ is not an Object, throw a *TypeError* exception.
+          1. Let _resolvedOpts_ be ? GetAmountOptions(_options_).
+          1. Let _unitOption_ be _resolvedOpts_.[[Unit]].
+          1. Let _unit_ be ? GetAmountConvertToUnit(_sourceValue_, _sourceUnit_, _options_, _unitOption_).
+          1. Set _resolvedOpts_.[[Unit]] to _unit_.
+          1. Return _resolvedOpts_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getamountconverttounit" type="abstract operation">
+        <h1>
+          GetAmountConvertToUnit (
+            _sourceValue_: a Number,
+            _sourceUnit_: a String,
+            _options_: an Object,
+            _unitOption_: a String or *undefined*,
+          ): either a normal completion containing a String or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It determines the appropriate unit identifier to use as the conversion target.</dd>
+        </dl>
+        <p>
+          An ECMAScript implementation that includes the ECMA-402 Internationalization API
+          must implement this method as specified in the ECMA-402 specification.
+          If an ECMAScript implementation does not include the ECMA-402 API,
+          GetAmountConvertToUnit performs the following steps when called:
+        </p>
+        <emu-alg>
+          1. If _unitOption_ is *undefined*, throw a *TypeError* exception.
+          1. Return _unitOption_.
         </emu-alg>
       </emu-clause>
 
@@ -182,7 +199,7 @@ location: https://tc39.es/proposal-amount/
 
       <emu-clause id="sec-amount-unit-conversion-data">
         <h1>Unit Conversion Data</h1>
-        <p>Unit conversion data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#conversion-data">Unicode Technical Standard #35 Part 6 Supplemental, Conversion Data</a>, each <code>&lt;convertUnit&gt;</code> element defines how to convert a <code>source</code> unit into a compatible <code>baseUnit</code>. An ECMAScript implementation must ignore all <code>special</code> conversions and support all conversions based on <code>factor</code> and/or <code>offset</code>, interpreting the value for each as an arithmetic expression with mathematical value operands (noting the respective defaults of 1 and 0 and the implicit presence of an identity mapping for each unit identified as the value of a <code>baseUnit</code>).</p>
+        <p>Unit conversion data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#conversion-data">Unicode Technical Standard #35 Part 6 Supplemental, Conversion Data</a>, each <code>&lt;convertUnit&gt;</code> element defines how to convert a <code>source</code> unit into a compatible <code>baseUnit</code>. An ECMAScript implementation must ignore all <code>special</code> conversions and support all conversions based on <code>factor</code> and/or <code>offset</code>, interpreting the value for each as an arithmetic expression with mathematical value operands (noting the respective defaults of 1 and 0 and the implicit presence of an identity mapping for each unit identified as the value of a <code>baseUnit</code>).</p>
         <p>Two units are convertible if and only if they share the same <code>baseUnit</code> value in CLDR. A unit that appears as a <code>baseUnit</code> value has an implicit identity conversion (<code>factor</code> 1, <code>offset</code> 0).</p>
         <emu-note>
           <p>In <code>factor</code> and <code>offset</code> expressions, <code>*</code> multiplication binds more tightly than <code>/</code> division, and constants defined by <code>&lt;unitConstant&gt;</code> elements are valid operands.</p>
@@ -437,14 +454,6 @@ location: https://tc39.es/proposal-amount/
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
-      1. Let _sourceUnit_ be _O_.[[Unit]].
-      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _validatedOpts_ be ? GetAmountConvertToOptions(_options_).
-      1. Let _targetUnit_ be _validatedOpts_.[[Unit]].
-      1. If _targetUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
-      1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
-      1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
       1. Let _v_ be _O_.[[AmountValue]].
       1. If _v_ is a Number, then
         1. Let _sourceValue_ be _v_.
@@ -453,9 +462,16 @@ location: https://tc39.es/proposal-amount/
       1. Else,
         1. Assert: _v_ is a String.
         1. Let _sourceValue_ be StringToNumber(_v_).
+      1. Let _sourceUnit_ be _O_.[[Unit]].
+      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
+      1. Let _opts_ be ? GetAmountConvertToOptions(_sourceValue_, _sourceUnit_, _options_).
+      1. Let _targetUnit_ be _opts_.[[Unit]].
       1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+      1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
       1. If _convertedValue_ is finite and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
+        1. Let _roundingMode_ be _opts_.[[RoundingMode]].
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _intlMV_ be ! ToIntlMathematicalValue(_convertedValue_).
         1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0).
