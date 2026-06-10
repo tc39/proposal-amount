@@ -298,6 +298,8 @@ Calling `toLocaleString()` on an Amount with a unit not supported by Intl.Number
 Unit identifiers consisting of three upper-case ASCII letters will be formatted with `style: 'currency'`,
 while all other units will be formatted with `style: 'unit'`.
 
+Note concerns and discussion regarding currency in [issue 18](https://github.com/tc39/proposal-amount/issues/18).
+
 ## Related but out-of-scope features
 
 Amount is intended to be a small, straightforwardly implementable kernel of functionality for JavaScript programmers that could perhaps be expanded upon in a follow-on proposal if data warrants. Some features that one might imagine belonging to Amount are natural and understandable, but are currently out-of scope. Here are the features:
