@@ -296,7 +296,7 @@ location: https://tc39.es/proposal-amount/
           1. Return _scalar_ × _sourceFactor_ / _targetFactor_ + (_sourceOffset_ - _targetOffset_) / _targetFactor_.
         </emu-alg>
         <emu-note>
-          <p>All arithmetic in this operation is exact: the factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are mathematical values. For non-offset conversions (the vast majority), the offset term is 0 and is skipped.</p>
+          <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are mathematical values. For non-offset conversions (the vast majority), the offset term is 0 and is skipped, thereby presering ~minus-zero~.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
