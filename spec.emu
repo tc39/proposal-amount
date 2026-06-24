@@ -268,32 +268,35 @@ location: https://tc39.es/proposal-amount/
 
       <emu-clause id="sec-amount-convertunitvalue" type="abstract operation">
         <h1>ConvertUnitValue (
-          _value_: a Number,
+          _value_: a mathematical value or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, or ~negative-zero~,
           _sourceUnit_: a String,
           _targetUnit_: a String
-        ): either a normal completion containing a Number or a throw completion
+        ): either a normal completion containing either a mathematical value or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, or ~negative-zero~, or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It converts _value_ from _sourceUnit_ to _targetUnit_ using Number arithmetic.</dd>
+          <dd>It converts _value_ from _sourceUnit_ to _targetUnit_, returning the exact mathematical value of the result.</dd>
         </dl>
         <emu-alg>
           1. If SameValue(_sourceUnit_, _targetUnit_) is *true*, return _value_.
           1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
           1. If _sourceConv_.[[BaseUnit]] is not _targetConv_.[[BaseUnit]], throw a *TypeError* exception.
-          1. If _value_ is *NaN*, return *NaN*.
+          1. If _value_ is ~not-a-number~, return ~not-a-number~.
+          1. If _value_ is ~positive-infinity~ or _value_ is ~negative-infinity~, return _value_.
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
           1. Let _targetOffset_ be _targetConv_.[[Offset]].
           1. If _sourceOffset_ is _targetOffset_, then
-            1. NOTE: This preserves a _value_ of *-0*<sub>𝔽</sub>.
-            1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_).
-          1. Return _value_ × 𝔽(_sourceFactor_ / _targetFactor_) + 𝔽((_sourceOffset_ - _targetOffset_) / _targetFactor_).
+            1. NOTE: With equal offsets the conversion is purely multiplicative. Since unit factors are positive, this preserves a _value_ of ~negative-zero~.
+            1. If _value_ is ~negative-zero~, return ~negative-zero~.
+            1. Return _value_ × _sourceFactor_ / _targetFactor_.
+          1. If _value_ is ~negative-zero~, let _scalar_ be 0; otherwise, let _scalar_ be _value_.
+          1. Return _scalar_ × _sourceFactor_ / _targetFactor_ + (_sourceOffset_ - _targetOffset_) / _targetFactor_.
         </emu-alg>
         <emu-note>
-          <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
+          <p>All arithmetic in this operation is exact: the factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are mathematical values that are never rounded to a Number here. The single rounding — to a Number, or to a requested precision — is performed by the caller, <emu-xref href="#sec-amount.prototype.convertto">Amount.prototype.convertTo</emu-xref>. Returning the exact mathematical value avoids the compounded rounding error that arises when the conversion factor is first rounded to a Number and then multiplied by _value_. For non-offset conversions (the vast majority), the offset term is 0 and is skipped so that a _value_ of ~negative-zero~ is preserved.</p>
         </emu-note>
       </emu-clause>
   </emu-clause>
