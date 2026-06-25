@@ -67,6 +67,8 @@ Note: ⚠️  All property/method names up for bikeshedding.
 * `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
   and optional `options`, of which the following are supported (all being optional):
   * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
+    As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
+    so `new Amount(42, "meter")` is the same as `new Amount(42, { unit: "meter" })`.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
@@ -88,7 +90,9 @@ The object prototype would provide the following methods:
   with the value of the new Amount being the value of the Amount it is called on converted to the new scale.
   The `options` object supports the following properties:
 
-  * `unit` (String): An explicit conversion target unit identifier
+  * `unit` (String): An explicit conversion target unit identifier.
+    As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
+    so `amount.convertTo("milliliter")` is the same as `amount.convertTo({ unit: "milliliter" })`.
   * `locale` (String or Array of Strings or undefined):
     The locale for which the preferred unit of the corresponding category is determined.
   * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
@@ -162,8 +166,8 @@ but the resulting Amount will of course have an appropriate `unit` set.
 For example:
 
 ```js
-let feet = new Amount(1.75, { unit: "foot" });
-feet.convertTo({ unit: "inch" }); // 21 inches
+let feet = new Amount(1.75, "foot"); // shorthand for { unit: "foot" }
+feet.convertTo("inch"); // 21 inches; shorthand for { unit: "inch" }
 feet.convertTo({ locale: "fr", usage: "person", significantDigits: 3 }); // 53.3 cm
 ```
 
