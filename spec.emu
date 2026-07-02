@@ -104,7 +104,9 @@ location: https://tc39.es/proposal-amount/
             1. If _significantDigits_ is not an integral Number, throw a *RangeError* exception.
             1. Set _significantDigits_ to ℝ(_significantDigits_).
             1. If _significantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
-          1. If _unit_ is the empty String, throw a *RangeError* exception.
+          1. If _unit_ is not *undefined*, then
+            1. If _unit_ is the empty String, throw a *RangeError* exception.
+            1. If _unit_ contains any code point in the union of |WhiteSpace| and |LineTerminator|, throw a *RangeError* exception.
           1. Return the Record { [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
         </emu-alg>
       </emu-clause>
@@ -139,7 +141,9 @@ location: https://tc39.es/proposal-amount/
             1. If _significantDigits_ is not an integral Number, throw a *RangeError* exception.
             1. Set _significantDigits_ to ℝ(_significantDigits_).
             1. If _significantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
-          1. If _unit_ is the empty String, throw a *RangeError* exception.
+          1. If _unit_ is not *undefined*, then
+            1. If _unit_ is the empty String, throw a *RangeError* exception.
+            1. If _unit_ contains any code point in the union of |WhiteSpace| and |LineTerminator|, throw a *RangeError* exception.
           1. Return the Record { [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
         </emu-alg>
       </emu-clause>

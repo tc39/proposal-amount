@@ -66,7 +66,7 @@ Note: ⚠️  All property/method names up for bikeshedding.
 
 * `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
   and optional `options`, of which the following are supported (all being optional):
-  * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
+  * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string and must not contain whitespace. Unit strings are never trimmed or otherwise normalized.
     As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
     so `new Amount(42, "meter")` is the same as `new Amount(42, { unit: "meter" })`.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
