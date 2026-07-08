@@ -308,7 +308,8 @@ location: https://tc39.es/proposal-amount/
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. If _value_ is a String, then
-          1. If _value_ is *"NaN"*, then
+          1. If ! TrimString(_value_, ~start+end~) is *"NaN"*, then
+            1. NOTE: |StringNumericLiteral| does not recognize *"NaN"*, so it is handled separately. Leading and trailing white space is ignored, as it is by |StringNumericLiteral|.
             1. Set _value_ to *NaN*.
           1. Else,
             1. Let _parsed_ be ParseText(_value_, |StringNumericLiteral|).
