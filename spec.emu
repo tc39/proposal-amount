@@ -308,8 +308,13 @@ location: https://tc39.es/proposal-amount/
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. If _value_ is a String, then
-          1. Let _parsed_ be ParseText(_value_, |StringNumericLiteral|).
-          1. If _parsed_ is a List of errors, throw a *RangeError* exception.
+          1. If _value_ is *"NaN"*, then
+            1. Set _value_ to *NaN*.
+          1. Else,
+            1. Let _parsed_ be ParseText(_value_, |StringNumericLiteral|).
+            1. If _parsed_ is a List of errors, throw a *RangeError* exception.
+            1. If _parsed_ does not contain a |StrNumericLiteral| Parse Node, throw a *RangeError* exception.
+            1. NOTE: The previous step rejects the empty String and Strings consisting solely of white space.
         1. Else if _value_ is not a Number or a BigInt, then
           1. Throw a *TypeError* exception.
         1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
@@ -320,9 +325,7 @@ location: https://tc39.es/proposal-amount/
         1. If _value_ is a String, then
           1. Let _intlMV_ be the StringIntlMV of _parsed_.
           1. Let _mv_ be _intlMV_.[[Value]].
-          1. If _mv_ is ~not-a-number~, then
-            1. Set _value_ to *NaN*.
-          1. Else if _mv_ is ~positive-infinity~, then
+          1. If _mv_ is ~positive-infinity~, then
             1. Set _value_ to *+∞*<sub>𝔽</sub>.
           1. Else if _mv_ is ~negative-infinity~, then
             1. Set _value_ to *-∞*<sub>𝔽</sub>.
