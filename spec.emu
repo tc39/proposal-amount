@@ -50,7 +50,7 @@ location: https://tc39.es/proposal-amount/
         UnitIdentifierPart IdentifierPartChar
     </emu-grammar>
     <emu-note>
-      <p>This grammar extends the syntax of <emu-xref href="#dfn-uts-35-unit-identifiers">UTS #35 Unit Identifiers</emu-xref> by admitting any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
+      <p>This grammar is inspired by the syntax of <emu-xref href="#dfn-uts-35-unit-identifiers">UTS #35 Unit Identifiers</emu-xref> by admitting any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
     </emu-note>
   </emu-clause>
 
