@@ -80,8 +80,9 @@ Note: ⚠️  All property/method names up for bikeshedding.
 
   Attempting to construct an Amount from a `value` that is not a Number or BigInt or String will throw a TypeError.
   When constructing an Amount from a String `value`,
-  its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
-  or a RangeError is thrown.
+  the string must be a numeric literal as recognized by [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
+  or the string `"NaN"`, in either case optionally surrounded by white space;
+  anything else (including the empty string) throws a RangeError.
   The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
   If either `fractionDigits` or `significantDigits` is set,
