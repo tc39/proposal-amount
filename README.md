@@ -66,7 +66,12 @@ Note: ⚠️  All property/method names up for bikeshedding.
 
 * `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
   and optional `options`, of which the following are supported (all being optional):
-  * `unit` (String): A unit identifier associated with the numerical value, which must not be an empty string.
+  * `unit` (String): A unit identifier associated with the numerical value.
+    A unit identifier is one or more nonempty segments separated by single hyphens (`-`),
+    where each segment consists of code points valid in ECMAScript identifiers
+    ([IdentifierPartChar](https://tc39.es/ecma262/multipage/ecmascript-language-lexical-grammar.html#prod-IdentifierPartChar)),
+    a minimal expansion of [UTS #35 Unit Identifiers](https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers).
+    Supplying a string that is not a unit identifier (for example, the empty string) throws a RangeError.
     As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
     so `new Amount(42, "meter")` is the same as `new Amount(42, { unit: "meter" })`.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
