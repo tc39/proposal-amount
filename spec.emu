@@ -38,7 +38,7 @@ location: https://tc39.es/proposal-amount/
 
   <emu-clause id="sec-amount-unit-identifiers">
     <h1>Unit Identifiers</h1>
-    <p>The unit of an Amount is given as a <dfn id="dfn-amount-unit-identifier">unit identifier</dfn>: a String that matches the |UnitIdentifier| goal symbol of the following grammar. Unit identifiers are parsed at runtime, when an Amount is constructed or converted.</p>
+    <p>The unit of an Amount is given as a <dfn id="dfn-amount-unit-identifier">unit identifier</dfn>: a String that matches the |UnitIdentifier| goal symbol of the following grammar.</p>
     <h2>Syntax</h2>
     <emu-grammar type="definition">
       UnitIdentifier :::
