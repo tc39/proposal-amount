@@ -70,7 +70,7 @@ Note: ⚠️  All property/method names up for bikeshedding.
     A unit identifier is one or more nonempty segments separated by single hyphens (`-`),
     where each segment consists of code points valid in ECMAScript identifiers
     ([IdentifierPartChar](https://tc39.es/ecma262/multipage/ecmascript-language-lexical-grammar.html#prod-IdentifierPartChar)),
-    a minimal expansion of [UTS #35 Unit Identifiers](https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers).
+    a syntax inspired by [UTS #35 Unit Identifiers](https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers).
     Supplying a string that is not a unit identifier (for example, the empty string) throws a RangeError.
     As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
     so `new Amount(42, "meter")` is the same as `new Amount(42, { unit: "meter" })`.
