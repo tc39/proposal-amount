@@ -50,7 +50,7 @@ location: https://tc39.es/proposal-amount/
         UnitIdentifierPart IdentifierPartChar
     </emu-grammar>
     <emu-note>
-      <p>This grammar extends the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">UTS #35 Unit Identifiers</a> by admitting any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
+      <p>This grammar extends the syntax of <emu-xref href="#dfn-uts-35-unit-identifiers">UTS #35 Unit Identifiers</emu-xref> by admitting any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
     </emu-note>
   </emu-clause>
 
@@ -474,6 +474,9 @@ location: https://tc39.es/proposal-amount/
     <li>
       <a href="https://unicode.org/reports/tr35/">Unicode Technical Standard #35: Unicode Locale Data Markup Language (LDML)</a>
       <ul>
+        <li>
+          <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Part 2 General, <dfn id="dfn-uts-35-unit-identifiers" variants="UTS #35 Unit Identifiers">Unit Identifiers</dfn></a>
+        </li>
         <li>
           <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">Part 6 Supplemental, Unit Conversion</a>
         </li>
