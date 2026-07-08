@@ -50,7 +50,7 @@ location: https://tc39.es/proposal-amount/
         UnitIdentifierPart IdentifierPartChar
     </emu-grammar>
     <emu-note>
-      <p>This grammar is a minimal expansion of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">UTS #35 Unit Identifiers</a> that admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. It is equivalent to the ECMAScript regular expression <code>/^[\p{ID_Continue}$\u200C\u200D]+(-[\p{ID_Continue}$\u200C\u200D]+)*$/u</code>. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
+      <p>This grammar extends the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">UTS #35 Unit Identifiers</a> by admitting any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. In particular, the empty String, Strings containing white space, and Strings with leading, trailing, or adjacent hyphens are not unit identifiers.</p>
     </emu-note>
   </emu-clause>
 
