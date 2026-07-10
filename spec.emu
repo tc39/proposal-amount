@@ -66,9 +66,6 @@ location: https://tc39.es/proposal-amount/
         StrNumericLiteral
         `NaN`
     </emu-grammar>
-    <emu-note>
-      <p>This grammar differs from ECMA-262's |StringNumericLiteral| in two ways: it accepts *"NaN"*, and it rejects the empty String and Strings consisting solely of white space, which |StringNumericLiteral| interprets as 0. Unlike ToNumber, which returns *NaN* for any String that does not parse, the Amount constructor throws on such Strings, so *"NaN"* must be recognized by the grammar in order to be accepted.</p>
-    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-amount-abstract-operations">
