@@ -351,7 +351,7 @@ location: https://tc39.es/proposal-amount/
               1. Assert: _digitCount_ ≥ 1.
               1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
           1. Else,
-            1. Assert: _parsed_ contains the literal `NaN`.
+            1. Assert: The source text matched by the |AmountLiteral| Parse Node contained in _parsed_ is *"NaN"*.
             1. Set _value_ to *NaN*.
         1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
           1. If _value_ is not a Number or _value_ is a finite Number, then
