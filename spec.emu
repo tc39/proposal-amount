@@ -95,7 +95,7 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an ECMAScript language value
-        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
