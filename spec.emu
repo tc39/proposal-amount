@@ -342,11 +342,11 @@ location: https://tc39.es/proposal-amount/
             1. Set _value_ to *+∞*<sub>𝔽</sub>.
           1. Else if _mv_ is ~negative-infinity~, then
             1. Set _value_ to *-∞*<sub>𝔽</sub>.
+          1. Else if _mv_ is ~negative-zero~, then
+            1. Set _value_ to RenderInExponentialNotation(_mv_, 1).
           1. Else,
-            1. If _parsed_ contains a |NonDecimalIntegerLiteral| Parse Node, then
-              1. Let _digitCount_ be the count of digits in the decimal representation of _intlMV_.[[Value]].
-            1. Else,
-              1. Let _digitCount_ be _intlMV_.[[StringDigitCount]].
+            1. Assert: _mv_ is a mathematical value.
+            1. If _intlMV_.[[StringDigitCount]] ≥ 1, let _digitCount_ be _intlMV_.[[StringDigitCount]]; else let _digitCount_ be the count of digits in the decimal representation of _mv_.
             1. Assert: _digitCount_ ≥ 1.
             1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
         1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
