@@ -50,7 +50,7 @@ location: https://tc39.es/proposal-amount/
         UnitIdentifierPart IdentifierPartChar
     </emu-grammar>
     <emu-note>
-      <p>This grammar is inspired by the syntax of <emu-xref href="#dfn-uts-35-unit-identifiers">UTS #35 Unit Identifiers</emu-xref>, but is not identical to it: each hyphen-separated segment admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax.</p>
+      <p>This grammar is inspired by the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Unicode Technical Standard #35 Part 2 General, Unit Identifiers</a>, but is not identical to it: each hyphen-separated segment admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax.</p>
     </emu-note>
   </emu-clause>
 
