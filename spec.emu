@@ -474,7 +474,7 @@ location: https://tc39.es/proposal-amount/
       <a href="https://unicode.org/reports/tr35/">Unicode Technical Standard #35: Unicode Locale Data Markup Language (LDML)</a>
       <ul>
         <li>
-          <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Part 2 General, <dfn id="dfn-uts-35-unit-identifiers" variants="UTS #35 Unit Identifiers">Unit Identifiers</dfn></a>
+          <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Part 2 General, Unit Identifiers</a>
         </li>
         <li>
           <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Conversion">Part 6 Supplemental, Unit Conversion</a>
