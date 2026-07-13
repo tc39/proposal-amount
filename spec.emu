@@ -99,7 +99,7 @@ location: https://tc39.es/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _opts_ for creating an Amount or converting an Amount to another Amount and returns a Record with slots set to appropriate mathematical values (or *undefined*). A String _opts_ is treated as a convenient shorthand for specifying a unit.</dd>
+          <dd>It validates the given _opts_ for creating an Amount and returns a Record with slots set to appropriate mathematical values (or *undefined*). A String _opts_ is treated as a convenient shorthand for specifying a unit.</dd>
         </dl>
         <emu-alg>
           1. Let _fractionDigits_ be *undefined*.
