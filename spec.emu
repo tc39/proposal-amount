@@ -36,7 +36,6 @@ location: https://tc39.es/proposal-amount/
     <h1>ToNumber ( _argument_ )</h1>
     <emu-clause id="sec-tonumber-applied-to-the-string-type">
       <h1>ToNumber Applied to the String Type</h1>
-      <p>The |StrNumericLiteral| production is extended to accept the String *"NaN"*:</p>
       <emu-grammar type="definition">
         StrNumericLiteral :::
           <ins>`NaN`</ins>
