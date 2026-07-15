@@ -207,5 +207,16 @@
         1. Return ~unused~.
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-amount-stringintlmv">
+      <h1>Runtime Semantics: StringIntlMV</h1>
+      <p>This amends the syntax-directed operation <emu-xref href="#sec-runtime-semantics-stringintlmv">StringIntlMV</emu-xref>, covering the |StrNumericLiteral| production added in <emu-xref href="#sec-tonumber-applied-to-the-string-type"></emu-xref>.</p>
+      <ins class="block">
+        <emu-grammar>StrNumericLiteral ::: `NaN`</emu-grammar>
+        <emu-alg>
+          1. Return the Intl MV Record { [[Value]]: ~not-a-number~, [[StringDigitCount]]: 0, [[StringFractionDigitCount]]: 0 }.
+        </emu-alg>
+      </ins>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
