@@ -15,7 +15,7 @@ location: https://tc39.es/proposal-amount/
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA&#8203;-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-amount/" title="Amount proposal (GitHub)">Amount proposal</a> and everything related to it, proposed to be added to ECMA&#8203;-262 in new sections, together with a change to an existing ECMA-262 grammar (string numeric literals);</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
   <emu-note type="editor">
@@ -26,6 +26,37 @@ location: https://tc39.es/proposal-amount/
     </p>
   </emu-note>
 </emu-intro>
+
+<emu-clause id="sec-abstract-operations">
+  <h1>Abstract Operations</h1>
+  <emu-note type="editor">
+    <p>This clause modifies existing text of ECMA-262. Only the modified production and the added rule are shown; <ins>insertions are marked like this</ins>.</p>
+  </emu-note>
+  <emu-clause id="sec-tonumber">
+    <h1>ToNumber ( _argument_ )</h1>
+    <emu-clause id="sec-tonumber-applied-to-the-string-type">
+      <h1>ToNumber Applied to the String Type</h1>
+      <p>The |StrNumericLiteral| production is extended to accept the String *"NaN"*:</p>
+      <emu-grammar type="definition">
+        StrNumericLiteral :::
+          <ins>`NaN`</ins>
+          StrDecimalLiteral
+          NonDecimalIntegerLiteral[~Sep]
+      </emu-grammar>
+      <emu-clause id="sec-runtime-semantics-stringnumericvalue" type="sdo">
+        <h1>Runtime Semantics: StringNumericValue ( ): a Number</h1>
+        <dl class="header">
+        </dl>
+        <ins class="block">
+          <emu-grammar>StrNumericLiteral ::: `NaN`</emu-grammar>
+          <emu-alg>
+            1. Return *NaN*.
+          </emu-alg>
+        </ins>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
 
 <emu-clause id="sec-the-amount-object">
   <h1>The Amount Object</h1>
@@ -52,20 +83,6 @@ location: https://tc39.es/proposal-amount/
     <emu-note>
       <p>This grammar is inspired by the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Unicode Technical Standard #35 Part 2 General, Unit Identifiers</a>, but is not identical to it: each hyphen-separated segment admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax.</p>
     </emu-note>
-  </emu-clause>
-
-  <emu-clause id="sec-amount-string-values">
-    <h1>String Values</h1>
-    <p>A String value for an Amount is given as a <dfn id="dfn-string-amount-literal">string amount literal</dfn>: a String that matches the |StringAmountLiteral| goal symbol of the following grammar.</p>
-    <h2>Syntax</h2>
-    <emu-grammar type="definition">
-      StringAmountLiteral :::
-        StrWhiteSpace? AmountLiteral StrWhiteSpace?
-
-      AmountLiteral :::
-        StrNumericLiteral
-        `NaN`
-    </emu-grammar>
   </emu-clause>
 
   <emu-clause id="sec-amount-abstract-operations">
@@ -322,8 +339,8 @@ location: https://tc39.es/proposal-amount/
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. If _value_ is a String, then
-          1. Let _parsed_ be ParseText(_value_, |StringAmountLiteral|).
-          1. If _parsed_ is a List of errors, throw a *RangeError* exception.
+          1. Let _parsed_ be ParseText(_value_, |StrNumericLiteral|).
+          1. If _parsed_ is not a Parse Node, throw a *RangeError* exception.
         1. Else if _value_ is not a Number or a BigInt, then
           1. Throw a *TypeError* exception.
         1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
@@ -332,24 +349,21 @@ location: https://tc39.es/proposal-amount/
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
         1. If _value_ is a String, then
-          1. If _parsed_ contains a |StrNumericLiteral| Parse Node, then
-            1. Let _numericLiteral_ be the |StrNumericLiteral| Parse Node contained in _parsed_.
-            1. Let _intlMV_ be the StringIntlMV of _numericLiteral_.
-            1. Let _mv_ be _intlMV_.[[Value]].
-            1. If _mv_ is ~positive-infinity~, then
-              1. Set _value_ to *+∞*<sub>𝔽</sub>.
-            1. Else if _mv_ is ~negative-infinity~, then
-              1. Set _value_ to *-∞*<sub>𝔽</sub>.
-            1. Else if _mv_ is ~negative-zero~, then
-              1. Set _value_ to RenderInExponentialNotation(_mv_, 1).
-            1. Else,
-              1. Assert: _mv_ is a mathematical value.
-              1. If _intlMV_.[[StringDigitCount]] ≥ 1, let _digitCount_ be _intlMV_.[[StringDigitCount]]; else let _digitCount_ be the count of digits in the decimal representation of _mv_.
-              1. Assert: _digitCount_ ≥ 1.
-              1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
-          1. Else,
-            1. Assert: The source text matched by the |AmountLiteral| Parse Node contained in _parsed_ is *"NaN"*.
+          1. Let _intlMV_ be the StringIntlMV of _parsed_.
+          1. Let _mv_ be _intlMV_.[[Value]].
+          1. If _mv_ is ~not-a-number~, then
             1. Set _value_ to *NaN*.
+          1. Else if _mv_ is ~positive-infinity~, then
+            1. Set _value_ to *+∞*<sub>𝔽</sub>.
+          1. Else if _mv_ is ~negative-infinity~, then
+            1. Set _value_ to *-∞*<sub>𝔽</sub>.
+          1. Else if _mv_ is ~negative-zero~, then
+            1. Set _value_ to RenderInExponentialNotation(_mv_, 1).
+          1. Else,
+            1. Assert: _mv_ is a mathematical value.
+            1. If _intlMV_.[[StringDigitCount]] ≥ 1, let _digitCount_ be _intlMV_.[[StringDigitCount]]; else let _digitCount_ be the count of digits in the decimal representation of _mv_.
+            1. Assert: _digitCount_ ≥ 1.
+            1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
         1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
           1. If _value_ is not a Number or _value_ is a finite Number, then
             1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
