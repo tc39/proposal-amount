@@ -32,8 +32,8 @@ location: https://tc39.es/proposal-amount/
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
     <p>An Amount is an object that wraps a numeric value—as a Number, BigInt, or String—together with an optional unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a value that, so to speak, knows what it is measuring.</p>
-    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, finite numeric values are stored as a <dfn id="dfn-decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
-    <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="dfn-amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
+    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, finite numeric values are stored as a <dfn id="decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
+    <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
   <emu-clause id="sec-amount-unit-identifiers">
@@ -95,7 +95,7 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an ECMAScript language value
-        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a <emu-xref href="#dfn-amount-rounding-mode">rounding mode</emu-xref>), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
