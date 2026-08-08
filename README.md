@@ -46,9 +46,8 @@ We propose creating a new `Amount` primordial containing an immutable numeric va
 
 Amount will have the following read-only properties:
 
-Note: ⚠️  All property/method names up for bikeshedding.
-
-* `value` (Number or BigInt or String): The numerical value of the amount.
+* `value: number | bigint | string | ReadonlyArray<number | bigint | string>` —
+  The numerical value of the amount.
   The type of the value used in the constructor is retained,
   except that any non-finite value is a Number (`Infinity`, `-Infinity`, or `NaN`)
   and any value that was potentially affected by precision options is a String.
@@ -57,14 +56,21 @@ Note: ⚠️  All property/method names up for bikeshedding.
   (decimal exponential notation with an explicitly signed exponent
   and a significand that is either exactly 0 or has a positive absolute value less than 10)
   but not necessarily limited by the same bounds.
-* `unit` (String or not defined): The unit of measurement associated with the Amount's numerical value.
+
+  An Array `value` is used when the `unit` includes at least one `-and-` substring.
+  These represent [sequence units], such as "5 feet, 11 inches".
+  The Array length matches the number of `-and-` separated parts of the `unit`,
+  and all except for the last Array entry always represent integers.
+
+* `unit: string | undefined` — The unit of measurement associated with the Amount's numerical value.
   An undefined value indicates "no unit supplied".
 
 [Number.p.toExponential]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toExponential
+[sequence units]: https://github.com/tc39/proposal-intl-sequence-units
 
 ### Constructor
 
-* `new Amount(value[, options])`. Constructs an Amount with the numerical value of `value`
+* `new Amount(value[, options])`. Constructs an Amount with `value`
   and optional `options`, of which the following are supported (all being optional):
   * `unit` (String): A unit identifier associated with the numerical value.
     A unit identifier is one or more nonempty segments separated by single hyphens (`-`),
@@ -74,20 +80,36 @@ Note: ⚠️  All property/method names up for bikeshedding.
     Supplying a string that is not a unit identifier (for example, the empty string) throws a RangeError.
     As a shorthand, `options` may be given directly as a String, which is equivalent to passing `{ unit: options }`,
     so `new Amount(42, "meter")` is the same as `new Amount(42, { unit: "meter" })`.
+
+    If the unit identifier includes one or more `-and-` substrings, it represents a [sequence unit],
+    and each of the segments separated by `-and-` must be nonempty, or a RangeError is thrown.
   * `fractionDigits`: the number of fractional digits the mathematical value should have (can be less than, equal to, or greater than the actual number of fractional digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `significantDigits`: the number of significant digits that the mathematical value should have  (can be less than, equal to, or greater than the actual number of significant digits that the underlying mathematical value has when rendered as a decimal digit string)
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
 
-  Attempting to construct an Amount from a `value` that is not a Number or BigInt or String will throw a TypeError.
-  When constructing an Amount from a String `value`,
+  Attempting to construct an Amount from a `value` that is not
+  a Number or BigInt or String or an Array with Number or BigInt or String values
+  will throw a TypeError.
+  When constructing an Amount from a String `value` or an Array containing a String value,
   its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
   or a RangeError is thrown.
   The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
+  An Array `value` is expected and required if and only if
+  the `unit` option is defined and includes at least one `-and-` substring.
+  Otherwise, using an Array `value` will throw a TypeError.
+  These represent [sequence units], such as "5 feet, 11 inches".
+  The Array length must match the number of `-and-` separated parts of the `unit`,
+  and all except for the last Array entry must represent an integer;
+  otherwise a TypeError is thrown.
+
   If either `fractionDigits` or `significantDigits` is set,
   the `value` is rounded accordingly,
   and is stored as a String (if finite) or Number (if not finite).
+  If `value` is an Array and `fractionDigits` is set,
+  the rounding is only applied to the last value in the Array.
   If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
+  If `value` is an Array and `significantDigits` is set, a RangeError is thrown.
 
 The object prototype would provide the following methods:
 
@@ -116,17 +138,30 @@ The object prototype would provide the following methods:
   the result will be rounded according to the precision options,
   and the returned Amount will have a String `value`.
   Otherwise, the returned Amount will have a Number `value`.
+  If the conversion target is a sequence unit and `fractionDigits` is set,
+  the rounding is only applied to the last value in the Array.
   If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
+  If the conversion target is a sequence unit and `significantDigits` is set, a RangeError is thrown.
 
   Calling `convertTo()` will throw a TypeError if conversion is not supported
   for the Amount's unit (such as currency units),
   or if the resolved conversion target is not valid for the Amount's unit
   (such as attempting to convert a mass unit into a length unit).
 
+  If the conversion target is a sequence unit,
+  a TypeError is thrown if the individual units are not convertible with each other
+  using integer multipliers, with decreasing magnitude.
+  In other words, conversion to `foot-and-inch` is valid, but
+  `inch-and-foot`, `foot-and-centimeter`, and `foot-and-gallon` are not valid conversion targets.
+
 * `toString()`: A string representation of the Amount.
   Returns a digit string together with the unit, surrounded by square brackets (for example, `"[1.23+e0 kilogram]"`).
   If the Amount does not have a unit,
   the tilde `~` (U+007E) is used in place of the unit (for example, `"[4.2+e1 ~]"`).
+  If the Amount has a sequence unit, the unit identifier is split to its component units,
+  and the component unit and their values are joined by `", "`
+  (for example, `"[6e+1 degree, 1.1e+1 arc-minute, 3.141e+1 arc-second]"`).
+
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
 appropriate to the locale (for example, `"1,23 kg"` in a locale that uses a comma as a fraction separator).
@@ -159,6 +194,18 @@ For example, to convert 1.75 feet to inches, the following mathematical operatio
 = 1.75 × 𝔽(12)
 = 21
 ```
+
+When converting from a [sequence unit](https://github.com/tc39/proposal-intl-sequence-units),
+each of the individual parts of the unit are converted separately,
+and the Number results then summed together.
+
+When converting to a sequence unit,
+the source unit value or values are first converted to the least-magnitude unit of the target sequence unit.
+Euclidean division is then applied to this Number using the integer multiplier
+from the smaller-magnitude unit to the next unit by magnitude.
+The remainder is assigned to the smaller-magnitude unit,
+and the quotient to the larger-magnitude unit.
+If the sequence unit contains more than two units, this process is repeated.
 
 Rounding is applied only to the final result, according to the precision options (if any)
 set in the conversion method's `options`.
@@ -196,6 +243,16 @@ a.value; // 42.7
 typeof a.value; // "number"
 a.toString(); // "[4.27e+1 kilogram]"
 a.toLocaleString("fr"); // "42,7 kg"
+```
+
+A sequence unit example:
+
+```js
+let a = new Amount([5, 11], "foot-and-inch");
+a.value; // [5, 11]
+typeof a.value; // "object"
+a.toString(); // "[5e+0 foot, 1.1e+1 inch]"
+a.toLocaleString("fr"); // "5 pi et 11 po"
 ```
 
 ### Formatting with Intl
@@ -329,10 +386,6 @@ This proposal focuses on the numeric core that future proposals can build on.
 ### Derived units
 
 Some units can derive other units, such as square meters and cubic yards (to mention only a couple!). Support for such units is currently out-of-scope for this proposal.
-
-### Compound units
-
-Some units can be combined. In the US, it is common to express the heights of people in terms of feet and inches, rather than a non-integer number of feet or a "large" number of inches. For instance, one would say commonly express a height of 71 inches as "5 feet 11 inches" rather than "71 inches" or "5.92 feet". Thus, one would naturally want to support "foot-and-inch" as a compound unit, derivable from a measurement in terms of feet or inches. Likewise, combining units to express, say, velocity (miles per hour) or density (grams per cubic centimeter) also falls under this umbrella.  Since this is closely related to unit conversion, we prefer to see this functionality in Smart Units.
 
 ## Frequently Asked Questions
 
