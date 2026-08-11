@@ -32,7 +32,8 @@ location: https://tc39.es/proposal-amount/
   <emu-intro id="sec-amount-intro">
     <h1>Introduction</h1>
     <p>An Amount is an object that wraps a numeric value—as a Number, BigInt, or String—together with an optional unit (e.g., mile, kilogram, EUR, JPY, USD-per-mile). One can intuitively understand an Amount as a value that, so to speak, knows what it is measuring.</p>
-    <p>When precision options (such as fractionDigits or significantDigits) are applied, or when unit conversion is performed, finite numeric values are stored as a <dfn id="decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
+    <p>When precision options (such as fractionDigits or significantDigits) are applied, finite numeric values are stored as a <dfn id="decimal-digit-string">decimal digit string</dfn>: a String in |StrDecimalLiteral| form. Non-finite values are stored as the Number values *NaN*, *+&infin;*<sub>𝔽</sub>, or *-&infin;*<sub>𝔽</sub>. Otherwise, the original JavaScript value type (Number, BigInt, or String) is retained.</p>
+    <p>Unit conversion computes with Number arithmetic. Its result is therefore a Number unless precision options are applied to it, whatever the value type of the Amount being converted.</p>
     <p>Rounding a mathematical value is an important part of this spec. When we say <dfn id="amount-rounding-mode">rounding mode</dfn> in this specification we simply refer to <emu-xref href="#table-intl-rounding-modes">ECMA-402's definition</emu-xref>.</p>
   </emu-intro>
 
@@ -371,7 +372,7 @@ location: https://tc39.es/proposal-amount/
       1. Return _O_.[[AmountValue]].
     </emu-alg>
     <emu-note>
-      <p>The value may be a Number, BigInt, or String. It is a String when precision options were applied during construction or when the Amount is the result of unit conversion.</p>
+      <p>The value may be a Number, BigInt, or String. It is a String in two cases: when the Amount was constructed from a String value, and when a finite value was rounded according to precision options, whether during construction or during unit conversion. The result of a unit conversion to which no precision options were applied is a Number.</p>
     </emu-note>
   </emu-clause>
 
