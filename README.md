@@ -106,10 +106,10 @@ Amount will have the following read-only properties:
   If either `fractionDigits` or `significantDigits` is set,
   the `value` is rounded accordingly,
   and is stored as a String (if finite) or Number (if not finite).
+  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
   If `value` is an Array and `fractionDigits` is set,
   the rounding is only applied to the last value in the Array.
-  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
-  If `value` is an Array and `significantDigits` is set, a RangeError is thrown.
+  If `value` is an Array and `significantDigits` is set, a TypeError is thrown.
 
 The object prototype would provide the following methods:
 
@@ -138,10 +138,10 @@ The object prototype would provide the following methods:
   the result will be rounded according to the precision options,
   and the returned Amount will have a String `value`.
   Otherwise, the returned Amount will have a Number `value`.
+  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
   If the conversion target is a sequence unit and `fractionDigits` is set,
   the rounding is only applied to the last value in the Array.
-  If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
-  If the conversion target is a sequence unit and `significantDigits` is set, a RangeError is thrown.
+  If the conversion target is a sequence unit and `significantDigits` is set, a TypeError is thrown.
 
   Calling `convertTo()` will throw a TypeError if conversion is not supported
   for the Amount's unit (such as currency units),
