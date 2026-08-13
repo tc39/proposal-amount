@@ -57,15 +57,12 @@ location: https://tc39.es/proposal-amount/
 
   <emu-clause id="sec-amount-finite-numeric-literals">
     <h1>Finite Numeric Literals</h1>
-    <p>A String value given to the Amount constructor must denote a finite numeric value: it must match the |StrFiniteNumericLiteral| goal symbol of the following grammar.</p>
+    <p>A String value given to the Amount constructor must denote a finite numeric value, which is defined as matching the |StrFiniteNumericLiteral| goal symbol of the following grammar.</p>
     <h2>Syntax</h2>
     <emu-grammar type="definition">
       StrFiniteNumericLiteral :::
         StrNumericLiteral but not one of `Infinity` or `+Infinity` or `-Infinity`
     </emu-grammar>
-    <emu-note>
-      <p>|StrNumericLiteral| is defined in <emu-xref href="#sec-tonumber-applied-to-the-string-type">ECMA-262's ToNumber Applied to the String Type</emu-xref>. Unlike |StringNumericLiteral|, it admits no white space, so the empty String, Strings with leading or trailing white space, and the String *"NaN"* all fail to match. Excluding `Infinity`, `+Infinity`, and `-Infinity` rules out the only remaining spellings of non-finite values.</p>
-    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-amount-abstract-operations">
