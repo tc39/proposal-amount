@@ -49,8 +49,9 @@ Amount will have the following read-only properties:
 * `value: number | bigint | string | ReadonlyArray<number | bigint | string>` —
   The numerical value of the amount.
   The type of the value used in the constructor is retained,
-  except that any non-finite value is a Number (`Infinity`, `-Infinity`, or `NaN`)
-  and any value that was potentially affected by precision options is a String.
+  except that any value that was potentially affected by precision options is a String.
+  Only a Number `value` can be non-finite (`Infinity`, `-Infinity`, or `NaN`);
+  String representations of non-finite values are rejected.
 
   A String `value` is always in the format returned by [Number.p.toExponential]
   (decimal exponential notation with an explicitly signed exponent
@@ -91,8 +92,11 @@ Amount will have the following read-only properties:
   a Number or BigInt or String or an Array with Number or BigInt or String values
   will throw a TypeError.
   When constructing an Amount from a String `value` or an Array containing a String value,
-  its mathematical value is parsed using [StringNumericLiteral](https://tc39.es/ecma262/#prod-StringNumericLiteral)
-  or a RangeError is thrown.
+  the string must be exactly a numeric literal denoting a finite value:
+  a [StrNumericLiteral](https://tc39.es/ecma262/#prod-StrNumericLiteral)
+  other than `"Infinity"`, `"+Infinity"`, or `"-Infinity"`;
+  anything else (including `"NaN"`, the empty string,
+  and strings with leading or trailing white space) throws a RangeError.
   The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
   An Array `value` is expected and required if and only if
