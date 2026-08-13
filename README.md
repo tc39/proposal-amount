@@ -94,8 +94,8 @@ Amount will have the following read-only properties:
   When constructing an Amount from a String `value` or an Array containing a String value,
   the string must be exactly a numeric literal denoting a finite value:
   a [StrNumericLiteral](https://tc39.es/ecma262/#prod-StrNumericLiteral)
-  other than `"Infinity"`, `"+Infinity"`, or `"-Infinity"`;
-  anything else (including `"NaN"`, the empty string,
+  other than `"Infinity"`, `"+Infinity"`, or `"-Infinity"`.
+  Anything else (including `"NaN"`, the empty string,
   and strings with leading or trailing white space) throws a RangeError.
   The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
