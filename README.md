@@ -50,8 +50,7 @@ Amount will have the following read-only properties:
   The numerical value of the amount.
   The type of the value used in the constructor is retained,
   except that any value that was potentially affected by precision options is a String.
-  Only a Number `value` can be non-finite (`Infinity`, `-Infinity`, or `NaN`);
-  String representations of non-finite values are rejected.
+  A Number `value` can be non-finite (`Infinity`, `-Infinity`, or `NaN`).
 
   A String `value` is always in the format returned by [Number.p.toExponential]
   (decimal exponential notation with an explicitly signed exponent
