@@ -334,7 +334,7 @@ location: https://tc39.es/proposal-amount/
           1. Let _digitCount_ be 1.
           1. If _mv_ is not ~negative-zero~, then
             1. Assert: _mv_ is a mathematical value.
-            1. If _intlMV_.[[StringDigitCount]] ≥ 1, let _digitCount_ be _intlMV_.[[StringDigitCount]]; else let _digitCount_ be the count of digits in the decimal representation of _mv_.
+            1. If _intlMV_.[[StringDigitCount]] ≥ 1, set _digitCount_ to _intlMV_.[[StringDigitCount]]; else set _digitCount_ to the count of digits in the decimal representation of _mv_.
           1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
         1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
           1. If _value_ is not a Number or _value_ is a finite Number, then
