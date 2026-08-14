@@ -332,11 +332,6 @@ location: https://tc39.es/proposal-amount/
           1. Let _intlMV_ be the StringIntlMV of _parsed_.
           1. Let _mv_ be _intlMV_.[[Value]].
           1. If _mv_ is ~negative-zero~, then
-            1. Set _value_ to RenderInExponentialNotation(_mv_, 1).
-          1. Else,
-            1. Assert: _mv_ is a mathematical value.
-            1. If _intlMV_.[[StringDigitCount]] ≥ 1, let _digitCount_ be _intlMV_.[[StringDigitCount]]; else let _digitCount_ be the count of digits in the decimal representation of _mv_.
-            1. Assert: _digitCount_ ≥ 1.
             1. Set _digitCount_ to 1.
           1. Else,
             1. Assert: _mv_ is a mathematical value.
