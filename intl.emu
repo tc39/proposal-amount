@@ -63,15 +63,12 @@
         1. Let _region_ be GetLocaleRegion(_maximalLocale_).
         1. If _region_ is *undefined*, set _region_ to *"001"*.
         1. Let _preferredUnits_ be ? GetPreferredUnits(_category_, _usage_, _region_).
-        1. Let _entry_ be the first element of _preferredUnits_.
-        1. Let _unit_ be _entry_.[[Unit]].
-        1. Repeat, while _preferredUnits_ has more than one element,
-          1. Let _threshold_ be _entry_.[[Threshold]].
-          1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
-          1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _threshold_, return _unit_.
-          1. Remove the first element of _preferredUnits_.
-          1. Set _entry_ to the first element of _preferredUnits_.
+        1. Let _unit_ be ~unset~.
+        1. For each element _entry_ of _preferredUnits_, do
           1. Set _unit_ to _entry_.[[Unit]].
+          1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
+          1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _entry_.[[Threshold]], return _unit_.
+        1. Assert: _unit_ is a String.
         1. Return _unit_.
       </emu-alg>
     </emu-clause>
