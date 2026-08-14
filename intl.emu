@@ -31,9 +31,9 @@
       <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
     </emu-clause>
 
-    <emu-clause id="sup-amount-getamountconverttounit" type="abstract operation">
+    <emu-clause id="sup-amount-selecttargetunit" type="abstract operation">
       <h1>
-        GetAmountConvertToUnit (
+        SelectTargetUnit (
           _sourceValue_: a Number,
           _sourceUnit_: a String,
           _options_: an Object,
@@ -46,7 +46,7 @@
         <dt>redefinition</dt>
         <dd>true</dd>
       </dl>
-      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountconverttounit"></emu-xref>.</p>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
       <emu-alg>
         1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. Let _locale_ be ? Get(_options_, *"locale"*).
