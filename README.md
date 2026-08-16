@@ -103,6 +103,11 @@ Amount will have the following read-only properties:
   and all except for the last Array entry must represent an integer;
   otherwise a TypeError is thrown.
 
+  String values in an Array are normalized to use a plain integer representation
+  for values that are not the last entry, and for the last entry,
+  the same exponential representation is used as for a String `value`.
+  For example, an Array `value` like `['5.0', '11.0']` will be normalized as `['5', '1.10e+1']`.
+
   If either `fractionDigits` or `significantDigits` is set,
   the `value` is rounded accordingly,
   and is stored as a String (if finite) or Number (if not finite).
@@ -159,8 +164,10 @@ The object prototype would provide the following methods:
   If the Amount does not have a unit,
   the tilde `~` (U+007E) is used in place of the unit (for example, `"[4.2+e1 ~]"`).
   If the Amount has a sequence unit, the unit identifier is split to its component units,
-  and the component unit and their values are joined by `", "`
-  (for example, `"[6e+1 degree, 1.1e+1 arc-minute, 3.141e+1 arc-second]"`).
+  and the component unit and their values are joined by `", "`.
+  For sequence unit values that are not the last,
+  a plain integer serialization is used, as these values must always be integers
+  (for example, `"[60 degree, 11 arc-minute, 3.141e+1 arc-second]"`).
 
 
 * `toLocaleString(locale[, options])`: Return a formatted string representation
@@ -251,7 +258,7 @@ A sequence unit example:
 let a = new Amount([5, 11], "foot-and-inch");
 a.value; // [5, 11]
 typeof a.value; // "object"
-a.toString(); // "[5e+0 foot, 1.1e+1 inch]"
+a.toString(); // "[5 foot, 1.1e+1 inch]"
 a.toLocaleString("fr"); // "5 pi et 11 po"
 ```
 
