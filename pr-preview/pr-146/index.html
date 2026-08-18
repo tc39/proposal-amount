@@ -4148,7 +4148,7 @@ p.ECMAaddress {
         <p>When no precision options are given, Number and BigInt arguments are stored directly in <var class="field">[[AmountValue]]</var>, preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
       </div></emu-note>
       <emu-note><span class="note">Note 2</span><div class="note-contents">
-        <p>A String argument must be exactly a numeric literal denoting a <emu-xref href="#finite"><a href="https://tc39.es/ecma262/#finite">finite</a></emu-xref> value. <emu-val>"NaN"</emu-val>, <emu-val>"Infinity"</emu-val>, <emu-val>"+Infinity"</emu-val>, and <emu-val>"-Infinity"</emu-val> are rejected, as well as Strings with leading or trailing white space, even though the corresponding Number values are accepted. <emu-val>""</emu-val> is also rejected.</p>
+        <p>A String argument must denote a <emu-xref href="#finite"><a href="https://tc39.es/ecma262/#finite">finite</a></emu-xref> <emu-xref href="#mathematical-value"><a href="https://tc39.es/ecma262/#mathematical-value">mathematical value</a></emu-xref>. <emu-val>"NaN"</emu-val>, <emu-val>"Infinity"</emu-val>, <emu-val>"+Infinity"</emu-val>, <emu-val>"-Infinity"</emu-val>, and <emu-val>""</emu-val> are rejected, as are Strings with leading or trailing white space or other extraneous contents.</p>
       </div></emu-note>
       <emu-note type="editor"><span class="note">Editor's Note</span><div class="note-contents">
 	<p>
