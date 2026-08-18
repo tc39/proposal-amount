@@ -62,7 +62,7 @@
         1. Let _maximalLocale_ be the result of the <a href="https://unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags</a> algorithm applied to _resolvedLocale_. If an error is signaled, set _maximalLocale_ to _resolvedLocale_.
         1. Let _region_ be GetLocaleRegion(_maximalLocale_).
         1. If _region_ is *undefined*, set _region_ to *"001"*.
-        1. Let _preferredUnits_ be ? GetPreferredUnits(_category_, _usage_, _region_).
+        1. Let _preferredUnits_ be GetPreferredUnits(_category_, _usage_, _region_).
         1. Let _unit_ be ~unset~.
         1. For each element _entry_ of _preferredUnits_, do
           1. Set _unit_ to _entry_.[[Unit]].
@@ -102,7 +102,7 @@
           _category_: a String,
           _usage_: a String,
           _region_: a String,
-        ): either a normal completion containing a List of Records or a throw completion
+        ): a List of Records
       </h1>
       <dl class="header">
         <dt>description</dt>
@@ -121,7 +121,7 @@
             1. Let _idx_ be StringLastIndexOf(_usage_, *"-"*, _len_ - 1).
             1. If _idx_ is ~not-found~ or _idx_ = 0, set _usage_ to *"default"*; else set _usage_ to the substring of _usage_ from 0 to _idx_.
         1. Let _matchingUnits_ be a new empty List.
-        1. Repeat, while _matchingElements_ is empty,
+        1. Repeat, while _matchingUnits_ is empty,
           1. For each element _unitPreference_ of _candidateElements_, do
             1. Assert: _unitPreference_ has an attribute <code>regions</code>.
             1. Let _regionsAttr_ be the String value of the <code>regions</code> attribute of _unitPreference_.
@@ -129,9 +129,9 @@
             1. Let _geq_ be the mathematical value of the <code>geq</code> attribute of _unitPreference_ if present, or 1 otherwise.
             1. Let _unit_ be the String value of the body of the _unitPreference_.
             1. If _regions_ contains _region_, append the Record { [[Unit]]: _unit_, [[Threshold]]: _geq_ } to _matchingUnits_.
-          1. If _matchingElements_ is empty, then
+          1. If _matchingUnits_ is empty, then
             1. Assert: _region_ is not *"001"*.
-            1. Set _region_ to *"001".
+            1. Set _region_ to *"001"*.
         1. Return _matchingUnits_.
       </emu-alg>
       <emu-note>
