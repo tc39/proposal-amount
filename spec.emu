@@ -506,7 +506,7 @@ location: https://tc39.es/proposal-amount/
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
       1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
       1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
-      1. If _convertedValue_ is finite and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
+      1. If _convertedValue_ is a finite Number and (_fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*), then
         1. Let _roundingMode_ be _opts_.[[RoundingMode]].
         1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
         1. Let _intlMV_ be ! ToIntlMathematicalValue(_convertedValue_).
