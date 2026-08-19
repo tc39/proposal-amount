@@ -49,8 +49,8 @@
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
       <emu-alg>
         1. If _unitOption_ is *undefined*, let _category_ be ? GetUnitCategory(_sourceUnit_).
-        1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. Let _locale_ be ? Get(_options_, *"locale"*).
+        1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
         1. If _unitOption_ is a String, then
           1. If _usage_ is not *undefined* or _locale_ is not *undefined*, throw a *TypeError* exception.
           1. Return _unitOption_.
