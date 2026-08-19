@@ -112,8 +112,7 @@
         1. Assert: _region_ can be matched by the <code>unicode_region_id</code> Unicode locale nonterminal and the ASCII-uppercase of _region_ is _region_.
         1. Let _candidateElements_ be ~unset~.
         1. Repeat, while _candidateElements_ is ~unset~,
-          1. If _category_ is the <code>category</code> and _usage_ is the <code>usage</code> of a <code>&lt;unitPreferences&gt;</code> element in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref>, then
-            1. Let _unitPreferencesElement_ be that element.
+          1. [declared="unitPreferencesElement"] If there is a <code>&lt;unitPreferences&gt;</code> element _unitPreferencesElement_ in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> such that its <code>category</code> is _category_ and its <code>usage</code> is _usage_, then
             1. Set _candidateElements_ to the List of <code>&lt;unitPreference&gt;</code> elements in _unitPreferencesElement_.
           1. Else,
             1. Assert: _usage_ is not *"default"*.
