@@ -342,7 +342,7 @@
           1. Set _intlObj_.[[CurrencyDisplay]] to _currencyDisplay_.
           1. Set _intlObj_.[[CurrencySign]] to _currencySign_.
         1. If _style_ is *"unit"*, then
-          1. <ins>If _unit_ is not *undefined*,</ins> <del>Set</del> <ins>set</ins> _intlObj_.[[Unit]] to _unit_.
+          1. <del>Set</del> <ins>If _unit_ is not *undefined*, set</ins> _intlObj_.[[Unit]] to _unit_.
           1. Set _intlObj_.[[UnitDisplay]] to _unitDisplay_.
         1. Return ~unused~.
       </emu-alg>
