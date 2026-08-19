@@ -154,8 +154,7 @@ location: https://tc39.es/proposal-amount/
           1. If _opts_ is a String, return ? GetAmountOptions(_opts_).
           1. If _opts_ is not an Object, throw a *TypeError* exception.
           1. Let _resolvedOpts_ be ? GetAmountOptions(_opts_).
-          1. Let _unitOption_ be _resolvedOpts_.[[Unit]].
-          1. Let _unit_ be ? SelectTargetUnit(_sourceValue_, _sourceUnit_, _opts_, _unitOption_).
+          1. Let _unit_ be ? SelectTargetUnit(_sourceValue_, _sourceUnit_, _opts_, _resolvedOpts_.[[Unit]]).
           1. Set _resolvedOpts_.[[Unit]] to _unit_.
           1. Return _resolvedOpts_.
         </emu-alg>
