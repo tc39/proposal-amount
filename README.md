@@ -355,7 +355,7 @@ a.value; // "1.2346e+2"
 By default, we use the round-ties-to-even rounding mode, which is used by IEEE 754 standard, and thus by Number and [Decimal](https://github.com/tc39/proposal-decimal). One can specify a rounding mode:
 
 ```js
-let b = new Amount("123.456", { significantDigits: 5, roundingMode: "truncate" });
+let b = new Amount("123.456", { significantDigits: 5, roundingMode: "trunc" });
 b.value; // "1.2345e+2"
 ```
 
