@@ -31,13 +31,48 @@
       <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
     </emu-clause>
 
+    <emu-clause id="sup-amount-getamountlocaleoption" type="abstract operation">
+      <h1>
+        GetAmountLocaleOption (
+          _options_: an Object,
+        ): either a normal completion containing an ECMAScript language value or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the value of the *"locale"* option, which determines the locale whose unit preferences are used to select a conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountlocaleoption"></emu-xref>.</p>
+      <emu-alg>
+        1. Return ? Get(_options_, *"locale"*).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sup-amount-getamountusageoption" type="abstract operation">
+      <h1>
+        GetAmountUsageOption (
+          _options_: an Object,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the value of the *"usage"* option, which determines the unit preferences that are used to select a conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountusageoption"></emu-xref>.</p>
+      <emu-alg>
+        1. Return ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sup-amount-selecttargetunit" type="abstract operation">
       <h1>
         SelectTargetUnit (
           _sourceValue_: a Number,
           _sourceUnit_: a String,
-          _options_: an Object,
-          _unitOption_: a String or *undefined*,
+          _resolvedOpts_: an Amount Options Record,
         ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
@@ -48,11 +83,12 @@
       </dl>
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
       <emu-alg>
-        1. Let _locale_ be ? Get(_options_, *"locale"*).
-        1. Let _usage_ be ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
-        1. If _unitOption_ is a String, then
+        1. Let _locale_ be _resolvedOpts_.[[Locale]].
+        1. Let _unit_ be _resolvedOpts_.[[Unit]].
+        1. Let _usage_ be _resolvedOpts_.[[Usage]].
+        1. If _unit_ is not *undefined*, then
           1. If _usage_ is not *undefined* or _locale_ is not *undefined*, throw a *TypeError* exception.
-          1. Return _unitOption_.
+          1. Return _unit_.
         1. If _usage_ is *undefined*, then
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
           1. Set _usage_ to *"default"*.
@@ -63,7 +99,7 @@
         1. Let _region_ be GetLocaleRegion(_maximalLocale_).
         1. If _region_ is *undefined*, set _region_ to *"001"*.
         1. Let _preferredUnits_ be GetPreferredUnits(_category_, _usage_, _region_).
-        1. Let _unit_ be ~unset~.
+        1. Set _unit_ to ~unset~.
         1. For each element _entry_ of _preferredUnits_, do
           1. Set _unit_ to _entry_.[[Unit]].
           1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).

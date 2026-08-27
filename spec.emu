@@ -103,27 +103,49 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-amount-options-record">
+        <h1>Amount Options Record</h1>
+        <p>
+          An <dfn variants="Amount Options Records">Amount Options Record</dfn> is a Record holding the resolved values of the options
+          accepted by the Amount constructor and by <emu-xref href="#sec-amount.prototype.convertto">Amount.prototype.convertTo</emu-xref>.
+          It has fields [[FractionDigits]] (a non-negative integer or *undefined*), [[Locale]] (an ECMAScript language value),
+          [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), [[Unit]] (a String or *undefined*),
+          and [[Usage]] (a String or *undefined*).
+        </p>
+        <emu-note>
+          <p>The [[Locale]] and [[Usage]] fields are always *undefined* in an implementation that does not include the ECMA-402 Internationalization API.</p>
+        </emu-note>
+      </emu-clause>
+
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
-          _opts_: an ECMAScript language value
-        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+          _opts_: an ECMAScript language value,
+          optional _sourceValue_: a Number,
+          optional _sourceUnit_: a String,
+        ): either a normal completion containing an Amount Options Record or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _opts_ and returns their resolved values. A String _opts_ is treated as a convenient shorthand for specifying a unit.</dd>
+          <dd>It validates the given _opts_ and returns their resolved values. A String _opts_ is treated as a convenient shorthand for specifying a unit. If _sourceValue_ and _sourceUnit_ are present, the options that select a conversion target are read as well, and the [[Unit]] field of the returned Record is the unit that _sourceValue_ and _sourceUnit_ are to be converted to.</dd>
         </dl>
         <emu-alg>
+          1. Assert: _sourceValue_ is present if and only if _sourceUnit_ is present.
           1. Let _fractionDigits_ be *undefined*.
-          1. Let _significantDigits_ be *undefined*.
+          1. Let _locale_ be *undefined*.
           1. Let _roundingMode_ be *"halfEven"*.
+          1. Let _significantDigits_ be *undefined*.
+          1. Let _usage_ be *undefined*.
           1. If _opts_ is a String, then
             1. Let _unit_ be _opts_.
           1. Else,
             1. Set _opts_ to ? GetOptionsObject(_opts_).
+            1. NOTE: The properties of _opts_ are read in alphabetical order, whether or not the implementation includes the ECMA-402 Internationalization API.
             1. Set _fractionDigits_ to ? GetOption(_opts_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
+            1. If _sourceUnit_ is present, set _locale_ to ? GetAmountLocaleOption(_opts_).
             1. Set _roundingMode_ to ? GetOption(_opts_, *"roundingMode"*, ~string~, « *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfCeil"*, *"halfFloor"*, *"halfExpand"*, *"halfTrunc"*, *"halfEven"* », *"halfEven"*).
             1. Set _significantDigits_ to ? GetOption(_opts_, *"significantDigits"*, ~number~, ~empty~, *undefined*).
             1. Let _unit_ be ? GetOption(_opts_, *"unit"*, ~string~, ~empty~, *undefined*).
+            1. If _sourceUnit_ is present, set _usage_ to ? GetAmountUsageOption(_opts_).
           1. If _fractionDigits_ is not *undefined*, then
             1. If _significantDigits_ is not *undefined*, throw a *RangeError* exception.
             1. If _fractionDigits_ is not an integral Number, throw a *RangeError* exception.
@@ -135,28 +157,55 @@ location: https://tc39.es/proposal-amount/
             1. If _significantDigits_ is not in the inclusive interval from 1 to 21, throw a *RangeError* exception.
           1. If _unit_ is not *undefined*, then
             1. If ParseText(_unit_, |UnitIdentifier|) is not a Parse Node, throw a *RangeError* exception.
-          1. Return the Record { [[FractionDigits]]: _fractionDigits_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_ }.
+          1. Let _resolvedOpts_ be the Amount Options Record { [[FractionDigits]]: _fractionDigits_, [[Locale]]: _locale_, [[RoundingMode]]: _roundingMode_, [[SignificantDigits]]: _significantDigits_, [[Unit]]: _unit_, [[Usage]]: _usage_ }.
+          1. If _sourceUnit_ is present, set _resolvedOpts_.[[Unit]] to ? SelectTargetUnit(_sourceValue_, _sourceUnit_, _resolvedOpts_).
+          1. Return _resolvedOpts_.
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getamountconverttooptions" type="abstract operation">
-        <h1>GetAmountConvertToOptions (
-          _sourceValue_: a Number,
-          _sourceUnit_: a String,
-          _opts_: an ECMAScript language value
-        ): either a normal completion containing a Record with fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode), [[SignificantDigits]] (a positive integer or *undefined*), and [[Unit]] (a String or *undefined*) or a throw completion
+      <emu-clause id="sec-amount-getamountlocaleoption" type="abstract operation">
+        <h1>
+          GetAmountLocaleOption (
+            _options_: an Object,
+          ): either a normal completion containing an ECMAScript language value or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _opts_ for translating an Amount's value to a new unit and returns their resolved values. A String _opts_ is treated as a convenient shorthand for specifying a unit.</dd>
+          <dd>It returns the value of the *"locale"* option, which determines the locale whose unit preferences are used to select a conversion target.</dd>
+          <dt>skip return checks</dt>
+          <dd>true</dd>
         </dl>
+        <p>
+          An ECMAScript implementation that includes the ECMA-402 Internationalization API
+          must implement this method as specified in the ECMA-402 specification.
+          If an ECMAScript implementation does not include the ECMA-402 API,
+          GetAmountLocaleOption performs the following steps when called:
+        </p>
         <emu-alg>
-          1. If _opts_ is a String, return ? GetAmountOptions(_opts_).
-          1. If _opts_ is not an Object, throw a *TypeError* exception.
-          1. Let _resolvedOpts_ be ? GetAmountOptions(_opts_).
-          1. Let _unit_ be ? SelectTargetUnit(_sourceValue_, _sourceUnit_, _opts_, _resolvedOpts_.[[Unit]]).
-          1. Set _resolvedOpts_.[[Unit]] to _unit_.
-          1. Return _resolvedOpts_.
+          1. Return *undefined*.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getamountusageoption" type="abstract operation">
+        <h1>
+          GetAmountUsageOption (
+            _options_: an Object,
+          ): either a normal completion containing either a String or *undefined*, or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns the value of the *"usage"* option, which determines the unit preferences that are used to select a conversion target.</dd>
+          <dt>skip return checks</dt>
+          <dd>true</dd>
+        </dl>
+        <p>
+          An ECMAScript implementation that includes the ECMA-402 Internationalization API
+          must implement this method as specified in the ECMA-402 specification.
+          If an ECMAScript implementation does not include the ECMA-402 API,
+          GetAmountUsageOption performs the following steps when called:
+        </p>
+        <emu-alg>
+          1. Return *undefined*.
         </emu-alg>
       </emu-clause>
 
@@ -165,8 +214,7 @@ location: https://tc39.es/proposal-amount/
           SelectTargetUnit (
             _sourceValue_: a Number,
             _sourceUnit_: a String,
-            _options_: an Object,
-            _unitOption_: a String or *undefined*,
+            _resolvedOpts_: an Amount Options Record,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
@@ -180,8 +228,9 @@ location: https://tc39.es/proposal-amount/
           SelectTargetUnit performs the following steps when called:
         </p>
         <emu-alg>
-          1. If _unitOption_ is *undefined*, throw a *TypeError* exception.
-          1. Return _unitOption_.
+          1. Let _unit_ be _resolvedOpts_.[[Unit]].
+          1. If _unit_ is *undefined*, throw a *TypeError* exception.
+          1. Return _unit_.
         </emu-alg>
       </emu-clause>
 
@@ -499,7 +548,7 @@ location: https://tc39.es/proposal-amount/
         1. Let _sourceValue_ be StringToNumber(_v_).
       1. Let _sourceUnit_ be _O_.[[Unit]].
       1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _opts_ be ? GetAmountConvertToOptions(_sourceValue_, _sourceUnit_, _options_).
+      1. Let _opts_ be ? GetAmountOptions(_options_, _sourceValue_, _sourceUnit_).
       1. Let _targetUnit_ be _opts_.[[Unit]].
       1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _targetUnit_).
       1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
