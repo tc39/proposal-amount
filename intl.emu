@@ -70,7 +70,7 @@
     <emu-clause id="sup-amount-selecttargetunit" type="abstract operation">
       <h1>
         SelectTargetUnit (
-          _sourceValue_: a Number,
+          _sourceValue_: an extended mathematical value or *NaN*,
           _sourceUnit_: a String,
           _resolvedOpts_: an Amount Options Record,
         ): either a normal completion containing a String or a throw completion
