@@ -543,8 +543,8 @@ location: https://tc39.es/proposal-amount/
         1. Let _numericValue_ be _v_.
         1. If _v_ is *NaN*, let _sourceValue_ be *NaN*; else let _sourceValue_ be the extended mathematical value of _v_.
       1. Else if _v_ is a BigInt, then
-        1. Let _numericValue_ be 𝔽(ℝ(_v_)).
         1. Let _sourceValue_ be ℝ(_v_).
+        1. Let _numericValue_ be 𝔽(_sourceValue_).
       1. Else,
         1. Assert: _v_ is a String.
         1. Let _numericValue_ be StringToNumber(_v_).
