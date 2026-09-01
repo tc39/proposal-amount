@@ -552,6 +552,7 @@ location: https://tc39.es/proposal-amount/
         1. Let _sourceMV_ be the StringIntlMV of _parsed_.
         1. If _sourceMV_.[[Value]] is ~negative-zero~, let _sourceValue_ be 0; else let _sourceValue_ be _sourceMV_.[[Value]].
         1. Let _numericValue_ be 𝔽(_sourceValue_).
+      1. Let _numericValue_ be 𝔽(_sourceValue_).
       1. NOTE: _sourceValue_ is the exact value of this Amount and is used to select the conversion target. _numericValue_ is its Number approximation and is used for the conversion itself.
       1. Let _sourceUnit_ be _O_.[[Unit]].
       1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
