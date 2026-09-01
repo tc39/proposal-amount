@@ -11,6 +11,180 @@
     </p>
   </emu-note>
 
+  <emu-clause id="sup-amount-abstract-operations">
+    <h1>Abstract Operations of the Amount Object</h1>
+
+    <emu-clause id="sec-amount-unit-category-data">
+      <h1>Unit Category Data</h1>
+      <p>
+        Unit category data is derived from CLDR file
+        <a href="https://github.com/unicode-org/cldr/blob/main/common/validity/unit.xml"><code>validity/unit.xml</code></a>.
+        As described in <a href="https://unicode.org/reports/tr35/tr35.html#Validity_Data">Unicode Technical Standard #35 Part 1 Core, Validity Data</a>,
+        the body of the <code>&lt;id type='unit' idStatus='regular'></code> element contains
+        the supported units, represented as a whitespace-separated list in which each element is a sequence of subtags separated by *"-"* (U+002D HYPHEN-MINUS) characters.
+        For each unit, the first subtag provides the <dfn variants="unit categories">unit category</dfn>, and the remaining subtags are the unit identifier.
+      </p>
+    </emu-clause>
+
+    <emu-clause id="sec-amount-unit-preference-data">
+      <h1>Unit Preference Data</h1>
+      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
+    </emu-clause>
+
+    <emu-clause id="sup-amount-getamountlocaleoption" type="abstract operation">
+      <h1>
+        GetAmountLocaleOption (
+          _options_: an Object,
+        ): either a normal completion containing an ECMAScript language value or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the value of the *"locale"* option, which determines the locale whose unit preferences are used to select a conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountlocaleoption"></emu-xref>.</p>
+      <emu-alg>
+        1. Return ? Get(_options_, *"locale"*).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sup-amount-getamountusageoption" type="abstract operation">
+      <h1>
+        GetAmountUsageOption (
+          _options_: an Object,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the value of the *"usage"* option, which determines the unit preferences that are used to select a conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-getamountusageoption"></emu-xref>.</p>
+      <emu-alg>
+        1. Return ? GetOption(_options_, *"usage"*, ~string~, ~empty~, *undefined*).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sup-amount-selecttargetunit" type="abstract operation">
+      <h1>
+        SelectTargetUnit (
+          _sourceValue_: an extended mathematical value or *NaN*,
+          _sourceUnit_: a String,
+          _resolvedOpts_: an Amount Options Record,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the appropriate unit identifier to use as the conversion target.</dd>
+        <dt>redefinition</dt>
+        <dd>true</dd>
+      </dl>
+      <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
+      <emu-alg>
+        1. Let _locale_ be _resolvedOpts_.[[Locale]].
+        1. Let _unit_ be _resolvedOpts_.[[Unit]].
+        1. Let _usage_ be _resolvedOpts_.[[Usage]].
+        1. If _unit_ is not *undefined*, then
+          1. If _usage_ is not *undefined* or _locale_ is not *undefined*, throw a *TypeError* exception.
+          1. Return _unit_.
+        1. If _usage_ is *undefined*, then
+          1. If _locale_ is *undefined*, throw a *TypeError* exception.
+          1. Set _usage_ to *"default"*.
+        1. Let _category_ be ? GetUnitCategory(_sourceUnit_).
+        1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
+        1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
+        1. Let _maximalLocale_ be the result of the <a href="https://unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags</a> algorithm applied to _resolvedLocale_. If an error is signaled, set _maximalLocale_ to _resolvedLocale_.
+        1. Let _region_ be GetLocaleRegion(_maximalLocale_).
+        1. If _region_ is *undefined*, set _region_ to *"001"*.
+        1. Let _preferredUnits_ be GetPreferredUnits(_category_, _usage_, _region_).
+        1. Set _unit_ to ~unset~.
+        1. For each element _entry_ of _preferredUnits_, do
+          1. Set _unit_ to _entry_.[[Unit]].
+          1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
+          1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _entry_.[[Threshold]], return _unit_.
+        1. Assert: _unit_ is a String.
+        1. Return _unit_.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-amount-getunitcategory" type="abstract operation">
+      <h1>
+        GetUnitCategory (
+          _unit_: a String,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the CLDR unit category for _unit_ using the <emu-xref href="#sec-amount-unit-category-data">unit category data</emu-xref>.</dd>
+      </dl>
+      <emu-alg>
+        1. Let _unitTags_ be a List of Strings constructed by splitting by white space the body of the <code>&lt;id type='unit' idStatus='regular'></code> element of the <emu-xref href="#sec-amount-unit-category-data">unit category data</emu-xref> and discarding any empty elements.
+        1. For each element _tag_ of _unitTags_, do
+          1. Let _i_ be StringIndexOf(_tag_, *"-"*, 0).
+          1. Assert: _i_ is not ~not-found~ and _i_ > 0.
+          1. Let _tagUnit_ be the substring of _tag_ from _i_ + 1.
+          1. If SameValue(_unit_, _tagUnit_) is *true*, then
+            1. Let _category_ be the substring of _tag_ from 0 to _i_.
+            1. Return _category_.
+        1. Throw a *RangeError* exception.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-amount-getpreferredunits" type="abstract operation">
+      <h1>
+        GetPreferredUnits (
+          _category_: a String,
+          _usage_: a String,
+          _region_: a String,
+        ): a List of Records
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It determines the preferred units to use for the given category, usage, and region according to the <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a> algorithm specified in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences</a>, and returns them ordered by descending threshold.</dd>
+      </dl>
+      <emu-alg>
+        1. Assert: _region_ can be matched by the <code>unicode_region_id</code> Unicode locale nonterminal and the ASCII-uppercase of _region_ is _region_.
+        1. Let _candidateElements_ be ~unset~.
+        1. Repeat, while _candidateElements_ is ~unset~,
+          1. [declared="unitPreferencesElement"] If there is a <code>&lt;unitPreferences&gt;</code> element _unitPreferencesElement_ in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> such that its <code>category</code> is _category_ and its <code>usage</code> is _usage_, then
+            1. Set _candidateElements_ to the List of <code>&lt;unitPreference&gt;</code> elements in _unitPreferencesElement_.
+          1. Else,
+            1. Assert: _usage_ is not *"default"*.
+            1. Let _len_ be the length of _usage_.
+            1. Let _idx_ be StringLastIndexOf(_usage_, *"-"*, _len_ - 1).
+            1. If _idx_ is ~not-found~ or _idx_ = 0, set _usage_ to *"default"*; else set _usage_ to the substring of _usage_ from 0 to _idx_.
+        1. Let _matchingUnits_ be a new empty List.
+        1. Repeat, while _matchingUnits_ is empty,
+          1. For each element _unitPreference_ of _candidateElements_, do
+            1. Assert: _unitPreference_ has an attribute <code>regions</code>.
+            1. Let _regionsAttr_ be the String value of the <code>regions</code> attribute of _unitPreference_.
+            1. Let _regions_ be StringSplitToList(_regionsAttr_, *" "*).
+            1. Let _geq_ be the mathematical value of the <code>geq</code> attribute of _unitPreference_ if present, or 1 otherwise.
+            1. Let _unit_ be the String value of the body of the _unitPreference_.
+            1. If _regions_ contains _region_, append the Record { [[Unit]]: _unit_, [[Threshold]]: _geq_ } to _matchingUnits_.
+          1. If _matchingUnits_ is empty, then
+            1. Assert: _region_ is not *"001"*.
+            1. Set _region_ to *"001"*.
+        1. Let _lastUnit_ be the last element of _matchingUnits_.
+        1. Set _lastUnit_.[[Threshold]] to 0.
+        1. Return _matchingUnits_.
+      </emu-alg>
+      <emu-note>
+        <p><a href="https://unicode.org/reports/tr35/tr35-info.html#constraints">Unicode Technical Standard #35 Part 1, Unit Preferences Constraints</a> specifies that the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> for a given _category_, _usage_, and _region_ is non-empty and already in descending order [by threshold].</p>
+      </emu-note>
+      <emu-note type="editor">
+        <p>
+          TODO: The UTS #35 algorithm includes region fallback based on
+          <a href="https://www.unicode.org/cldr/charts/latest/supplemental/territory_containment_un_m_49.html">UN M.49 territory containment</a>,
+          but this algorithm currently only falls back to region <code>001</code>.
+          The unit preference data does not (yet) include any other numeric regions, but we'll probably need revision in order to be compatible with possible future CLDR updates.
+        </p>
+      </emu-note>
+    </emu-clause>
+  </emu-clause>
+
   <emu-clause id="sup-properties-of-the-amount-prototype-object">
     <h1>Properties of the Amount Prototype Object</h1>
 
@@ -67,8 +241,10 @@
 
 <emu-clause id="numberformat-objects">
   <h1>NumberFormat Objects</h1>
+
   <emu-clause id="sec-numberformat-abstracts">
     <h1>Abstract Operations for NumberFormat Objects</h1>
+
     <emu-clause id="sec-getnumberformatpattern" type="abstract operation">
       <h1>
         GetNumberFormatPattern (
@@ -202,7 +378,7 @@
           1. Set _intlObj_.[[CurrencyDisplay]] to _currencyDisplay_.
           1. Set _intlObj_.[[CurrencySign]] to _currencySign_.
         1. If _style_ is *"unit"*, then
-          1. <ins>If _unit_ is not *undefined*, </ins> <del>Set</del> <ins>set</ins> _intlObj_.[[Unit]] to _unit_.
+          1. <del>Set</del> <ins>If _unit_ is not *undefined*, set</ins> _intlObj_.[[Unit]] to _unit_.
           1. Set _intlObj_.[[UnitDisplay]] to _unitDisplay_.
         1. Return ~unused~.
       </emu-alg>
