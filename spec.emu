@@ -40,19 +40,59 @@ location: https://tc39.es/proposal-amount/
   <emu-clause id="sec-amount-unit-identifiers">
     <h1>Unit Identifiers</h1>
     <p>The unit of an Amount is given as a <dfn id="amount-unit-identifier">unit identifier</dfn>: a String that matches the |UnitIdentifier| goal symbol of the following grammar.</p>
+    <p>A unit identifier that matches |SequenceUnitIdentifier| is a <dfn id="amount-sequence-unit" variants="sequence units">sequence unit</dfn>. Its <dfn id="amount-unit-components" variants="component">components</dfn> are the |SingleUnitIdentifier|s it joins with *"-and-"*, in order from the largest to the smallest unit of measurement. A unit identifier that matches |SingleUnitIdentifier| is a <dfn id="amount-single-unit" variants="single units">single unit</dfn> and is its own sole component.</p>
     <h2>Syntax</h2>
     <emu-grammar type="definition">
       UnitIdentifier :::
+        SingleUnitIdentifier
+        SequenceUnitIdentifier
+
+      SequenceUnitIdentifier :::
+        SingleUnitIdentifier `-and-` SingleUnitIdentifier
+        SequenceUnitIdentifier `-and-` SingleUnitIdentifier
+
+      SingleUnitIdentifier :::
         UnitIdentifierPart
-        UnitIdentifier `-` UnitIdentifierPart
+        SingleUnitIdentifier `-` UnitIdentifierPart
 
       UnitIdentifierPart :::
+        UnitIdentifierPartChars but not `and`
+
+      UnitIdentifierPartChars :::
         IdentifierPartChar
-        UnitIdentifierPart IdentifierPartChar
+        UnitIdentifierPartChars IdentifierPartChar
     </emu-grammar>
     <emu-note>
-      <p>This grammar is inspired by the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Unicode Technical Standard #35 Part 2 General, Unit Identifiers</a>, but is not identical to it: each hyphen-separated segment admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax.</p>
+      <p>This grammar is inspired by the syntax of <a href="https://unicode.org/reports/tr35/tr35-general.html#Unit_Identifiers">Unicode Technical Standard #35 Part 2 General, Unit Identifiers</a>, but is not identical to it: each hyphen-separated segment admits any |IdentifierPartChar|, aligning the accepted code points with ECMAScript identifier syntax. The segment `and` is reserved for joining the components of a sequence unit, so it cannot appear as a segment of a single unit.</p>
     </emu-note>
+
+    <emu-clause id="sec-amount-static-semantics-unitcomponents" type="sdo">
+      <h1>Static Semantics: UnitComponents ( ): a List of Strings</h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the components of a unit identifier, each as a String, in source order.</dd>
+      </dl>
+      <emu-grammar>
+        SingleUnitIdentifier :::
+          UnitIdentifierPart
+          SingleUnitIdentifier `-` UnitIdentifierPart
+      </emu-grammar>
+      <emu-alg>
+        1. Return « CodePointsToString(the source text matched by |SingleUnitIdentifier|) ».
+      </emu-alg>
+      <emu-grammar>SequenceUnitIdentifier ::: SingleUnitIdentifier `-and-` SingleUnitIdentifier</emu-grammar>
+      <emu-alg>
+        1. Let _first_ be the UnitComponents of the first |SingleUnitIdentifier|.
+        1. Let _second_ be the UnitComponents of the second |SingleUnitIdentifier|.
+        1. Return the list-concatenation of _first_ and _second_.
+      </emu-alg>
+      <emu-grammar>SequenceUnitIdentifier ::: SequenceUnitIdentifier `-and-` SingleUnitIdentifier</emu-grammar>
+      <emu-alg>
+        1. Let _prefix_ be the UnitComponents of |SequenceUnitIdentifier|.
+        1. Let _last_ be the UnitComponents of |SingleUnitIdentifier|.
+        1. Return the list-concatenation of _prefix_ and _last_.
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-amount-finite-numeric-literals">
@@ -67,6 +107,23 @@ location: https://tc39.es/proposal-amount/
 
   <emu-clause id="sec-amount-abstract-operations">
     <h1>Abstract Operations</h1>
+
+      <emu-clause id="sec-amount-getunitcomponents" type="abstract operation">
+        <h1>
+          GetUnitComponents (
+            _unit_: a String,
+          ): a List of Strings
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns the components of _unit_, which must be a unit identifier. The result has one element if _unit_ is a single unit, and two or more elements if _unit_ is a sequence unit.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _parsed_ be ParseText(_unit_, |UnitIdentifier|).
+          1. Assert: _parsed_ is a Parse Node.
+          1. Return the UnitComponents of _parsed_.
+        </emu-alg>
+      </emu-clause>
 
       <!-- Copied and modified from ECMA-402 GetOption -->
       <!-- The difference: -->
