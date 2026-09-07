@@ -95,9 +95,8 @@
         1. Let _category_ be ? GetUnitCategory(_sourceUnit_).
         1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
         1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
-        1. Let _maximalLocale_ be the result of the <a href="https://unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags</a> algorithm applied to _resolvedLocale_. If an error is signaled, set _maximalLocale_ to _resolvedLocale_.
-        1. Let _region_ be GetLocaleRegion(_maximalLocale_).
-        1. If _region_ is *undefined*, set _region_ to *"001"*.
+        1. Let _regionPreference_ be RegionPreference(_resolvedLocale_).
+        1. If _regionPreference_.[[RegionOverride]] is not *undefined*, let _region_ be _regionPreference_.[[RegionOverride]]; else let _region_ be _regionPreference_.[[Region]].
         1. Let _preferredUnits_ be GetPreferredUnits(_category_, _usage_, _region_).
         1. Set _unit_ to ~unset~.
         1. For each element _entry_ of _preferredUnits_, do
