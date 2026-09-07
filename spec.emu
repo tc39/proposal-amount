@@ -178,16 +178,14 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an ECMAScript language value,
-          optional _conversionSource_: an Amount,
+          optional _conversionSource_: a Conversion Source Record,
         ): either a normal completion containing an Amount Options Record or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It validates the given _opts_ and returns their resolved values. A String _opts_ is treated as a shorthand for specifying only a unit. If _conversionSource_ is present, the [[Unit]] field of the returned Record is the unit that _conversionSource_ is to be converted to, which the options may select without naming it explicitly.</dd>
+          <dd>It validates the given _opts_ and returns their resolved values. A String _opts_ is treated as a shorthand for specifying only a unit. If _conversionSource_ is present, the [[Unit]] field of the returned Record is the unit that the quantity described by _conversionSource_ is to be converted to, which the options may select without naming it explicitly.</dd>
         </dl>
         <emu-alg>
-          1. If _conversionSource_ is present, then
-            1. Assert: _conversionSource_.[[Unit]] is not *undefined*.
           1. Let _resolvedOpts_ be the Amount Options Record { [[FractionDigits]]: *undefined*, [[RoundingMode]]: *"halfEven"*, [[SignificantDigits]]: *undefined*, [[Unit]]: *undefined*, [[ExtendedOptions]]: *undefined* }.
           1. If _opts_ is a String, then
             1. If ParseText(_opts_, |UnitIdentifier|) is not a Parse Node, throw a *RangeError* exception.
@@ -245,13 +243,13 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-selecttargetunit" type="abstract operation">
         <h1>
           SelectTargetUnit (
-            _conversionSource_: an Amount,
+            _conversionSource_: a Conversion Source Record,
             _resolvedOpts_: an Amount Options Record,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It determines the unit identifier to which _conversionSource_ is to be converted.</dd>
+          <dd>It determines the unit identifier to which the quantity described by _conversionSource_ is to be converted.</dd>
         </dl>
         <p>
           An ECMAScript implementation that includes the ECMA-402 Internationalization API
@@ -266,18 +264,17 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getamountnumericvalue" type="abstract operation">
+      <emu-clause id="sec-amount-numericentryvalue" type="abstract operation">
         <h1>
-          GetAmountNumericValue (
-            _amount_: an Amount,
+          NumericEntryValue (
+            _v_: a Number, a BigInt, or a String,
           ): a Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the Number that most closely approximates the value of _amount_. The sign of a negative zero is preserved.</dd>
+          <dd>It returns the Number that most closely approximates the stored Amount value or sequence entry _v_. The sign of a negative zero is preserved.</dd>
         </dl>
         <emu-alg>
-          1. Let _v_ be _amount_.[[AmountValue]].
           1. If _v_ is a Number, return _v_.
           1. If _v_ is a BigInt, return 𝔽(ℝ(_v_)).
           1. Assert: _v_ is a String.
@@ -620,6 +617,176 @@ location: https://tc39.es/proposal-amount/
           <p>The factor term _sourceFactor_ / _targetFactor_ and the offset term (_sourceOffset_ − _targetOffset_) / _targetFactor_ are computed as mathematical values, and then converted to Number values for the multiplication and addition. For non-offset conversions (the vast majority), the offset term is 0 and addition is skipped in order to preserve an input _value_ of *-0*<sub>𝔽</sub>.</p>
         </emu-note>
       </emu-clause>
+
+      <emu-clause id="sec-amount-conversion-source-record">
+        <h1>Conversion Source Record</h1>
+        <p>
+          A <dfn variants="Conversion Source Records">Conversion Source Record</dfn> is a Record describing the quantity that a unit conversion starts from.
+          It has fields [[Value]] (a Number) and [[Unit]] (a String), where [[Unit]] is a <emu-xref href="#amount-single-unit">single unit</emu-xref> and [[Value]] is the quantity of that unit.
+          For a single-unit Amount these are the Amount's own value and unit. For a sequence-unit Amount, [[Unit]] is the last (smallest) component and [[Value]] is the total of all entries expressed in that component.
+        </p>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getsequenceunitdata" type="abstract operation">
+        <h1>
+          GetSequenceUnitData (
+            _components_: a List of Strings,
+          ): either a normal completion containing a Record with fields [[BaseUnit]] (a String) and [[Multipliers]] (a List of integers) or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It checks that _components_, the components of a sequence unit, are units that convert to the same base unit without an offset, in decreasing order of magnitude, with each unit an integer multiple of the next. [[Multipliers]][_k_] is the number of units of _components_[_k_ + 1] in one unit of _components_[_k_].</dd>
+        </dl>
+        <emu-alg>
+          1. Let _n_ be the number of elements in _components_.
+          1. Assert: _n_ ≥ 2.
+          1. Let _first_ be ? GetUnitConversionFactor(_components_[0]).
+          1. If _first_.[[Offset]] ≠ 0, throw a *TypeError* exception.
+          1. Let _baseUnit_ be _first_.[[BaseUnit]].
+          1. Let _previousFactor_ be _first_.[[Factor]].
+          1. Let _multipliers_ be a new empty List.
+          1. Let _k_ be 1.
+          1. Repeat, while _k_ &lt; _n_,
+            1. Let _conv_ be ? GetUnitConversionFactor(_components_[_k_]).
+            1. If _conv_.[[BaseUnit]] is not _baseUnit_, throw a *TypeError* exception.
+            1. If _conv_.[[Offset]] ≠ 0, throw a *TypeError* exception.
+            1. Let _ratio_ be _previousFactor_ / _conv_.[[Factor]].
+            1. If _ratio_ is not an integer or _ratio_ &lt; 2, throw a *TypeError* exception.
+            1. Append _ratio_ to _multipliers_.
+            1. Set _previousFactor_ to _conv_.[[Factor]].
+            1. Set _k_ to _k_ + 1.
+          1. Return the Record { [[BaseUnit]]: _baseUnit_, [[Multipliers]]: _multipliers_ }.
+        </emu-alg>
+        <emu-note>
+          <p>Conversion factors are mathematical values taken from CLDR, so the ratio of two factors is exact. foot-and-inch is convertible with multiplier 12; inch-and-foot is rejected because its ratio is 1/12; foot-and-centimeter is rejected because 30.48 is not an integer; foot-and-gallon is rejected because the base units differ; celsius-and-kelvin is rejected because celsius has an offset. Whether a sequence unit can also be formatted by Intl.NumberFormat is decided separately by ECMA-402, which admits only a fixed list of sequences.</p>
+        </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-sequencetotal" type="abstract operation">
+        <h1>
+          SequenceTotal (
+            _entries_: a List of either Numbers, BigInts, or Strings,
+            _multipliers_: a List of integers,
+          ): a Number
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns the Number that most closely approximates the total of _entries_, the stored entries of a sequence-unit Amount, expressed in the last (smallest) component unit. The contribution of every entry but the last is computed exactly; only the final addition rounds.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _n_ be the number of elements in _entries_.
+          1. Assert: The number of elements in _multipliers_ is _n_ - 1.
+          1. Let _sum_ be 0.
+          1. Let _scale_ be 1.
+          1. Let _k_ be _n_ - 2.
+          1. Repeat, while _k_ ≥ 0,
+            1. Set _scale_ to _scale_ × _multipliers_[_k_].
+            1. Let _entry_ be _entries_[_k_].
+            1. If _entry_ is a String, then
+              1. Let _parsed_ be ParseText(_entry_, |StringNumericLiteral|).
+              1. Assert: _parsed_ is a Parse Node.
+              1. Let _intlMV_ be the StringIntlMV of _parsed_.
+              1. Let _mv_ be _intlMV_.[[Value]].
+              1. If _mv_ is ~negative-zero~, set _mv_ to 0.
+            1. Else,
+              1. Assert: _entry_ is an integral Number or a BigInt.
+              1. Let _mv_ be ℝ(_entry_).
+            1. Assert: _mv_ is an integer.
+            1. Set _sum_ to _sum_ + _mv_ × _scale_.
+            1. Set _k_ to _k_ - 1.
+          1. Let _last_ be NumericEntryValue(_entries_[_n_ - 1]).
+          1. If _last_ is not finite, return _last_.
+          1. If _sum_ = 0, return _last_.
+          1. Return 𝔽(_sum_ + ℝ(_last_)).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-getamountconversionsource" type="abstract operation">
+        <h1>
+          GetAmountConversionSource (
+            _amount_: an Amount,
+          ): either a normal completion containing a Conversion Source Record or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It expresses _amount_ as a Number in a single unit so that it can be converted. It throws a *TypeError* exception if _amount_ has a sequence unit whose components are not convertible with each other.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _unit_ be _amount_.[[Unit]].
+          1. Assert: _unit_ is a String.
+          1. Let _components_ be GetUnitComponents(_unit_).
+          1. Let _v_ be _amount_.[[AmountValue]].
+          1. If the number of elements in _components_ is 1, then
+            1. Assert: _v_ is not a List.
+            1. Return the Conversion Source Record { [[Value]]: NumericEntryValue(_v_), [[Unit]]: _unit_ }.
+          1. Assert: _v_ is a List.
+          1. Let _data_ be ? GetSequenceUnitData(_components_).
+          1. Let _total_ be SequenceTotal(_v_, _data_.[[Multipliers]]).
+          1. Return the Conversion Source Record { [[Value]]: _total_, [[Unit]]: the last element of _components_ }.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-splitintosequence" type="abstract operation">
+        <h1>
+          SplitIntoSequence (
+            _value_: a finite Number,
+            _multipliers_: a List of integers,
+            _resolvedOpts_: an Amount Options Record,
+          ): a List of either Numbers or Strings
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It expresses _value_, a quantity of the last (smallest) component unit of a sequence unit, as the entries of that sequence unit. The value is first rounded according to the precision options of _resolvedOpts_, so that rounding can carry into a larger component, and then divided by the multipliers from the smallest unit up, truncating toward zero so that every entry has the sign of _value_. Every entry but the last is an integral Number; the last is a Number, or a decimal digit string if precision options were applied.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _n_ be the number of elements in _multipliers_ + 1.
+          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
+          1. Assert: _resolvedOpts_.[[SignificantDigits]] is *undefined*.
+          1. If _fractionDigits_ is *undefined*, then
+            1. Let _formatter_ be *undefined*.
+            1. If _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~; else let _mv_ be ℝ(_value_).
+          1. Else,
+            1. Let _formatter_ be CreateFormatterObject(_resolvedOpts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
+            1. Let _intlMV_ be ! ToIntlMathematicalValue(_value_).
+            1. Let _rounded_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
+            1. Let _mv_ be _rounded_.[[RoundedNumber]].
+          1. If _mv_ is ~negative-zero~, then
+            1. Let _negative_ be *true*.
+            1. Let _magnitude_ be 0.
+          1. Else if _mv_ &lt; 0, then
+            1. Let _negative_ be *true*.
+            1. Let _magnitude_ be -_mv_.
+          1. Else,
+            1. Let _negative_ be *false*.
+            1. Let _magnitude_ be _mv_.
+          1. Let _parts_ be a new empty List.
+          1. Let _k_ be _n_ - 2.
+          1. Repeat, while _k_ ≥ 0,
+            1. Let _m_ be _multipliers_[_k_].
+            1. Let _q_ be floor(_magnitude_ / _m_).
+            1. Insert _magnitude_ - _q_ × _m_ as the first element of _parts_.
+            1. Set _magnitude_ to _q_.
+            1. Set _k_ to _k_ - 1.
+          1. Insert _magnitude_ as the first element of _parts_.
+          1. Let _entries_ be a new empty List.
+          1. Set _k_ to 0.
+          1. Repeat, while _k_ &lt; _n_ - 1,
+            1. If _negative_ is *true*, append 𝔽(-_parts_[_k_]) to _entries_; else append 𝔽(_parts_[_k_]) to _entries_.
+            1. Set _k_ to _k_ + 1.
+          1. Let _lastPart_ be _parts_[_n_ - 1].
+          1. If _negative_ is *true* and _lastPart_ = 0, let _last_ be ~negative-zero~; else if _negative_ is *true*, let _last_ be -_lastPart_; else let _last_ be _lastPart_.
+          1. If _formatter_ is *undefined*, then
+            1. If _last_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_; else append 𝔽(_last_) to _entries_.
+          1. Else,
+            1. Let _lastFmt_ be FormatNumericToString(_formatter_, _last_, 0, 0).
+            1. Let _lastIntlMV_ be ! ToIntlMathematicalValue(_lastFmt_.[[FormattedString]]).
+            1. Append RenderInExponentialNotation(_lastFmt_.[[RoundedNumber]], _lastIntlMV_.[[StringDigitCount]]) to _entries_.
+          1. Return _entries_.
+        </emu-alg>
+        <emu-note>
+          <p>Converting -15 inches to foot-and-inch yields [-1, -3], not [-2, 9]. Converting 71.6 inches to foot-and-inch with 0 fraction digits rounds to 72 inches first and yields [6, *"0e+0"*], not [5, *"1.2e+1"*]. The second call to FormatNumericToString does not round further, because _last_ already has at most _fractionDigits_ fraction digits; it only pads with trailing zeros so that the stored string keeps the requested precision. The sign is taken from [[RoundedNumber]] because [[FormattedString]] is unsigned.</p>
+        </emu-note>
+      </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-the-amount-constructor">
@@ -768,28 +935,39 @@ location: https://tc39.es/proposal-amount/
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
-      1. Let _sourceUnit_ be _O_.[[Unit]].
-      1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _opts_ be ? GetAmountOptions(_options_, _O_).
+      1. If _O_.[[Unit]] is *undefined*, throw a *TypeError* exception.
+      1. Let _source_ be ? GetAmountConversionSource(_O_).
+      1. Let _opts_ be ? GetAmountOptions(_options_, _source_).
       1. Let _targetUnit_ be _opts_.[[Unit]].
-      1. Let _numericValue_ be GetAmountNumericValue(_O_).
-      1. Let _convertedValue_ be ? ConvertUnitValue(_numericValue_, _sourceUnit_, _targetUnit_).
-      1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. Let _targetComponents_ be GetUnitComponents(_targetUnit_).
       1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
       1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
-      1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, let _needsRounding_ be *true*, else let _needsRounding_ be *false*.
-      1. If _convertedValue_ is a finite Number and _needsRounding_ is *true*, then
-        1. Let _roundingMode_ be _opts_.[[RoundingMode]].
-        1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
-        1. Let _intlMV_ be ! ToIntlMathematicalValue(_convertedValue_).
-        1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
-        1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
-        1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
+      1. Let _result_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
+      1. If the number of elements in _targetComponents_ is 1, then
+        1. Let _convertedValue_ be ? ConvertUnitValue(_source_.[[Value]], _source_.[[Unit]], _targetUnit_).
+        1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, let _needsRounding_ be *true*, else let _needsRounding_ be *false*.
+        1. If _convertedValue_ is a finite Number and _needsRounding_ is *true*, then
+          1. Let _roundingMode_ be _opts_.[[RoundingMode]].
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_convertedValue_).
+          1. Let _formatted_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
+          1. Let _formattedMV_ be ! ToIntlMathematicalValue(_formatted_.[[FormattedString]]).
+          1. Set _result_.[[AmountValue]] to RenderInExponentialNotation(_formattedMV_.[[Value]], _formattedMV_.[[StringDigitCount]]).
+        1. Else,
+          1. Set _result_.[[AmountValue]] to _convertedValue_.
       1. Else,
-        1. Set _result_.[[AmountValue]] to _convertedValue_.
+        1. If _significantDigits_ is not *undefined*, throw a *TypeError* exception.
+        1. Let _targetData_ be ? GetSequenceUnitData(_targetComponents_).
+        1. Let _smallestUnit_ be the last element of _targetComponents_.
+        1. Let _convertedValue_ be ? ConvertUnitValue(_source_.[[Value]], _source_.[[Unit]], _smallestUnit_).
+        1. If _convertedValue_ is not finite, throw a *RangeError* exception.
+        1. Set _result_.[[AmountValue]] to SplitIntoSequence(_convertedValue_, _targetData_.[[Multipliers]], _opts_).
       1. Set _result_.[[Unit]] to _targetUnit_.
       1. Return _result_.
     </emu-alg>
+    <emu-note>
+      <p>A sequence-unit source is first totalled in its smallest component unit, so converting [5, 11] foot-and-inch to meter converts 71 inches once. A sequence-unit target is produced by converting to its smallest component unit and then splitting, so converting [5, 12] foot-and-inch to foot-and-inch rebalances it to [6, 0]. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
+    </emu-note>
   </emu-clause>
 </emu-clause>
 
