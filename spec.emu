@@ -514,6 +514,53 @@ location: https://tc39.es/proposal-amount/
         </emu-note>
       </emu-clause>
 
+      <emu-clause id="sec-amount-renderamountvalue" type="abstract operation">
+        <h1>
+          RenderAmountValue (
+            _v_: a Number, a BigInt, or a String,
+          ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It renders a stored Amount value in canonical exponential notation, or as *"NaN"*, *"Infinity"*, or *"-Infinity"* for non-finite Numbers.</dd>
+        </dl>
+        <emu-alg>
+          1. If _v_ is a String, return _v_.
+          1. If _v_ is a Number, then
+            1. If _v_ is *NaN*, return *"NaN"*.
+            1. If _v_ is *+&infin;*<sub>𝔽</sub>, return *"Infinity"*.
+            1. If _v_ is *-&infin;*<sub>𝔽</sub>, return *"-Infinity"*.
+            1. Let _decimalStr_ be Number::toString(_v_, 10).
+            1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
+            1. Let _mv_ be _intlMV_.[[Value]].
+            1. If _v_ is *-0*<sub>𝔽</sub>, set _mv_ to ~negative-zero~.
+            1. Return RenderInExponentialNotation(_mv_, _intlMV_.[[StringDigitCount]]).
+          1. Assert: _v_ is a BigInt.
+          1. Let _digits_ be BigInt::toString(_v_, 10).
+          1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
+          1. Return RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-renderintegerentry" type="abstract operation">
+        <h1>
+          RenderIntegerEntry (
+            _v_: a Number, a BigInt, or a String,
+          ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It renders an entry of a sequence-unit Amount other than the last, which is always an integer, as a plain decimal integer.</dd>
+        </dl>
+        <emu-alg>
+          1. If _v_ is a String, return _v_.
+          1. If _v_ is a BigInt, return BigInt::toString(_v_, 10).
+          1. Assert: _v_ is an integral Number.
+          1. If _v_ is *-0*<sub>𝔽</sub>, return RenderInteger(~negative-zero~).
+          1. Return RenderInteger(ℝ(_v_)).
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-amount-getunitconversionfactor" type="abstract operation">
         <h1>GetUnitConversionFactor (
           _unit_: a String
@@ -682,29 +729,24 @@ location: https://tc39.es/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Let _v_ be _O_.[[AmountValue]].
       1. Let _u_ be _O_.[[Unit]].
-      1. If _v_ is a String, then
-        1. Let _valueStr_ be _v_.
-      1. Else if _v_ is a Number, then
-        1. If _v_ is *NaN*, then
-          1. Let _valueStr_ be *"NaN"*.
-        1. Else if _v_ is *+&infin;*<sub>𝔽</sub>, then
-          1. Let _valueStr_ be *"Infinity"*.
-        1. Else if _v_ is *-&infin;*<sub>𝔽</sub>, then
-          1. Let _valueStr_ be *"-Infinity"*.
-        1. Else,
-          1. Let _decimalStr_ be Number::toString(_v_, 10).
-          1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
-          1. Let _mv_ be _intlMV_.[[Value]].
-          1. If _v_ is *-0*<sub>𝔽</sub>, set _mv_ to ~negative-zero~.
-          1. Let _valueStr_ be RenderInExponentialNotation(_mv_, _intlMV_.[[StringDigitCount]]).
-      1. Else,
-        1. Assert: _v_ is a BigInt.
-        1. Let _digits_ be BigInt::toString(_v_, 10).
-        1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
-        1. Let _valueStr_ be RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+      1. If _v_ is a List, then
+        1. Let _components_ be GetUnitComponents(_u_).
+        1. Let _n_ be the number of elements in _v_.
+        1. Let _result_ be *"["*.
+        1. Let _k_ be 0.
+        1. Repeat, while _k_ &lt; _n_,
+          1. If _k_ &gt; 0, set _result_ to the string-concatenation of _result_ and *", "*.
+          1. If _k_ = _n_ - 1, let _entryStr_ be RenderAmountValue(_v_[_k_]); else let _entryStr_ be RenderIntegerEntry(_v_[_k_]).
+          1. Set _result_ to the string-concatenation of _result_, _entryStr_, *" "*, and _components_[_k_].
+          1. Set _k_ to _k_ + 1.
+        1. Return the string-concatenation of _result_ and *"]"*.
+      1. Let _valueStr_ be RenderAmountValue(_v_).
       1. If _u_ is *undefined*, return the string-concatenation of *"["*, _valueStr_, and *" ~]"*.
       1. Return the string-concatenation of *"["*, _valueStr_, *" "*, _u_, and *"]"*.
     </emu-alg>
+    <emu-note>
+      <p>A sequence-unit Amount renders each entry with its own component unit, separated by *", "*. Every entry but the last is a plain integer, so <code>new Amount([5, 11], "foot-and-inch").toString()</code> is *"[5 foot, 1.1e+1 inch]"*, and each entry carries its own sign: <code>new Amount([-1, -3], "foot-and-inch").toString()</code> is *"[-1 foot, -3e+0 inch]"*.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-amount.prototype.tolocalestring">
