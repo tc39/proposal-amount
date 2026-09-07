@@ -130,6 +130,7 @@ The object prototype would provide the following methods:
     so `amount.convertTo("milliliter")` is the same as `amount.convertTo({ unit: "milliliter" })`.
   * `locale` (String or Array of Strings or undefined):
     The locale for which the preferred unit of the corresponding category is determined.
+    Unit preferences depend only on the region of the locale, which is taken from the `rg` Unicode extension key (if present)
   * `usage` (String): The use case for the Amount, such as `"person"` for a mass unit.
   * Optional properties with the same meanings as in the Amount constructor:
     * `fractionDigits`
