@@ -38,7 +38,7 @@
           1. Perform ? CopyDataProperties(_mergedOptions_, _optionsObj_, « »).
         1. If _unit_ is not *undefined*, then
           1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
-            1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
+            1. If the length of _unit_ is 3 and every code unit of _unit_ is an ASCII uppercase letter code unit (0x0041 through 0x005A, inclusive), then
               1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"currency"*).
               1. If ? HasProperty(_mergedOptions_, *"currency"*) is *false*, then
                 1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"currency"*, _unit_).
@@ -49,6 +49,13 @@
         1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, « _locales_, _mergedOptions_ »).
         1. Return FormatNumeric(_numberFormat_, _numValue_).
       </emu-alg>
+      <emu-note>
+        <p>
+          When the caller supplies no <code>style</code> option, the Amount's unit is read as a currency only if it is exactly three ASCII uppercase letters, such as *"EUR"*.
+          IsWellFormedCurrencyCode is not used for this purpose because it is ASCII-case-insensitive, and so would also match lowercase three-letter unit identifiers such as *"day"* or *"ton"*.
+          Any other unit, including a lowercase spelling of a currency code such as *"eur"*, is passed to %Intl.NumberFormat% as a unit identifier.
+        </p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
