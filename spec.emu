@@ -987,5 +987,8 @@ location: https://tc39.es/proposal-amount/
         </li>
       </ul>
     </li>
+    <li>
+      <a href="https://tc39.es/proposal-intl-sequence-units/">Intl Sequence Units (TC39 proposal)</a>, for the formatting of sequence units by ECMA-402
+    </li>
   </ul>
 </emu-clause>
