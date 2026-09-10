@@ -207,7 +207,13 @@
         1. If _options_ is not *undefined*, then
           1. Let _optionsObj_ be ? GetOptionsObject(_options_).
           1. Perform ? CopyDataProperties(_mergedOptions_, _optionsObj_, « »).
-        1. If _unit_ is not *undefined*, then
+        1. If _v_ is a List, then
+          1. Assert: _unit_ is a String.
+          1. If ? HasProperty(_mergedOptions_, *"style"*) is *true*, throw a *TypeError* exception.
+          1. If ? HasProperty(_mergedOptions_, *"unit"*) is *true*, throw a *TypeError* exception.
+          1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"unit"*).
+          1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"unit"*, _unit_).
+        1. Else if _unit_ is not *undefined*, then
           1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
             1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
               1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"currency"*).
@@ -221,20 +227,12 @@
         1. If _v_ is a List, then
           1. Let _values_ be a new empty List.
           1. For each element _entry_ of _v_, do
-            1. If _entry_ is a BigInt, let _entryValue_ be BigInt::toString(_entry_, 10); else let _entryValue_ be _entry_.
-            1. Append ! ToIntlMathematicalValue(_entryValue_) to _values_.
+            1. Append ! ToIntlMathematicalValue(_entry_) to _values_.
           1. Return FormatNumericSequence(_numberFormat_, _values_).
-        1. If _v_ is a String, then
-          1. Let _numValue_ be _v_.
-        1. Else if _v_ is a BigInt, then
-          1. Let _numValue_ be BigInt::toString(_v_, 10).
-        1. Else,
-          1. Assert: _v_ is a Number.
-          1. Let _numValue_ be _v_.
-        1. Return FormatNumeric(_numberFormat_, _numValue_).
+        1. Return FormatNumeric(_numberFormat_, ! ToIntlMathematicalValue(_v_)).
       </emu-alg>
       <emu-note>
-        <p>For a sequence-unit Amount the unit is passed to Intl.NumberFormat unchanged, so a sequence that ECMA-402 does not sanction, such as degree-and-arc-minute, causes the constructor to throw a *RangeError* exception even though <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref> may accept it. The entries were validated at construction, so they are handed to FormatNumericSequence directly rather than through an intermediate object and ToSequenceUnitList.</p>
+        <p>A sequence-unit Amount is always formatted with its own unit, so the *"style"* and *"unit"* options may not be given for it. Intl.NumberFormat accepts only a fixed list of sequence units, so it may throw a *RangeError* exception for a sequence unit that <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref> accepts.</p>
       </emu-note>
       <emu-note type="editor">
         <p>FormatNumericSequence is defined by the <a href="https://tc39.es/proposal-intl-sequence-units/">Intl Sequence Units proposal</a>, on which this text depends. That proposal predates the Intl MV Record introduced by <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/">Intl Keep Trailing Zeros</a>; the elements of _values_ above are Intl MV Records, and we expect FormatNumericSequence to be updated to accept them.</p>
