@@ -722,33 +722,33 @@ location: https://tc39.es/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the Number that most closely approximates the total of _entries_, the stored entries of a sequence-unit Amount, expressed in the last (smallest) component unit. The contribution of every entry but the last is computed exactly; only the final addition rounds.</dd>
+          <dd>It returns the Number that most closely approximates the total of _entries_, the stored entries of a sequence-unit Amount, expressed in the last (smallest) component unit. The total is computed exactly and rounded once. If the total is zero, the sign of the last entry is preserved.</dd>
         </dl>
         <emu-alg>
           1. Let _n_ be the number of elements in _entries_.
           1. Assert: The number of elements in _multipliers_ is _n_ - 1.
+          1. Let _last_ be _entries_[_n_ - 1].
+          1. If _last_ is a Number and _last_ is not finite, return _last_.
           1. Let _sum_ be 0.
           1. Let _scale_ be 1.
-          1. Let _k_ be _n_ - 2.
+          1. Let _k_ be _n_ - 1.
           1. Repeat, while _k_ ≥ 0,
-            1. Set _scale_ to _scale_ × _multipliers_[_k_].
             1. Let _entry_ be _entries_[_k_].
             1. If _entry_ is a String, then
               1. Let _parsed_ be ParseText(_entry_, |StringNumericLiteral|).
               1. Assert: _parsed_ is a Parse Node.
               1. Let _intlMV_ be the StringIntlMV of _parsed_.
               1. Let _mv_ be _intlMV_.[[Value]].
-              1. If _mv_ is ~negative-zero~, set _mv_ to 0.
             1. Else,
-              1. Assert: _entry_ is an integral Number or a BigInt.
               1. Let _mv_ be ℝ(_entry_).
-            1. Assert: _mv_ is an integer.
+            1. If _mv_ is ~negative-zero~, set _mv_ to 0.
+            1. If _k_ &lt; _n_ - 1, then
+              1. Assert: _mv_ is an integer.
             1. Set _sum_ to _sum_ + _mv_ × _scale_.
+            1. If _k_ &gt; 0, set _scale_ to _scale_ × _multipliers_[_k_ - 1].
             1. Set _k_ to _k_ - 1.
-          1. Let _last_ be GetAmountNumericValue(_entries_[_n_ - 1]).
-          1. If _last_ is not finite, return _last_.
-          1. If _sum_ = 0, return _last_.
-          1. Return 𝔽(_sum_ + ℝ(_last_)).
+          1. If _sum_ = 0, return GetAmountNumericValue(_last_).
+          1. Return 𝔽(_sum_).
         </emu-alg>
       </emu-clause>
 
