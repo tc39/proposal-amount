@@ -189,7 +189,7 @@ location: https://tc39.es/proposal-amount/
         <h1>
           SelectTargetUnit (
             _conversionSource_: an Amount,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
@@ -203,7 +203,7 @@ location: https://tc39.es/proposal-amount/
           SelectTargetUnit performs the following steps when called:
         </p>
         <emu-alg>
-          1. Let _unit_ be _resolvedOpts_.[[Unit]].
+          1. Let _unit_ be _opts_.[[Unit]].
           1. If _unit_ is *undefined*, throw a *TypeError* exception.
           1. Return _unit_.
         </emu-alg>
@@ -283,22 +283,22 @@ location: https://tc39.es/proposal-amount/
         <h1>
           RoundAmountValue (
             _value_: a Number, a BigInt, or an Intl MV Record,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): a Number, a BigInt, or a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the value to store in an Amount for the input _value_ under the precision options of _resolvedOpts_. A finite value to which precision options apply, and any value that came from a String, is returned as a decimal digit string in exponential notation; otherwise _value_ is returned unchanged.</dd>
+          <dd>It returns the value to store in an Amount for the input _value_ under the precision options of _opts_. A finite value to which precision options apply, and any value that came from a String, is returned as a decimal digit string in exponential notation; otherwise _value_ is returned unchanged.</dd>
         </dl>
         <emu-alg>
-          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
-          1. Let _significantDigits_ be _resolvedOpts_.[[SignificantDigits]].
+          1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+          1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
           1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
             1. If _value_ is a finite Number or _value_ is not a Number, then
               1. If _value_ is an Intl MV Record, let _mv_ be _value_.[[Value]].
               1. Else if _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~.
               1. Else, let _mv_ be ℝ(_value_).
-              1. Let _roundingMode_ be _resolvedOpts_.[[RoundingMode]].
+              1. Let _roundingMode_ be _opts_.[[RoundingMode]].
               1. If _fractionDigits_ is not *undefined*, return RoundToFractionDigits(_mv_, _fractionDigits_, _roundingMode_).
               1. Return RoundToSignificantDigits(_mv_, _significantDigits_, _roundingMode_).
             1. Return _value_.
