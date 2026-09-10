@@ -240,6 +240,25 @@
     </emu-clause>
   </emu-clause>
 
+  <emu-clause id="sup-numberformat-abstracts">
+    <h1>Abstract Operations for NumberFormat Objects</h1>
+    <p>[...]</p>
+    <emu-clause id="sup-getunsignedroundingmode">
+      <h1><del>GetUnsignedRoundingMode ( roundingMode, sign )</del></h1>
+      <emu-note type="editor">
+        <p>This abstract operation, together with its table of unsigned rounding modes, is promoted unchanged to ECMA-262 as <emu-xref href="#sec-getunsignedroundingmode"></emu-xref> and is deleted here.</p>
+      </emu-note>
+    </emu-clause>
+    <p>[...]</p>
+    <emu-clause id="sup-applyunsignedroundingmode">
+      <h1><del>ApplyUnsignedRoundingMode ( x, r1, r2, unsignedRoundingMode )</del></h1>
+      <emu-note type="editor">
+        <p>This abstract operation is promoted unchanged to ECMA-262 as <emu-xref href="#sec-applyunsignedroundingmode"></emu-xref> and is deleted here.</p>
+      </emu-note>
+    </emu-clause>
+    <p>[...]</p>
+  </emu-clause>
+
   <emu-clause id="sec-amount-intl-normative-references">
     <h1>Amendment to the Normative References of ECMA-402</h1>
     <emu-note type="editor">
