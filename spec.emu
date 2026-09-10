@@ -491,22 +491,39 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-renderintegerentry" type="abstract operation">
+      <emu-clause id="sec-amount-rendersequenceentries" type="abstract operation">
         <h1>
-          RenderIntegerEntry (
-            _v_: a Number, a BigInt, or a String,
+          RenderSequenceEntries (
+            _entries_: a List of either Numbers, BigInts, or Strings,
+            _components_: a List of Strings,
           ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders an entry of a sequence-unit Amount other than the last, which is always an integer, as a plain decimal integer.</dd>
+          <dd>It renders the stored entries of a sequence-unit Amount, each followed by its component unit and separated by *", "*. Every entry but the last is an integer and is rendered as a plain decimal integer; the last is rendered as the value of a single-unit Amount is.</dd>
         </dl>
         <emu-alg>
-          1. If _v_ is a String, return _v_.
-          1. If _v_ is a BigInt, return BigInt::toString(_v_, 10).
-          1. Assert: _v_ is an integral Number.
-          1. If _v_ is *-0*<sub>𝔽</sub>, return RenderInteger(~negative-zero~).
-          1. Return RenderInteger(ℝ(_v_)).
+          1. Let _n_ be the number of elements in _entries_.
+          1. Assert: The number of elements in _components_ is _n_.
+          1. Let _result_ be the empty String.
+          1. Let _k_ be 0.
+          1. Repeat, while _k_ &lt; _n_,
+            1. Let _entry_ be _entries_[_k_].
+            1. If _k_ = _n_ - 1, then
+              1. Let _entryStr_ be RenderAmountValue(_entry_).
+            1. Else if _entry_ is a String, then
+              1. Let _entryStr_ be _entry_.
+            1. Else if _entry_ is a BigInt, then
+              1. Let _entryStr_ be BigInt::toString(_entry_, 10).
+            1. Else if _entry_ is *-0*<sub>𝔽</sub>, then
+              1. Let _entryStr_ be RenderInteger(~negative-zero~).
+            1. Else,
+              1. Assert: _entry_ is an integral Number.
+              1. Let _entryStr_ be RenderInteger(ℝ(_entry_)).
+            1. If _k_ &gt; 0, set _result_ to the string-concatenation of _result_ and *", "*.
+            1. Set _result_ to the string-concatenation of _result_, _entryStr_, *" "*, and _components_[_k_].
+            1. Set _k_ to _k_ + 1.
+          1. Return _result_.
         </emu-alg>
       </emu-clause>
 
@@ -842,17 +859,7 @@ location: https://tc39.es/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Let _v_ be _O_.[[AmountValue]].
       1. Let _u_ be _O_.[[Unit]].
-      1. If _v_ is a List, then
-        1. Let _components_ be GetUnitComponents(_u_).
-        1. Let _n_ be the number of elements in _v_.
-        1. Let _result_ be *"["*.
-        1. Let _k_ be 0.
-        1. Repeat, while _k_ &lt; _n_,
-          1. If _k_ &gt; 0, set _result_ to the string-concatenation of _result_ and *", "*.
-          1. If _k_ = _n_ - 1, let _entryStr_ be RenderAmountValue(_v_[_k_]); else let _entryStr_ be RenderIntegerEntry(_v_[_k_]).
-          1. Set _result_ to the string-concatenation of _result_, _entryStr_, *" "*, and _components_[_k_].
-          1. Set _k_ to _k_ + 1.
-        1. Return the string-concatenation of _result_ and *"]"*.
+      1. If _v_ is a List, return the string-concatenation of *"["*, RenderSequenceEntries(_v_, GetUnitComponents(_u_)), and *"]"*.
       1. Let _valueStr_ be RenderAmountValue(_v_).
       1. If _u_ is *undefined*, return the string-concatenation of *"["*, _valueStr_, and *" ~]"*.
       1. Return the string-concatenation of *"["*, _valueStr_, *" "*, _u_, and *"]"*.
