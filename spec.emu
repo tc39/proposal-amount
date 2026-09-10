@@ -902,7 +902,7 @@ location: https://tc39.es/proposal-amount/
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
       </emu-note>
       <emu-note>
-        <p>A sequence unit requires an Object _value_: either an Array with one element per component, or an object with a property named after each component, such as { foot: 5, inch: 11 } for foot-and-inch. Each entry follows the rules for a single-unit value, is stored with its own type, and the entries are validated together by ReadSequenceEntries. A String entry in any position but the last is stored as a plain integer string, so *"5.0"* becomes *"5"*. Precision options round only the last entry and never carry into an earlier one; balancing a sequence is the job of <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref>.</p>
+        <p>A sequence unit requires an Object _value_: either an Array with one element per component, or an object with a property named after each component, such as *{ foot: 5, inch: 11 }* for foot-and-inch. Each entry follows the rules for a single-unit value, is stored with its own type, and the entries are validated together by ReadSequenceEntries. A String entry in any position but the last is stored as a plain integer string, so *"5.0"* becomes *"5"*. Precision options round only the last entry and never carry into an earlier one; balancing a sequence is the job of <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref>.</p>
       </emu-note>
       <emu-note>
         <p>A String argument must denote a finite mathematical value. *"NaN"*, *"Infinity"*, *"+Infinity"*, *"-Infinity"*, and *""* are rejected, as are Strings with leading or trailing white space or other extraneous contents.</p>
@@ -1025,7 +1025,7 @@ location: https://tc39.es/proposal-amount/
       1. Return _result_.
     </emu-alg>
     <emu-note>
-      <p>A sequence-unit source is first totalled in its smallest component unit, so converting [5, 11] foot-and-inch to meter converts 71 inches once. A sequence-unit target is produced by converting to its smallest component unit and then splitting, so converting [5, 12] foot-and-inch to foot-and-inch rebalances it to [6, 0]. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
+      <p>A sequence-unit source is first totalled in its smallest component unit. Thus, converting <code>[5, 11] foot-and-inch</code> to <code>meter</code> converts to <code>71 inches</code> without creating an observable intermediate Amount value. A sequence-unit target is produced by converting to its smallest component unit and then splitting. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
     </emu-note>
   </emu-clause>
 </emu-clause>
