@@ -262,18 +262,18 @@ location: https://tc39.es/proposal-amount/
         <h1>
           RoundToDecimalDigitString (
             _mv_: a mathematical value or ~negative-zero~,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It rounds _mv_ according to the rounding mode and precision options of _resolvedOpts_, at least one of which must be present, and returns the result as a decimal digit string in exponential notation with as many significant digits as the rounding produced. The sign of _mv_, including that of negative zero, is preserved.</dd>
+          <dd>It rounds _mv_ according to the rounding mode and precision options of _opts_, at least one of which must be present, and returns the result as a decimal digit string in exponential notation with as many significant digits as the rounding produced. The sign of _mv_, including that of negative zero, is preserved.</dd>
         </dl>
         <emu-alg>
-          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
-          1. Let _significantDigits_ be _resolvedOpts_.[[SignificantDigits]].
+          1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+          1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
           1. Assert: _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*.
-          1. Let _formatter_ be CreateFormatterObject(_resolvedOpts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+          1. Let _formatter_ be CreateFormatterObject(_opts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
           1. Let _fmt_ be FormatNumericToString(_formatter_, _mv_, 0, 0).
           1. Let _parsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
           1. Assert: _parsed_ is a Parse Node.
