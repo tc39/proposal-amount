@@ -527,11 +527,10 @@ location: https://tc39.es/proposal-amount/
             1. If _v_ is *NaN*, return *"NaN"*.
             1. If _v_ is *+&infin;*<sub>𝔽</sub>, return *"Infinity"*.
             1. If _v_ is *-&infin;*<sub>𝔽</sub>, return *"-Infinity"*.
+            1. If _v_ is *-0*<sub>𝔽</sub>, return *"-0e+0"*.
             1. Let _decimalStr_ be Number::toString(_v_, 10).
             1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
-            1. Let _mv_ be _intlMV_.[[Value]].
-            1. If _v_ is *-0*<sub>𝔽</sub>, set _mv_ to ~negative-zero~.
-            1. Return RenderInExponentialNotation(_mv_, _intlMV_.[[StringDigitCount]]).
+            1. Return RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
           1. Assert: _v_ is a BigInt.
           1. Let _digits_ be BigInt::toString(_v_, 10).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
