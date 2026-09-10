@@ -709,7 +709,7 @@ location: https://tc39.es/proposal-amount/
           1. Return the Record { [[BaseUnit]]: _baseUnit_, [[Multipliers]]: _multipliers_ }.
         </emu-alg>
         <emu-note>
-          <p>Conversion factors are mathematical values taken from CLDR, so the ratio of two factors is exact. foot-and-inch is convertible with multiplier 12; inch-and-foot is rejected because its ratio is 1/12; foot-and-centimeter is rejected because 30.48 is not an integer; foot-and-gallon is rejected because the base units differ; celsius-and-kelvin is rejected because celsius has an offset. Whether a sequence unit can also be formatted by Intl.NumberFormat is decided separately by ECMA-402, which admits only a fixed list of sequences.</p>
+          <p>Conversion factors are mathematical values taken from CLDR, so the ratio of two factors is exact. Whether a sequence unit can also be formatted by Intl.NumberFormat is decided separately by ECMA-402, which admits only a fixed list of sequences.</p>
         </emu-note>
       </emu-clause>
 
@@ -831,9 +831,6 @@ location: https://tc39.es/proposal-amount/
             1. Set _k_ to _k_ + 1.
           1. Return _entries_.
         </emu-alg>
-        <emu-note>
-          <p>Converting -15 inches to foot-and-inch yields [-1, -3], not [-2, 9]. Converting 71.6 inches to foot-and-inch with 0 fraction digits rounds to 72 inches first and yields [6, *"0e+0"*], not [5, *"1.2e+1"*]. The second call to FormatNumericToString does not round further, because _last_ already has at most _fractionDigits_ fraction digits; it only pads with trailing zeros so that the stored string keeps the requested precision. The sign is taken from [[RoundedNumber]] because [[FormattedString]] is unsigned.</p>
-        </emu-note>
       </emu-clause>
   </emu-clause>
 
@@ -891,7 +888,7 @@ location: https://tc39.es/proposal-amount/
         <p>When no precision options are given, Number and BigInt arguments are stored directly in [[AmountValue]], preserving the original type. String arguments and values resulting from precision options are stored as a String in canonical exponential notation, preserving the precision implied by the input.</p>
       </emu-note>
       <emu-note>
-        <p>A sequence unit requires an Object _value_: either an Array with one element per component, or an object with a property named after each component, such as *{ foot: 5, inch: 11 }* for foot-and-inch. Each entry follows the rules for a single-unit value, is stored with its own type, and the entries are validated together by ReadSequenceEntries. A String entry in any position but the last is stored as a plain integer string, so *"5.0"* becomes *"5"*. Precision options round only the last entry and never carry into an earlier one; balancing a sequence is the job of <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref>.</p>
+        <p>A sequence unit requires an Object _value_: either an Array with one element per component, or an object with a property named after each component. Each entry is stored with its own type, except that a String entry in any position but the last is stored as a plain integer string. Precision options round only the last entry and never carry into an earlier one; balancing a sequence is the job of <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref>.</p>
       </emu-note>
       <emu-note>
         <p>A String argument must denote a finite mathematical value. *"NaN"*, *"Infinity"*, *"+Infinity"*, *"-Infinity"*, and *""* are rejected, as are Strings with leading or trailing white space or other extraneous contents.</p>
@@ -959,9 +956,6 @@ location: https://tc39.es/proposal-amount/
       1. If _u_ is *undefined*, return the string-concatenation of *"["*, _valueStr_, and *" ~]"*.
       1. Return the string-concatenation of *"["*, _valueStr_, *" "*, _u_, and *"]"*.
     </emu-alg>
-    <emu-note>
-      <p>A sequence-unit Amount renders each entry with its own component unit, separated by *", "*. Every entry but the last is a plain integer, so <code>new Amount([5, 11], "foot-and-inch").toString()</code> is *"[5 foot, 1.1e+1 inch]"*, and each entry carries its own sign: <code>new Amount([-1, -3], "foot-and-inch").toString()</code> is *"[-1 foot, -3e+0 inch]"*.</p>
-    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-amount.prototype.tolocalestring">
@@ -1003,7 +997,7 @@ location: https://tc39.es/proposal-amount/
       1. Return _result_.
     </emu-alg>
     <emu-note>
-      <p>A sequence-unit source is first totalled in its smallest component unit. Thus, converting <code>[5, 11] foot-and-inch</code> to <code>meter</code> converts to <code>71 inches</code> without creating an observable intermediate Amount value. A sequence-unit target is produced by converting to its smallest component unit and then splitting. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
+      <p>A sequence-unit source is first totalled in its smallest component unit, without creating an intermediate Amount. A sequence-unit target is produced by converting to its smallest component unit and then splitting. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
     </emu-note>
   </emu-clause>
 </emu-clause>

@@ -108,7 +108,7 @@
         1. Return _unit_.
       </emu-alg>
       <emu-note>
-        <p>Unit preference data may name a sequence unit, such as foot-and-inch for the person-height usage in some regions. Its <code>geq</code> threshold is expressed in the first (largest) component of that sequence, so the comparison converts to that component. The sequence unit itself is returned, and <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref> then converts to it.</p>
+        <p>Unit preference data may name a sequence unit. Its <code>geq</code> threshold is expressed in the first (largest) component of that sequence, so the comparison converts to that component.</p>
       </emu-note>
     </emu-clause>
 
