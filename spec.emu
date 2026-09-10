@@ -519,7 +519,7 @@ location: https://tc39.es/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders a stored Amount value in canonical exponential notation, or as *"NaN"*, *"Infinity"*, or *"-Infinity"* for non-finite Numbers.</dd>
+          <dd>It renders a stored Amount value in canonical exponential notation, or as *"NaN"*, *"Infinity"*, or *"-Infinity"* for non-finite Numbers. A finite Number is rendered with the fewest significant digits that identify it, as Number.prototype.toExponential does when called without an argument, except that negative zero keeps its sign.</dd>
         </dl>
         <emu-alg>
           1. If _v_ is a String, return _v_.
@@ -528,9 +528,10 @@ location: https://tc39.es/proposal-amount/
             1. If _v_ is *+&infin;*<sub>𝔽</sub>, return *"Infinity"*.
             1. If _v_ is *-&infin;*<sub>𝔽</sub>, return *"-Infinity"*.
             1. If _v_ is *-0*<sub>𝔽</sub>, return *"-0e+0"*.
-            1. Let _decimalStr_ be Number::toString(_v_, 10).
-            1. Let _intlMV_ be ! ToIntlMathematicalValue(_decimalStr_).
-            1. Return RenderInExponentialNotation(_intlMV_.[[Value]], _intlMV_.[[StringDigitCount]]).
+            1. If _v_ is *+0*<sub>𝔽</sub>, return *"0e+0"*.
+            1. If _v_ &lt; *-0*<sub>𝔽</sub>, return the string-concatenation of *"-"* and RenderAmountValue(-_v_).
+            1. Let _n_, _k_, and _s_ be integers such that _k_ ≥ 1, 10<sup>_k_ - 1</sup> ≤ _s_ &lt; 10<sup>_k_</sup>, 𝔽(_s_ × 10<sup>_n_ - _k_</sup>) is _v_, and _k_ is as small as possible. If there are multiple possibilities for _s_, choose the value of _s_ for which _s_ × 10<sup>_n_ - _k_</sup> is closest in value to ℝ(_v_). If there are two such possible values of _s_, choose the one that is even.
+            1. Return RenderInExponentialNotation(_s_ × 10<sup>_n_ - _k_</sup>, _k_).
           1. Assert: _v_ is a BigInt.
           1. Let _digits_ be BigInt::toString(_v_, 10).
           1. Let _intlMV_ be ! ToIntlMathematicalValue(_digits_).
