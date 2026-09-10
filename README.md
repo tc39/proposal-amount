@@ -88,7 +88,8 @@ Amount will have the following read-only properties:
   * `roundingMode`: one of the seven supported Intl rounding modes. This option is used when the `fractionDigits` and `significantDigits` options are provided and rounding is necessary to ensure that the value really does have the specified number of fraction/significant digits.
 
   Attempting to construct an Amount from a `value` that is not
-  a Number or BigInt or String or an Array with Number or BigInt or String values
+  a Number or BigInt or String,
+  or (for a sequence unit) an Array or plain object whose entries are Numbers, BigInts, or Strings,
   will throw a TypeError.
   When constructing an Amount from a String `value` or an Array containing a String value,
   the string must be exactly a numeric literal denoting a finite value:
@@ -98,13 +99,16 @@ Amount will have the following read-only properties:
   and strings with leading or trailing white space) throws a RangeError.
   The `value` property of a String-valued Amount is always normalized to decimal exponential notation as described above.
 
-  An Array `value` is expected and required if and only if
-  the `unit` option is defined and includes at least one `-and-` substring.
-  Otherwise, using an Array `value` will throw a TypeError.
+  A sequence unit, whose `unit` option includes at least one `-and-` substring,
+  requires an Object `value`, and any other unit rejects an Object `value` with a TypeError.
+  The Object is either an Array with exactly one entry per `-and-`-separated part of the `unit`
+  (any other length throws a TypeError),
+  or a plain object with one property named after each part, such as `{ foot: 5, inch: 11 }`
+  (a missing property throws a TypeError; extra properties are ignored).
   These represent [sequence units], such as "5 feet, 11 inches".
-  The Array length must match the number of `-and-` separated parts of the `unit`,
-  and all except for the last Array entry must represent an integer;
-  otherwise a TypeError is thrown.
+  All except the last entry must represent an integer,
+  and no entry may be negative while another is positive;
+  otherwise a RangeError is thrown.
 
   String values in an Array are normalized to use a plain integer representation
   for values that are not the last entry, and for the last entry,
@@ -115,9 +119,9 @@ Amount will have the following read-only properties:
   the `value` is rounded accordingly,
   and is stored as a String (if finite) or Number (if not finite).
   If both `fractionDigits` and `significantDigits` are set, a RangeError is thrown.
-  If `value` is an Array and `fractionDigits` is set,
+  If `value` represents a sequence unit and `fractionDigits` is set,
   the rounding is only applied to the last value in the Array.
-  If `value` is an Array and `significantDigits` is set, a TypeError is thrown.
+  If `value` represents a sequence unit and `significantDigits` is set, a TypeError is thrown.
 
 The object prototype would provide the following methods:
 
@@ -157,11 +161,12 @@ The object prototype would provide the following methods:
   or if the resolved conversion target is not valid for the Amount's unit
   (such as attempting to convert a mass unit into a length unit).
 
-  If the conversion target is a sequence unit,
-  a TypeError is thrown if the individual units are not convertible with each other
-  using integer multipliers, with decreasing magnitude.
-  In other words, conversion to `foot-and-inch` is valid, but
-  `inch-and-foot`, `foot-and-centimeter`, and `foot-and-gallon` are not valid conversion targets.
+  If either the source or the target is a sequence unit,
+  a TypeError is thrown unless its component units share a CLDR base unit without an offset,
+  appear in decreasing order of magnitude, and each is an integer multiple of the next.
+  In other words, `foot-and-inch` is valid, but
+  `inch-and-foot`, `foot-and-centimeter`, `foot-and-gallon`, and `celsius-and-kelvin` are not.
+  Converting a non-finite value to a sequence unit throws a RangeError.
 
 * `toString()`: A string representation of the Amount.
   Returns a digit string together with the unit, surrounded by square brackets (for example, `"[1.23+e0 kilogram]"`).
@@ -207,18 +212,22 @@ For example, to convert 1.75 feet to inches, the following mathematical operatio
 ```
 
 When converting from a [sequence unit](https://github.com/tc39/proposal-intl-sequence-units),
-each of the individual parts of the unit are converted separately,
-and the Number results then summed together.
+the entries are first totalled in the smallest component unit,
+with every entry but the last contributing exactly,
+and that total is then converted once to the target unit.
 
 When converting to a sequence unit,
-the source unit value or values are first converted to the least-magnitude unit of the target sequence unit.
-Euclidean division is then applied to this Number using the integer multiplier
-from the smaller-magnitude unit to the next unit by magnitude.
-The remainder is assigned to the smaller-magnitude unit,
-and the quotient to the larger-magnitude unit.
-If the sequence unit contains more than two units, this process is repeated.
+the source value is first converted to the smallest component unit of the target
+and rounded there according to the precision options (if any),
+so that rounding can carry into a larger component.
+The rounded value is then divided by the integer multiplier between each pair of adjacent components,
+from the smallest unit up, truncating toward zero:
+the remainder is assigned to the smaller unit and the quotient carried to the larger one,
+so every entry has the sign of the source value.
+For example, -15 inches converts to `[-1, -3]` feet and inches,
+and `[5, 12]` feet and inches converts to `[6, 0]` when converted to `foot-and-inch` again.
 
-Rounding is applied only to the final result, according to the precision options (if any)
+For a single-unit target, rounding is applied only to the final result, according to the precision options (if any)
 set in the conversion method's `options`.
 The precision of the source Amount is not retained,
 and the precision of the result is capped by the precision of Number.
