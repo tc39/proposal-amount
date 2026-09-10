@@ -216,7 +216,7 @@ location: https://tc39.es/proposal-amount/
         <h1>
           SelectTargetUnit (
             _conversionSource_: a Conversion Source Record,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
@@ -230,7 +230,7 @@ location: https://tc39.es/proposal-amount/
           SelectTargetUnit performs the following steps when called:
         </p>
         <emu-alg>
-          1. Let _unit_ be _resolvedOpts_.[[Unit]].
+          1. Let _unit_ be _opts_.[[Unit]].
           1. If _unit_ is *undefined*, throw a *TypeError* exception.
           1. Return _unit_.
         </emu-alg>
@@ -309,22 +309,22 @@ location: https://tc39.es/proposal-amount/
         <h1>
           RoundAmountValue (
             _value_: a Number, a BigInt, or an Intl MV Record,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): a Number, a BigInt, or a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the value to store in an Amount for the input _value_ under the precision options of _resolvedOpts_. A finite value to which precision options apply, and any value that came from a String, is returned as a decimal digit string in exponential notation; otherwise _value_ is returned unchanged.</dd>
+          <dd>It returns the value to store in an Amount for the input _value_ under the precision options of _opts_. A finite value to which precision options apply, and any value that came from a String, is returned as a decimal digit string in exponential notation; otherwise _value_ is returned unchanged.</dd>
         </dl>
         <emu-alg>
-          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
-          1. Let _significantDigits_ be _resolvedOpts_.[[SignificantDigits]].
+          1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+          1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
           1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
             1. If _value_ is a finite Number or _value_ is not a Number, then
               1. If _value_ is an Intl MV Record, let _mv_ be _value_.[[Value]].
               1. Else if _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~.
               1. Else, let _mv_ be ℝ(_value_).
-              1. Let _roundingMode_ be _resolvedOpts_.[[RoundingMode]].
+              1. Let _roundingMode_ be _opts_.[[RoundingMode]].
               1. If _fractionDigits_ is not *undefined*, return RoundToFractionDigits(_mv_, _fractionDigits_, _roundingMode_).
               1. Return RoundToSignificantDigits(_mv_, _significantDigits_, _roundingMode_).
             1. Return _value_.
@@ -705,21 +705,21 @@ location: https://tc39.es/proposal-amount/
           SplitIntoSequence (
             _value_: a finite Number,
             _multipliers_: a List of integers,
-            _resolvedOpts_: an Amount Options Record,
+            _opts_: an Amount Options Record,
           ): a List of either Numbers or Strings
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It expresses _value_, a quantity of the last (smallest) component unit of a sequence unit, as the entries of that sequence unit. The value is first rounded according to the precision options of _resolvedOpts_, so that rounding can carry into a larger component, and then divided by the multipliers from the smallest unit up, truncating toward zero so that every entry has the sign of _value_. A zero entry of a negative _value_ is negative zero. Every entry but the last is an integral Number; the last is a Number, or a decimal digit string if precision options were applied.</dd>
+          <dd>It expresses _value_, a quantity of the last (smallest) component unit of a sequence unit, as the entries of that sequence unit. The value is first rounded according to the precision options of _opts_, so that rounding can carry into a larger component, and then divided by the multipliers from the smallest unit up, truncating toward zero so that every entry has the sign of _value_. A zero entry of a negative _value_ is negative zero. Every entry but the last is an integral Number; the last is a Number, or a decimal digit string if precision options were applied.</dd>
         </dl>
         <emu-alg>
           1. Let _n_ be the number of elements in _multipliers_ + 1.
-          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
-          1. Assert: _resolvedOpts_.[[SignificantDigits]] is *undefined*.
+          1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
+          1. Assert: _opts_.[[SignificantDigits]] is *undefined*.
           1. If _fractionDigits_ is *undefined*, then
             1. If _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~; else let _mv_ be ℝ(_value_).
           1. Else,
-            1. Let _formatter_ be CreateFormatterObject(_resolvedOpts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
+            1. Let _formatter_ be CreateFormatterObject(_opts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
             1. Let _intlMV_ be ! ToIntlMathematicalValue(_value_).
             1. Let _rounded_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
             1. Let _mv_ be _rounded_.[[RoundedNumber]].
@@ -746,7 +746,7 @@ location: https://tc39.es/proposal-amount/
           1. Repeat, while _k_ &lt; _n_,
             1. Let _part_ be _parts_[_k_].
             1. If _negative_ is *true* and _part_ = 0, let _signedPart_ be ~negative-zero~; else if _negative_ is *true*, let _signedPart_ be -_part_; else let _signedPart_ be _part_.
-            1. If _k_ = _n_ - 1 and _fractionDigits_ is not *undefined*, append RoundToFractionDigits(_signedPart_, _fractionDigits_, _resolvedOpts_.[[RoundingMode]]) to _entries_.
+            1. If _k_ = _n_ - 1 and _fractionDigits_ is not *undefined*, append RoundToFractionDigits(_signedPart_, _fractionDigits_, _opts_.[[RoundingMode]]) to _entries_.
             1. Else if _signedPart_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_.
             1. Else, append 𝔽(_signedPart_) to _entries_.
             1. Set _k_ to _k_ + 1.

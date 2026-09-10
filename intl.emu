@@ -69,7 +69,7 @@
       <h1>
         SelectTargetUnit (
           _conversionSource_: a Conversion Source Record,
-          _resolvedOpts_: an Amount Options Record,
+          _opts_: an Amount Options Record,
         ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
@@ -80,8 +80,8 @@
       </dl>
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
       <emu-alg>
-        1. Let _unit_ be _resolvedOpts_.[[Unit]].
-        1. Let _extendedOpts_ be _resolvedOpts_.[[ExtendedOptions]].
+        1. Let _unit_ be _opts_.[[Unit]].
+        1. Let _extendedOpts_ be _opts_.[[ExtendedOptions]].
         1. Let _locale_ be _extendedOpts_.[[Locale]].
         1. Let _usage_ be _extendedOpts_.[[Usage]].
         1. If _unit_ is not *undefined*, then
