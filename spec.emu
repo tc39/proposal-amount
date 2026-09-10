@@ -258,22 +258,20 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-roundtodecimaldigitstring" type="abstract operation">
+      <emu-clause id="sec-amount-roundtofractiondigits" type="abstract operation">
         <h1>
-          RoundToDecimalDigitString (
+          RoundToFractionDigits (
             _mv_: a mathematical value or ~negative-zero~,
-            _opts_: an Amount Options Record,
+            _fractionDigits_: a non-negative integer,
+            _roundingMode_: a rounding mode,
           ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It rounds _mv_ according to the rounding mode and precision options of _opts_, at least one of which must be present, and returns the result as a decimal digit string in exponential notation with as many significant digits as the rounding produced. The sign of _mv_, including that of negative zero, is preserved.</dd>
+          <dd>It rounds _mv_ to _fractionDigits_ fraction digits using _roundingMode_ and returns the result as a decimal digit string in exponential notation with as many significant digits as the rounding produced. The sign of _mv_, including that of negative zero, is preserved.</dd>
         </dl>
         <emu-alg>
-          1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
-          1. Let _significantDigits_ be _opts_.[[SignificantDigits]].
-          1. Assert: _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*.
-          1. Let _formatter_ be CreateFormatterObject(_opts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
           1. Let _fmt_ be FormatNumericToString(_formatter_, _mv_, 0, 0).
           1. Let _parsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
           1. Assert: _parsed_ is a Parse Node.
@@ -283,6 +281,28 @@ location: https://tc39.es/proposal-amount/
         <emu-note>
           <p>[[FormattedString]] carries no sign, so it determines only the number of digits; the value comes from [[RoundedNumber]].</p>
         </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
+        <h1>
+          RoundToSignificantDigits (
+            _mv_: a mathematical value or ~negative-zero~,
+            _significantDigits_: a positive integer,
+            _roundingMode_: a rounding mode,
+          ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It rounds _mv_ to _significantDigits_ significant digits using _roundingMode_ and returns the result as a decimal digit string in exponential notation with _significantDigits_ significant digits. The sign of _mv_, including that of negative zero, is preserved.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, *undefined*, *undefined*, _significantDigits_, _significantDigits_, *undefined*).
+          1. Let _fmt_ be FormatNumericToString(_formatter_, _mv_, 0, 0).
+          1. Let _parsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
+          1. Assert: _parsed_ is a Parse Node.
+          1. Let _fmtIntlMV_ be the StringIntlMV of _parsed_.
+          1. Return RenderInExponentialNotation(_fmt_.[[RoundedNumber]], _fmtIntlMV_.[[StringDigitCount]]).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-roundamountvalue" type="abstract operation">
@@ -304,7 +324,9 @@ location: https://tc39.es/proposal-amount/
               1. If _value_ is an Intl MV Record, let _mv_ be _value_.[[Value]].
               1. Else if _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~.
               1. Else, let _mv_ be ℝ(_value_).
-              1. Return RoundToDecimalDigitString(_mv_, _resolvedOpts_).
+              1. Let _roundingMode_ be _resolvedOpts_.[[RoundingMode]].
+              1. If _fractionDigits_ is not *undefined*, return RoundToFractionDigits(_mv_, _fractionDigits_, _roundingMode_).
+              1. Return RoundToSignificantDigits(_mv_, _significantDigits_, _roundingMode_).
             1. Return _value_.
           1. If _value_ is an Intl MV Record, then
             1. Let _mv_ be _value_.[[Value]].
@@ -695,7 +717,6 @@ location: https://tc39.es/proposal-amount/
           1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
           1. Assert: _resolvedOpts_.[[SignificantDigits]] is *undefined*.
           1. If _fractionDigits_ is *undefined*, then
-            1. Let _formatter_ be *undefined*.
             1. If _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~; else let _mv_ be ℝ(_value_).
           1. Else,
             1. Let _formatter_ be CreateFormatterObject(_resolvedOpts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
@@ -725,7 +746,7 @@ location: https://tc39.es/proposal-amount/
           1. Repeat, while _k_ &lt; _n_,
             1. Let _part_ be _parts_[_k_].
             1. If _negative_ is *true* and _part_ = 0, let _signedPart_ be ~negative-zero~; else if _negative_ is *true*, let _signedPart_ be -_part_; else let _signedPart_ be _part_.
-            1. If _k_ = _n_ - 1 and _formatter_ is not *undefined*, append RoundToDecimalDigitString(_signedPart_, _resolvedOpts_) to _entries_.
+            1. If _k_ = _n_ - 1 and _fractionDigits_ is not *undefined*, append RoundToFractionDigits(_signedPart_, _fractionDigits_, _resolvedOpts_.[[RoundingMode]]) to _entries_.
             1. Else if _signedPart_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_.
             1. Else, append 𝔽(_signedPart_) to _entries_.
             1. Set _k_ to _k_ + 1.
