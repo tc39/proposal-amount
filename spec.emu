@@ -264,9 +264,9 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-numericentryvalue" type="abstract operation">
+      <emu-clause id="sec-amount-getamountnumericvalue" type="abstract operation">
         <h1>
-          NumericEntryValue (
+          GetAmountNumericValue (
             _v_: a Number, a BigInt, or a String,
           ): a Number
         </h1>
@@ -694,7 +694,7 @@ location: https://tc39.es/proposal-amount/
             1. Assert: _mv_ is an integer.
             1. Set _sum_ to _sum_ + _mv_ × _scale_.
             1. Set _k_ to _k_ - 1.
-          1. Let _last_ be NumericEntryValue(_entries_[_n_ - 1]).
+          1. Let _last_ be GetAmountNumericValue(_entries_[_n_ - 1]).
           1. If _last_ is not finite, return _last_.
           1. If _sum_ = 0, return _last_.
           1. Return 𝔽(_sum_ + ℝ(_last_)).
@@ -718,7 +718,7 @@ location: https://tc39.es/proposal-amount/
           1. Let _v_ be _amount_.[[AmountValue]].
           1. If the number of elements in _components_ is 1, then
             1. Assert: _v_ is not a List.
-            1. Return the Conversion Source Record { [[Value]]: NumericEntryValue(_v_), [[Unit]]: _unit_ }.
+            1. Return the Conversion Source Record { [[Value]]: GetAmountNumericValue(_v_), [[Unit]]: _unit_ }.
           1. Assert: _v_ is a List.
           1. Let _data_ be ? GetSequenceUnitData(_components_).
           1. Let _total_ be SequenceTotal(_v_, _data_.[[Multipliers]]).
