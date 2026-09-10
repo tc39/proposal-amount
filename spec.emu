@@ -258,24 +258,6 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-renderinteger" type="abstract operation">
-        <h1>
-          RenderInteger (
-            _v_: an integer or ~negative-zero~,
-          ): a String
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It returns the decimal representation of _v_ with no leading zeros, exponent, or fractional part. The sign of negative zero is preserved.</dd>
-        </dl>
-        <emu-alg>
-          1. If _v_ is ~negative-zero~, return *"-0"*.
-          1. If _v_ &lt; 0, return the string-concatenation of *"-"* and RenderInteger(-_v_).
-          1. If _v_ = 0, return *"0"*.
-          1. Return the String value consisting of the decimal digits of _v_ with no leading zeros.
-        </emu-alg>
-      </emu-clause>
-
       <emu-clause id="sec-amount-roundtodecimaldigitstring" type="abstract operation">
         <h1>
           RoundToDecimalDigitString (
@@ -486,7 +468,7 @@ location: https://tc39.es/proposal-amount/
             1. Return RenderInExponentialNotation(_s_ × 10<sup>_n_ - _k_</sup>, _k_).
           1. Assert: _v_ is a BigInt.
           1. Let _mv_ be ℝ(_v_).
-          1. Let _digitCount_ be the length of RenderInteger(abs(_mv_)).
+          1. Let _digitCount_ be the number of digits in the decimal representation of abs(_mv_).
           1. Return RenderInExponentialNotation(_mv_, _digitCount_).
         </emu-alg>
       </emu-clause>
@@ -516,10 +498,10 @@ location: https://tc39.es/proposal-amount/
             1. Else if _entry_ is a BigInt, then
               1. Let _entryStr_ be BigInt::toString(_entry_, 10).
             1. Else if _entry_ is *-0*<sub>𝔽</sub>, then
-              1. Let _entryStr_ be RenderInteger(~negative-zero~).
+              1. Let _entryStr_ be *"-0"*.
             1. Else,
               1. Assert: _entry_ is an integral Number.
-              1. Let _entryStr_ be RenderInteger(ℝ(_entry_)).
+              1. Let _entryStr_ be the String value consisting of the decimal representation of ℝ(_entry_) with no leading zeros.
             1. If _k_ &gt; 0, set _result_ to the string-concatenation of _result_ and *", "*.
             1. Set _result_ to the string-concatenation of _result_, _entryStr_, *" "*, and _components_[_k_].
             1. Set _k_ to _k_ + 1.
@@ -780,7 +762,8 @@ location: https://tc39.es/proposal-amount/
             1. If _k_ = _n_ - 1, then
               1. Append RoundAmountValue(_entry_, _validatedOpts_) to _entries_.
             1. Else if _entry_ is an Intl MV Record, then
-              1. Append RenderInteger(_entry_.[[Value]]) to _entries_.
+              1. If _entry_.[[Value]] is ~negative-zero~, append *"-0"* to _entries_.
+              1. Else, append the String value consisting of the decimal representation of _entry_.[[Value]] with no leading zeros to _entries_.
             1. Else,
               1. Append _entry_ to _entries_.
             1. Set _k_ to _k_ + 1.
