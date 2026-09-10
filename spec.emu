@@ -760,7 +760,7 @@ location: https://tc39.es/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It expresses _amount_ as a Number in a single unit so that it can be converted. It throws a *TypeError* exception if _amount_ has a sequence unit whose components are not convertible with each other.</dd>
+          <dd>It expresses _amount_ as a Number in a single unit so that it can be converted. It throws a *TypeError* exception if the unit of _amount_ has no conversion data, or is a sequence unit whose components are not convertible with each other.</dd>
         </dl>
         <emu-alg>
           1. Let _unit_ be _amount_.[[Unit]].
@@ -769,6 +769,7 @@ location: https://tc39.es/proposal-amount/
           1. Let _v_ be _amount_.[[AmountValue]].
           1. If the number of elements in _components_ is 1, then
             1. Assert: _v_ is not a List.
+            1. Perform ? GetUnitConversionFactor(_unit_).
             1. Return the Conversion Source Record { [[Value]]: GetAmountNumericValue(_v_), [[Unit]]: _unit_ }.
           1. Assert: _v_ is a List.
           1. Let _data_ be ? GetSequenceUnitData(_components_).
