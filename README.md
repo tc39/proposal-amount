@@ -89,7 +89,7 @@ Amount will have the following read-only properties:
 
   Attempting to construct an Amount from a `value` that is not
   a Number or BigInt or String,
-  or (for a sequence unit) an Array or plain object whose entries are Numbers, BigInts, or Strings,
+  or (for a sequence unit) an Array or object whose entries are Numbers, BigInts, or Strings,
   will throw a TypeError.
   When constructing an Amount from a String `value` or an Array containing a String value,
   the string must be exactly a numeric literal denoting a finite value:
@@ -103,7 +103,7 @@ Amount will have the following read-only properties:
   requires an Object `value`, and any other unit rejects an Object `value` with a TypeError.
   The Object is either an Array with exactly one entry per `-and-`-separated part of the `unit`
   (any other length throws a TypeError),
-  or a plain object with one property named after each part, such as `{ foot: 5, inch: 11 }`
+  or an object with one property named after each part, such as `{ foot: 5, inch: 11 }`
   (a missing property throws a TypeError; extra properties are ignored).
   These represent [sequence units], such as "5 feet, 11 inches".
   All except the last entry must represent an integer,
@@ -165,7 +165,7 @@ The object prototype would provide the following methods:
   a TypeError is thrown unless its component units share a CLDR base unit without an offset,
   appear in decreasing order of magnitude, and each is an integer multiple of the next.
   In other words, `foot-and-inch` is valid, but
-  `inch-and-foot`, `foot-and-centimeter`, `foot-and-gallon`, and `celsius-and-kelvin` are not.
+  `inch-and-foot`, `foot-and-gallon`, and `celsius-and-kelvin` are not.
   Converting a non-finite value to a sequence unit throws a RangeError.
 
 * `toString()`: A string representation of the Amount.
@@ -212,9 +212,8 @@ For example, to convert 1.75 feet to inches, the following mathematical operatio
 ```
 
 When converting from a [sequence unit](https://github.com/tc39/proposal-intl-sequence-units),
-the entries are first totalled in the smallest component unit,
-with every entry but the last contributing exactly,
-and that total is then converted once to the target unit.
+the entries are first totalled exactly in the smallest component unit,
+and that total is then rounded to a Number and converted once to the target unit.
 
 When converting to a sequence unit,
 the source value is first converted to the smallest component unit of the target
