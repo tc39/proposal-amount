@@ -787,7 +787,7 @@ location: https://tc39.es/proposal-amount/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It expresses _value_, a quantity of the last (smallest) component unit of a sequence unit, as the entries of that sequence unit. The value is first rounded according to the precision options of _resolvedOpts_, so that rounding can carry into a larger component, and then divided by the multipliers from the smallest unit up, truncating toward zero so that every entry has the sign of _value_. Every entry but the last is an integral Number; the last is a Number, or a decimal digit string if precision options were applied.</dd>
+          <dd>It expresses _value_, a quantity of the last (smallest) component unit of a sequence unit, as the entries of that sequence unit. The value is first rounded according to the precision options of _resolvedOpts_, so that rounding can carry into a larger component, and then divided by the multipliers from the smallest unit up, truncating toward zero so that every entry has the sign of _value_. A zero entry of a negative _value_ is negative zero. Every entry but the last is an integral Number; the last is a Number, or a decimal digit string if precision options were applied.</dd>
         </dl>
         <emu-alg>
           1. Let _n_ be the number of elements in _multipliers_ + 1.
@@ -821,15 +821,13 @@ location: https://tc39.es/proposal-amount/
           1. Insert _magnitude_ as the first element of _parts_.
           1. Let _entries_ be a new empty List.
           1. Set _k_ to 0.
-          1. Repeat, while _k_ &lt; _n_ - 1,
-            1. If _negative_ is *true*, append 𝔽(-_parts_[_k_]) to _entries_; else append 𝔽(_parts_[_k_]) to _entries_.
+          1. Repeat, while _k_ &lt; _n_,
+            1. Let _part_ be _parts_[_k_].
+            1. If _negative_ is *true* and _part_ = 0, let _signedPart_ be ~negative-zero~; else if _negative_ is *true*, let _signedPart_ be -_part_; else let _signedPart_ be _part_.
+            1. If _k_ = _n_ - 1 and _formatter_ is not *undefined*, append RoundToDecimalDigitString(_signedPart_, _resolvedOpts_) to _entries_.
+            1. Else if _signedPart_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_.
+            1. Else, append 𝔽(_signedPart_) to _entries_.
             1. Set _k_ to _k_ + 1.
-          1. Let _lastPart_ be _parts_[_n_ - 1].
-          1. If _negative_ is *true* and _lastPart_ = 0, let _last_ be ~negative-zero~; else if _negative_ is *true*, let _last_ be -_lastPart_; else let _last_ be _lastPart_.
-          1. If _formatter_ is *undefined*, then
-            1. If _last_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_; else append 𝔽(_last_) to _entries_.
-          1. Else,
-            1. Append RoundToDecimalDigitString(_last_, _resolvedOpts_) to _entries_.
           1. Return _entries_.
         </emu-alg>
         <emu-note>
