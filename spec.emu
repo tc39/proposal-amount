@@ -470,47 +470,6 @@ location: https://tc39.es/proposal-amount/
         </emu-note>
       </emu-clause>
 
-      <emu-clause id="sec-amount-renderinexponentialnotation" type="abstract operation">
-        <h1>RenderInExponentialNotation (
-          _v_: a mathematical value or ~negative-zero~,
-          _sigDigits_: a positive integer
-        ): a String
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent. The sign of negative zero is preserved.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _sign_ be the empty String.
-          1. If _v_ is ~negative-zero~, then
-            1. Set _sign_ to *"-"*.
-            1. Set _v_ to 0.
-          1. Else if _v_ &lt; 0, then
-            1. Set _sign_ to *"-"*.
-            1. Set _v_ to -_v_.
-          1. If _v_ = 0, then
-            1. Let _exponent_ be 0.
-            1. Let _mantissaInt_ be 0.
-          1. Else,
-            1. Let _exponent_ be the unique integer such that 10<sup>_exponent_</sup> ≤ _v_ &lt; 10<sup>_exponent_ + 1</sup>.
-            1. Let _mantissaInt_ be _v_ × 10<sup>_sigDigits_ - 1 - _exponent_</sup>.
-          1. Assert: _mantissaInt_ is a non-negative integer with at most _sigDigits_ decimal digits.
-          1. Let _intStr_ be the base-10 String representation of _mantissaInt_ with no leading zeros, or *"0"* if _mantissaInt_ is 0.
-          1. Repeat, while the length of _intStr_ is less than _sigDigits_,
-            1. Set _intStr_ to the string-concatenation of *"0"* and _intStr_.
-          1. If _sigDigits_ = 1, then
-            1. Let _mantissaStr_ be _intStr_.
-          1. Else,
-            1. Let _mantissaStr_ be the string-concatenation of the substring of _intStr_ from 0 to 1, *"."*, and the substring of _intStr_ from 1.
-          1. If _exponent_ ≥ 0, let _expSign_ be *"+"*; else let _expSign_ be *"-"*.
-          1. Let _expStr_ be the unique base-10 String representation of abs(_exponent_) with no leading zeros.
-          1. Return the string-concatenation of _sign_, _mantissaStr_, *"e"*, _expSign_, and _expStr_.
-        </emu-alg>
-        <emu-note type="editor">
-          <p>TODO: this algorithm performs essentially the same work as the latter portion of <emu-xref href="#sec-number.prototype.toexponential">Number.prototype.toExponential</emu-xref> (the part following its initial argument-coercion and special-value handling). We should extract a shared abstract operation from that algorithm and use it both there and here, to ensure the two stay in sync.</p>
-        </emu-note>
-      </emu-clause>
-
       <emu-clause id="sec-amount-renderamountvalue" type="abstract operation">
         <h1>
           RenderAmountValue (
@@ -967,6 +926,106 @@ location: https://tc39.es/proposal-amount/
     </emu-alg>
     <emu-note>
       <p>A sequence-unit source is first totalled in its smallest component unit, so converting [5, 11] foot-and-inch to meter converts 71 inches once. A sequence-unit target is produced by converting to its smallest component unit and then splitting, so converting [5, 12] foot-and-inch to foot-and-inch rebalances it to [6, 0]. Converting a non-finite value to a sequence unit throws, because every entry but the last must be an integer.</p>
+    </emu-note>
+  </emu-clause>
+</emu-clause>
+
+<emu-clause id="sec-amount-262-amendments">
+  <h1>Amendments to ECMA-262</h1>
+  <emu-note type="editor">
+    <p>This section lists amendments to be made to existing sections of ECMA-262. Text to be added is marked <ins>like this</ins>, and text to be deleted is marked <del>like this</del>.</p>
+  </emu-note>
+  <p>The abstract operation RenderInExponentialNotation is added to <emu-xref href="#sec-properties-of-the-number-prototype-object"></emu-xref>, and Number.prototype.toExponential is amended to use it. The Amount specification uses the same operation wherever it renders a value in exponential notation.</p>
+
+  <emu-clause id="sec-amount-renderinexponentialnotation" type="abstract operation">
+    <h1>RenderInExponentialNotation (
+      _v_: a mathematical value or ~negative-zero~,
+      _sigDigits_: a positive integer
+    ): a String
+    </h1>
+    <dl class="header">
+      <dt>description</dt>
+      <dd>It returns _v_ rendered in canonical exponential notation with _sigDigits_ significant digits: an optional minus sign, a mantissa with one integer digit, an optional fractional part of length _sigDigits_ - 1, *"e"*, an explicit sign, and an unpadded base-10 exponent. The sign of negative zero is preserved.</dd>
+    </dl>
+    <emu-alg>
+      1. Let _sign_ be the empty String.
+      1. If _v_ is ~negative-zero~, then
+        1. Set _sign_ to *"-"*.
+        1. Set _v_ to 0.
+      1. Else if _v_ &lt; 0, then
+        1. Set _sign_ to *"-"*.
+        1. Set _v_ to -_v_.
+      1. If _v_ = 0, then
+        1. Let _exponent_ be 0.
+        1. Let _mantissaInt_ be 0.
+      1. Else,
+        1. Let _exponent_ be the unique integer such that 10<sup>_exponent_</sup> ≤ _v_ &lt; 10<sup>_exponent_ + 1</sup>.
+        1. Let _mantissaInt_ be _v_ × 10<sup>_sigDigits_ - 1 - _exponent_</sup>.
+      1. Assert: _mantissaInt_ is a non-negative integer with at most _sigDigits_ decimal digits.
+      1. Let _intStr_ be the base-10 String representation of _mantissaInt_ with no leading zeros, or *"0"* if _mantissaInt_ is 0.
+      1. Repeat, while the length of _intStr_ is less than _sigDigits_,
+        1. Set _intStr_ to the string-concatenation of *"0"* and _intStr_.
+      1. If _sigDigits_ = 1, then
+        1. Let _mantissaStr_ be _intStr_.
+      1. Else,
+        1. Let _mantissaStr_ be the string-concatenation of the substring of _intStr_ from 0 to 1, *"."*, and the substring of _intStr_ from 1.
+      1. If _exponent_ ≥ 0, let _expSign_ be *"+"*; else let _expSign_ be *"-"*.
+      1. Let _expStr_ be the unique base-10 String representation of abs(_exponent_) with no leading zeros.
+      1. Return the string-concatenation of _sign_, _mantissaStr_, *"e"*, _expSign_, and _expStr_.
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sup-number.prototype.toexponential">
+    <h1>Number.prototype.toExponential ( _fractionDigits_ )</h1>
+    <p>This definition supersedes the definition provided in <emu-xref href="#sec-number.prototype.toexponential"></emu-xref>.</p>
+    <p>This method returns a String containing this Number value represented in decimal exponential notation with one digit before the significand's decimal point and _fractionDigits_ digits after the significand's decimal point. If _fractionDigits_ is *undefined*, it includes as many significand digits as necessary to uniquely specify the Number (just like in ToString except that in this case the Number is always output in exponential notation).</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _number_ be ? ThisNumberValue(*this* value).
+      1. Let _fractionCount_ be ? ToIntegerOrInfinity(_fractionDigits_).
+      1. Assert: If _fractionDigits_ is *undefined*, then _fractionCount_ is 0.
+      1. If _number_ is not finite, return Number::toString(_number_, 10).
+      1. If _fractionCount_ &lt; 0 or _fractionCount_ > 100, throw a *RangeError* exception.
+      1. Set _number_ to ℝ(_number_).
+      1. Let _sign_ be the empty String.
+      1. If _number_ &lt; 0, then
+        1. Set _sign_ to *"-"*.
+        1. Set _number_ to -_number_.
+      1. If _number_ = 0, then
+        1. <del>Let _significand_ be the String value consisting of _fractionCount_ + 1 occurrences of the code unit 0x0030 (DIGIT ZERO).</del>
+        1. <ins>Let _intSignificand_ be 0.</ins>
+        1. Let _exponent_ be 0.
+      1. Else,
+        1. If _fractionDigits_ is not *undefined*, then
+          1. Let _exponent_ and _intSignificand_ be integers such that 10<sup>_fractionCount_</sup> ≤ _intSignificand_ &lt; 10<sup>_fractionCount_ + 1</sup> and for which _intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> - _number_ is as close to zero as possible. If there are two such sets of _exponent_ and _intSignificand_, pick the _exponent_ and _intSignificand_ for which _intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> is larger.
+        1. Else,
+          1. [id="step-amount-number-proto-toexponential-intermediate-values"] Let _exponent_, _intSignificand_, and _ff_ be integers such that _ff_ ≥ 0, 10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>, 𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) is 𝔽(_number_), and _ff_ is as small as possible. Note that the decimal representation of _intSignificand_ has _ff_ + 1 digits, _intSignificand_ is not divisible by 10, and the least significant digit of _intSignificand_ is not necessarily uniquely determined by these criteria.
+          1. Set _fractionCount_ to _ff_.
+        1. <del>Let _significand_ be the String value consisting of the digits of the decimal representation of _intSignificand_ (in order, with no leading zeroes).</del>
+      1. <del>If _fractionCount_ ≠ 0, then</del>
+        1. <del>Let _intPart_ be the first code unit of _significand_.</del>
+        1. <del>Let _fractionalPart_ be the other _fractionCount_ code units of _significand_.</del>
+        1. <del>Set _significand_ to the string-concatenation of _intPart_, *"."*, and _fractionalPart_.</del>
+      1. <del>If _exponent_ = 0, then</del>
+        1. <del>Let _exponentSign_ be *"+"*.</del>
+        1. <del>Let _exponentDigits_ be *"0"*.</del>
+      1. <del>Else,</del>
+        1. <del>If _exponent_ > 0, then</del>
+          1. <del>Let _exponentSign_ be *"+"*.</del>
+        1. <del>Else,</del>
+          1. <del>Assert: _exponent_ &lt; 0.</del>
+          1. <del>Let _exponentSign_ be *"-"*.</del>
+          1. <del>Set _exponent_ to -_exponent_.</del>
+        1. <del>Let _exponentDigits_ be the String value consisting of the digits of the decimal representation of _exponent_ (in order, with no leading zeroes).</del>
+      1. <del>Set _significand_ to the string-concatenation of _significand_, *"e"*, _exponentSign_, and _exponentDigits_.</del>
+      1. <del>Return the string-concatenation of _sign_ and _significand_.</del>
+      1. <ins>Return the string-concatenation of _sign_ and RenderInExponentialNotation(_intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup>, _fractionCount_ + 1).</ins>
+    </emu-alg>
+    <emu-note>
+      <p>For implementations that provide more accurate conversions than required by the rules above, it is recommended that the following alternative version of step <emu-xref href="#step-amount-number-proto-toexponential-intermediate-values"></emu-xref> be used as a guideline:</p>
+      <emu-alg replaces-step="step-amount-number-proto-toexponential-intermediate-values">
+        1. Let _exponent_, _intSignificand_, and _ff_ be integers such that _ff_ ≥ 0, 10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>, 𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) is 𝔽(_number_), and _ff_ is as small as possible. If there are multiple possibilities for _intSignificand_, choose _intSignificand_ such that 𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) is closest to 𝔽(_number_). If there are two such possible values of _intSignificand_, choose the one that is even.
+      </emu-alg>
     </emu-note>
   </emu-clause>
 </emu-clause>
