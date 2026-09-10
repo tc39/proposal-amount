@@ -28,7 +28,7 @@
 
     <emu-clause id="sec-amount-unit-preference-data">
       <h1>Unit Preference Data</h1>
-      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
+      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference. The body of every <code>&lt;unitPreference&gt;</code> element is a <emu-xref href="#amount-unit-identifier">unit identifier</emu-xref>.</p>
     </emu-clause>
 
     <emu-clause id="sup-amount-options-record">
@@ -68,20 +68,20 @@
     <emu-clause id="sup-amount-selecttargetunit" type="abstract operation">
       <h1>
         SelectTargetUnit (
-          _conversionSource_: an Amount,
-          _resolvedOpts_: an Amount Options Record,
+          _conversionSource_: a Conversion Source Record,
+          _opts_: an Amount Options Record,
         ): either a normal completion containing a String or a throw completion
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It determines the unit identifier to which _conversionSource_ is to be converted.</dd>
+        <dd>It determines the unit identifier to which the quantity described by _conversionSource_ is to be converted.</dd>
         <dt>redefinition</dt>
         <dd>true</dd>
       </dl>
       <p>This definition supersedes the definition provided in <emu-xref href="#sec-amount-selecttargetunit"></emu-xref>.</p>
       <emu-alg>
-        1. Let _unit_ be _resolvedOpts_.[[Unit]].
-        1. Let _extendedOpts_ be _resolvedOpts_.[[ExtendedOptions]].
+        1. Let _unit_ be _opts_.[[Unit]].
+        1. Let _extendedOpts_ be _opts_.[[ExtendedOptions]].
         1. Let _locale_ be _extendedOpts_.[[Locale]].
         1. Let _usage_ be _extendedOpts_.[[Usage]].
         1. If _unit_ is not *undefined*, then
@@ -91,7 +91,7 @@
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
           1. Set _usage_ to *"default"*.
         1. Let _sourceUnit_ be _conversionSource_.[[Unit]].
-        1. Let _sourceValue_ be GetAmountNumericValue(_conversionSource_).
+        1. Let _sourceValue_ be _conversionSource_.[[Value]].
         1. Let _category_ be ? GetUnitCategory(_sourceUnit_).
         1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
         1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
@@ -101,11 +101,15 @@
         1. Set _unit_ to ~unset~.
         1. For each element _entry_ of _preferredUnits_, do
           1. Set _unit_ to _entry_.[[Unit]].
-          1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _unit_).
+          1. Let _thresholdUnit_ be the first element of GetUnitComponents(_unit_).
+          1. Let _convertedValue_ be ? ConvertUnitValue(_sourceValue_, _sourceUnit_, _thresholdUnit_).
           1. If _convertedValue_ is not finite or abs(ℝ(_convertedValue_)) ≥ _entry_.[[Threshold]], return _unit_.
         1. Assert: _unit_ is a String.
         1. Return _unit_.
       </emu-alg>
+      <emu-note>
+        <p>Unit preference data may name a sequence unit. Its <code>geq</code> threshold is expressed in the first (largest) component of that sequence, so the comparison converts to that component.</p>
+      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-amount-getunitcategory" type="abstract operation">
@@ -162,6 +166,7 @@
             1. Let _regions_ be StringSplitToList(_regionsAttr_, *" "*).
             1. Let _geq_ be the mathematical value of the <code>geq</code> attribute of _unitPreference_ if present, or 1 otherwise.
             1. Let _unit_ be the String value of the body of the _unitPreference_.
+            1. Assert: ParseText(_unit_, |UnitIdentifier|) is a Parse Node.
             1. If _regions_ contains _region_, append the Record { [[Unit]]: _unit_, [[Threshold]]: _geq_ } to _matchingUnits_.
           1. If _matchingUnits_ is empty, then
             1. Assert: _region_ is not *"001"*.
@@ -197,19 +202,18 @@
         1. Let _O_ be the *this* value.
         1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
         1. Let _v_ be _O_.[[AmountValue]].
-        1. If _v_ is a String, then
-          1. Let _numValue_ be _v_.
-        1. Else if _v_ is a BigInt, then
-          1. Let _numValue_ be BigInt::toString(_v_, 10).
-        1. Else,
-          1. Assert: _v_ is a Number.
-          1. Let _numValue_ be _v_.
         1. Let _unit_ be _O_.[[Unit]].
         1. Let _mergedOptions_ be OrdinaryObjectCreate(*null*).
         1. If _options_ is not *undefined*, then
           1. Let _optionsObj_ be ? GetOptionsObject(_options_).
           1. Perform ? CopyDataProperties(_mergedOptions_, _optionsObj_, « »).
-        1. If _unit_ is not *undefined*, then
+        1. If _v_ is a List, then
+          1. Assert: _unit_ is a String.
+          1. If ? HasProperty(_mergedOptions_, *"style"*) is *true*, throw a *TypeError* exception.
+          1. If ? HasProperty(_mergedOptions_, *"unit"*) is *true*, throw a *TypeError* exception.
+          1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"unit"*).
+          1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"unit"*, _unit_).
+        1. Else if _unit_ is not *undefined*, then
           1. If ? HasProperty(_mergedOptions_, *"style"*) is *false*, then
             1. If IsWellFormedCurrencyCode(_unit_) is *true*, then
               1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"style"*, *"currency"*).
@@ -220,9 +224,39 @@
               1. If ? HasProperty(_mergedOptions_, *"unit"*) is *false*, then
                 1. Perform ! CreateDataPropertyOrThrow(_mergedOptions_, *"unit"*, _unit_).
         1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, « _locales_, _mergedOptions_ »).
-        1. Return FormatNumeric(_numberFormat_, _numValue_).
+        1. If _v_ is a List, then
+          1. Let _values_ be a new empty List.
+          1. For each element _entry_ of _v_, do
+            1. Append ! ToIntlMathematicalValue(_entry_) to _values_.
+          1. Return FormatNumericSequence(_numberFormat_, _values_).
+        1. Return FormatNumeric(_numberFormat_, ! ToIntlMathematicalValue(_v_)).
       </emu-alg>
+      <emu-note>
+        <p>A sequence-unit Amount is always formatted with its own unit, so the *"style"* and *"unit"* options may not be given for it. Intl.NumberFormat accepts only a fixed list of sequence units, so it may throw a *RangeError* exception for a sequence unit that <emu-xref href="#sec-amount.prototype.convertto">convertTo</emu-xref> accepts.</p>
+      </emu-note>
+      <emu-note type="editor">
+        <p>FormatNumericSequence is defined by the <a href="https://tc39.es/proposal-intl-sequence-units/">Intl Sequence Units proposal</a>, on which this text depends. That proposal predates the Intl MV Record introduced by <a href="https://tc39.es/proposal-intl-keep-trailing-zeros/">Intl Keep Trailing Zeros</a>; the elements of _values_ above are Intl MV Records, and we expect FormatNumericSequence to be updated to accept them.</p>
+      </emu-note>
     </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sup-numberformat-abstracts">
+    <h1>Abstract Operations for NumberFormat Objects</h1>
+    <p>[...]</p>
+    <emu-clause id="sup-getunsignedroundingmode">
+      <h1><del>GetUnsignedRoundingMode ( roundingMode, sign )</del></h1>
+      <emu-note type="editor">
+        <p>This abstract operation, together with its table of unsigned rounding modes, is promoted unchanged to ECMA-262 as <emu-xref href="#sec-getunsignedroundingmode"></emu-xref> and is deleted here.</p>
+      </emu-note>
+    </emu-clause>
+    <p>[...]</p>
+    <emu-clause id="sup-applyunsignedroundingmode">
+      <h1><del>ApplyUnsignedRoundingMode ( x, r1, r2, unsignedRoundingMode )</del></h1>
+      <emu-note type="editor">
+        <p>This abstract operation is promoted unchanged to ECMA-262 as <emu-xref href="#sec-applyunsignedroundingmode"></emu-xref> and is deleted here.</p>
+      </emu-note>
+    </emu-clause>
+    <p>[...]</p>
   </emu-clause>
 
   <emu-clause id="sec-amount-intl-normative-references">
@@ -235,6 +269,9 @@
         <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Part 6 Supplemental, Unit Preferences</a>
       </li>
     </ul>
+    <emu-note type="editor">
+      <p>This text also depends on the <a href="https://tc39.es/proposal-intl-sequence-units/">Intl Sequence Units proposal</a> for the validation of sequence unit identifiers by Intl.NumberFormat and for the FormatNumericSequence abstract operation.</p>
+    </emu-note>
   </emu-clause>
 </emu-clause>
 
