@@ -264,23 +264,24 @@ location: https://tc39.es/proposal-amount/
             _mv_: a mathematical value or ~negative-zero~,
             _fractionDigits_: a non-negative integer,
             _roundingMode_: a rounding mode,
-          ): a String
+          ): a mathematical value or ~negative-zero~
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It rounds _mv_ to _fractionDigits_ fraction digits using _roundingMode_ and returns the result as a decimal digit string in exponential notation with as many significant digits as the rounding produced. The sign of _mv_, including that of negative zero, is preserved.</dd>
+          <dd>It rounds _mv_ to a multiple of 10<sup>-_fractionDigits_</sup> using _roundingMode_. The sign of _mv_ is preserved, and a negative value that rounds to zero becomes ~negative-zero~.</dd>
         </dl>
         <emu-alg>
-          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
-          1. Let _fmt_ be FormatNumericToString(_formatter_, _mv_, 0, 0).
-          1. Let _parsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
-          1. Assert: _parsed_ is a Parse Node.
-          1. Let _fmtIntlMV_ be the StringIntlMV of _parsed_.
-          1. Return RenderInExponentialNotation(_fmt_.[[RoundedNumber]], _fmtIntlMV_.[[StringDigitCount]]).
+          1. If _mv_ is ~negative-zero~, return ~negative-zero~.
+          1. If _mv_ &lt; 0, let _sign_ be ~negative~ and let _x_ be -_mv_; else let _sign_ be ~positive~ and let _x_ be _mv_.
+          1. Let _unsignedRoundingMode_ be GetUnsignedRoundingMode(_roundingMode_, _sign_).
+          1. Let _r1_ be the largest mathematical value such that _r1_ ≤ _x_ and _r1_ × 10<sup>_fractionDigits_</sup> is an integer.
+          1. Let _r2_ be the smallest mathematical value such that _r2_ ≥ _x_ and _r2_ × 10<sup>_fractionDigits_</sup> is an integer.
+          1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
+          1. If _sign_ is ~negative~, then
+            1. If _r_ = 0, return ~negative-zero~.
+            1. Return -_r_.
+          1. Return _r_.
         </emu-alg>
-        <emu-note>
-          <p>[[FormattedString]] carries no sign, so it determines only the number of digits; the value comes from [[RoundedNumber]].</p>
-        </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-amount-roundtosignificantdigits" type="abstract operation">
@@ -289,19 +290,41 @@ location: https://tc39.es/proposal-amount/
             _mv_: a mathematical value or ~negative-zero~,
             _significantDigits_: a positive integer,
             _roundingMode_: a rounding mode,
+          ): a mathematical value or ~negative-zero~
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It rounds _mv_ to _significantDigits_ significant decimal digits using _roundingMode_. The sign of _mv_ is preserved, and zero is returned unchanged.</dd>
+        </dl>
+        <emu-alg>
+          1. If _mv_ is ~negative-zero~ or _mv_ = 0, return _mv_.
+          1. If _mv_ &lt; 0, let _sign_ be ~negative~ and let _x_ be -_mv_; else let _sign_ be ~positive~ and let _x_ be _mv_.
+          1. Let _unsignedRoundingMode_ be GetUnsignedRoundingMode(_roundingMode_, _sign_).
+          1. Let _r1_ be the largest mathematical value such that _r1_ ≤ _x_ and _r1_ is the product of an integer in the inclusive interval from 10<sup>_significantDigits_ - 1</sup> to 10<sup>_significantDigits_</sup> - 1 and an integer power of 10.
+          1. Let _r2_ be the smallest mathematical value such that _r2_ ≥ _x_ and _r2_ is the product of an integer in the inclusive interval from 10<sup>_significantDigits_ - 1</sup> to 10<sup>_significantDigits_</sup> - 1 and an integer power of 10.
+          1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
+          1. If _sign_ is ~negative~, return -_r_.
+          1. Return _r_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-amount-renderwithfractiondigits" type="abstract operation">
+        <h1>
+          RenderWithFractionDigits (
+            _r_: a mathematical value or ~negative-zero~,
+            _fractionDigits_: a non-negative integer,
           ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It rounds _mv_ to _significantDigits_ significant digits using _roundingMode_ and returns the result as a decimal digit string in exponential notation with _significantDigits_ significant digits. The sign of _mv_, including that of negative zero, is preserved.</dd>
+          <dd>It renders _r_, which must be a multiple of 10<sup>-_fractionDigits_</sup>, as a decimal digit string in exponential notation. The number of significant digits is that of _r_ written in decimal with exactly _fractionDigits_ fraction digits, so that the precision of the rendering matches _fractionDigits_. Zero is rendered with _fractionDigits_ + 1 digits.</dd>
         </dl>
         <emu-alg>
-          1. Let _formatter_ be CreateFormatterObject(_roundingMode_, *undefined*, *undefined*, _significantDigits_, _significantDigits_, *undefined*).
-          1. Let _fmt_ be FormatNumericToString(_formatter_, _mv_, 0, 0).
-          1. Let _parsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
-          1. Assert: _parsed_ is a Parse Node.
-          1. Let _fmtIntlMV_ be the StringIntlMV of _parsed_.
-          1. Return RenderInExponentialNotation(_fmt_.[[RoundedNumber]], _fmtIntlMV_.[[StringDigitCount]]).
+          1. If _r_ is ~negative-zero~ or _r_ = 0, return RenderInExponentialNotation(_r_, _fractionDigits_ + 1).
+          1. Let _n_ be abs(_r_) × 10<sup>_fractionDigits_</sup>.
+          1. Assert: _n_ is a positive integer.
+          1. Let _digitCount_ be the number of digits in the decimal representation of _n_.
+          1. Return RenderInExponentialNotation(_r_, _digitCount_).
         </emu-alg>
       </emu-clause>
 
@@ -325,8 +348,11 @@ location: https://tc39.es/proposal-amount/
               1. Else if _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~.
               1. Else, let _mv_ be ℝ(_value_).
               1. Let _roundingMode_ be _opts_.[[RoundingMode]].
-              1. If _fractionDigits_ is not *undefined*, return RoundToFractionDigits(_mv_, _fractionDigits_, _roundingMode_).
-              1. Return RoundToSignificantDigits(_mv_, _significantDigits_, _roundingMode_).
+              1. If _fractionDigits_ is not *undefined*, then
+                1. Let _rounded_ be RoundToFractionDigits(_mv_, _fractionDigits_, _roundingMode_).
+                1. Return RenderWithFractionDigits(_rounded_, _fractionDigits_).
+              1. Let _rounded_ be RoundToSignificantDigits(_mv_, _significantDigits_, _roundingMode_).
+              1. Return RenderInExponentialNotation(_rounded_, _significantDigits_).
             1. Return _value_.
           1. If _value_ is an Intl MV Record, then
             1. Let _mv_ be _value_.[[Value]].
@@ -401,54 +427,6 @@ location: https://tc39.es/proposal-amount/
         <emu-note>
           <p>*NaN* and the infinities are not integral Numbers, so they are rejected in every position but the last. Extra properties of an object _value_ are ignored, matching the handling of sequence unit values by Intl.NumberFormat.</p>
         </emu-note>
-      </emu-clause>
-
-      <emu-clause id="sec-amount-createformatterobject" type="abstract operation">
-        <h1>CreateFormatterObject (
-          _roundingMode_: a String,
-          _minFractionDigits_: a non-negative integer or *undefined*,
-          _maxFractionDigits_: a non-negative integer or *undefined*,
-          _minSignificantDigits_: a positive integer or *undefined*,
-          _maxSignificantDigits_: a positive integer or *undefined*,
-          _roundingPriority_: a String or *undefined*
-        ): an Object
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>It creates an object with the internal slots required by <emu-xref href="#sec-formatnumerictostring">FormatNumericToString</emu-xref>, configured according to the given rounding and digit options.</dd>
-        </dl>
-        <emu-alg>
-          1. Let _formatter_ be OrdinaryObjectCreate(*null*, « [[MinimumFractionDigits]], [[MinimumIntegerDigits]], [[MinimumSignificantDigits]], [[MaximumFractionDigits]], [[MaximumSignificantDigits]], [[RoundingIncrement]], [[RoundingMode]], [[RoundingType]], [[TrailingZeroDisplay]] »).
-          1. Set _formatter_.[[RoundingMode]] to _roundingMode_.
-          1. Set _formatter_.[[MinimumIntegerDigits]] to 1.
-          1. Set _formatter_.[[RoundingIncrement]] to 1.
-          1. Set _formatter_.[[TrailingZeroDisplay]] to *"auto"*.
-          1. If _minSignificantDigits_ is not *undefined* or _maxSignificantDigits_ is not *undefined*, let _hasSD_ be *true*; else let _hasSD_ be *false*.
-          1. If _minFractionDigits_ is not *undefined* or _maxFractionDigits_ is not *undefined*, let _hasFD_ be *true*; else let _hasFD_ be *false*.
-          1. If _hasSD_ is *true*, then
-            1. If _minSignificantDigits_ is not *undefined*, let _resolvedMinSD_ be _minSignificantDigits_; else let _resolvedMinSD_ be 1.
-            1. If _maxSignificantDigits_ is not *undefined*, let _resolvedMaxSD_ be _maxSignificantDigits_; else let _resolvedMaxSD_ be 21.
-            1. Set _formatter_.[[MinimumSignificantDigits]] to _resolvedMinSD_.
-            1. Set _formatter_.[[MaximumSignificantDigits]] to _resolvedMaxSD_.
-          1. Else,
-            1. Set _formatter_.[[MinimumSignificantDigits]] to 1.
-            1. Set _formatter_.[[MaximumSignificantDigits]] to 21.
-          1. If _hasFD_ is *true*, then
-            1. If _minFractionDigits_ is not *undefined*, let _resolvedMinFD_ be _minFractionDigits_; else let _resolvedMinFD_ be 0.
-            1. If _maxFractionDigits_ is not *undefined*, let _resolvedMaxFD_ be _maxFractionDigits_; else let _resolvedMaxFD_ be 100.
-            1. Set _formatter_.[[MinimumFractionDigits]] to _resolvedMinFD_.
-            1. Set _formatter_.[[MaximumFractionDigits]] to _resolvedMaxFD_.
-          1. Else,
-            1. Set _formatter_.[[MinimumFractionDigits]] to 0.
-            1. Set _formatter_.[[MaximumFractionDigits]] to 100.
-          1. If _hasSD_ is *true* and _hasFD_ is *true*, then
-            1. If _roundingPriority_ is *"morePrecision"*, set _formatter_.[[RoundingType]] to ~more-precision~; else set _formatter_.[[RoundingType]] to ~less-precision~.
-          1. Else if _hasSD_ is *true*, then
-            1. Set _formatter_.[[RoundingType]] to ~significant-digits~.
-          1. Else,
-            1. Set _formatter_.[[RoundingType]] to ~fraction-digits~.
-          1. Return _formatter_.
-        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-amount-unit-conversion-data">
@@ -716,13 +694,8 @@ location: https://tc39.es/proposal-amount/
           1. Let _n_ be the number of elements in _multipliers_ + 1.
           1. Let _fractionDigits_ be _opts_.[[FractionDigits]].
           1. Assert: _opts_.[[SignificantDigits]] is *undefined*.
-          1. If _fractionDigits_ is *undefined*, then
-            1. If _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~; else let _mv_ be ℝ(_value_).
-          1. Else,
-            1. Let _formatter_ be CreateFormatterObject(_opts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, *undefined*, *undefined*, *undefined*).
-            1. Let _intlMV_ be ! ToIntlMathematicalValue(_value_).
-            1. Let _rounded_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
-            1. Let _mv_ be _rounded_.[[RoundedNumber]].
+          1. If _value_ is *-0*<sub>𝔽</sub>, let _mv_ be ~negative-zero~; else let _mv_ be ℝ(_value_).
+          1. If _fractionDigits_ is not *undefined*, set _mv_ to RoundToFractionDigits(_mv_, _fractionDigits_, _opts_.[[RoundingMode]]).
           1. If _mv_ is ~negative-zero~, then
             1. Let _negative_ be *true*.
             1. Let _magnitude_ be 0.
@@ -746,7 +719,7 @@ location: https://tc39.es/proposal-amount/
           1. Repeat, while _k_ &lt; _n_,
             1. Let _part_ be _parts_[_k_].
             1. If _negative_ is *true* and _part_ = 0, let _signedPart_ be ~negative-zero~; else if _negative_ is *true*, let _signedPart_ be -_part_; else let _signedPart_ be _part_.
-            1. If _k_ = _n_ - 1 and _fractionDigits_ is not *undefined*, append RoundToFractionDigits(_signedPart_, _fractionDigits_, _opts_.[[RoundingMode]]) to _entries_.
+            1. If _k_ = _n_ - 1 and _fractionDigits_ is not *undefined*, append RenderWithFractionDigits(_signedPart_, _fractionDigits_) to _entries_.
             1. Else if _signedPart_ is ~negative-zero~, append *-0*<sub>𝔽</sub> to _entries_.
             1. Else, append 𝔽(_signedPart_) to _entries_.
             1. Set _k_ to _k_ + 1.
@@ -814,9 +787,6 @@ location: https://tc39.es/proposal-amount/
       </emu-note>
       <emu-note>
         <p>A String argument must denote a finite mathematical value. *"NaN"*, *"Infinity"*, *"+Infinity"*, *"-Infinity"*, and *""* are rejected, as are Strings with leading or trailing white space or other extraneous contents.</p>
-      </emu-note>
-      <emu-note type="editor">
-        <p>We intend to move ECMA-402 FormatNumericToString and its dependent operations to ECMA-262, possibly renamed.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
