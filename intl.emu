@@ -28,7 +28,7 @@
 
     <emu-clause id="sec-amount-unit-preference-data">
       <h1>Unit Preference Data</h1>
-      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference.</p>
+      <p>Unit preference data is derived from CLDR file <a href="https://github.com/unicode-org/cldr/blob/main/common/supplemental/units.xml"><code>supplemental/units.xml</code></a>. As described in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences_Data">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences Data</a>, each <code>&lt;unitPreferences&gt;</code> element contains the preferred units for its <code>category</code> and <code>usage</code>. A <code>&lt;unitPreferences&gt;</code> element contains one or more <code>&lt;unitPreference&gt;</code> elements, which define the <code>regions</code> (a space-separated list of region identifiers) and optionally the <code>geq</code> threshold for the unit preference. The body of every <code>&lt;unitPreference&gt;</code> element is a <emu-xref href="#amount-unit-identifier">unit identifier</emu-xref>.</p>
     </emu-clause>
 
     <emu-clause id="sup-amount-options-record">
@@ -166,6 +166,7 @@
             1. Let _regions_ be StringSplitToList(_regionsAttr_, *" "*).
             1. Let _geq_ be the mathematical value of the <code>geq</code> attribute of _unitPreference_ if present, or 1 otherwise.
             1. Let _unit_ be the String value of the body of the _unitPreference_.
+            1. Assert: ParseText(_unit_, |UnitIdentifier|) is a Parse Node.
             1. If _regions_ contains _region_, append the Record { [[Unit]]: _unit_, [[Threshold]]: _geq_ } to _matchingUnits_.
           1. If _matchingUnits_ is empty, then
             1. Assert: _region_ is not *"001"*.
