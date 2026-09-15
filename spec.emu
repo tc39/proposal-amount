@@ -578,11 +578,21 @@ location: https://tc39.es/proposal-amount/
         </p>
       </emu-clause>
 
+      <emu-clause id="sec-amount-sequence-unit-data-record">
+        <h1>Sequence Unit Data Record</h1>
+        <p>
+          A <dfn variants="Sequence Unit Data Records">Sequence Unit Data Record</dfn> is a Record describing the conversion relationships between the components of a sequence unit.
+          It has fields [[BaseUnit]] (a String) and [[Multipliers]] (a List of integers, each at least 2).
+          [[BaseUnit]] is the common base unit to which all components convert without an offset.
+          [[Multipliers]] has one fewer element than the sequence has components; [[Multipliers]][_k_] is the number of units of component _k_ + 1 in one unit of component _k_, with components indexed from 0.
+        </p>
+      </emu-clause>
+
       <emu-clause id="sec-amount-getsequenceunitdata" type="abstract operation">
         <h1>
           GetSequenceUnitData (
             _components_: a List of Strings,
-          ): either a normal completion containing a Record with fields [[BaseUnit]] (a String) and [[Multipliers]] (a List of integers) or a throw completion
+          ): either a normal completion containing a Sequence Unit Data Record or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -606,7 +616,7 @@ location: https://tc39.es/proposal-amount/
             1. Append _ratio_ to _multipliers_.
             1. Set _previousFactor_ to _conv_.[[Factor]].
             1. Set _k_ to _k_ + 1.
-          1. Return the Record { [[BaseUnit]]: _baseUnit_, [[Multipliers]]: _multipliers_ }.
+          1. Return the Sequence Unit Data Record { [[BaseUnit]]: _baseUnit_, [[Multipliers]]: _multipliers_ }.
         </emu-alg>
         <emu-note>
           <p>Conversion factors are mathematical values taken from CLDR, so the ratio of two factors is exact. Whether a sequence unit can also be formatted by Intl.NumberFormat is decided separately by ECMA-402, which admits only a fixed list of sequences.</p>
