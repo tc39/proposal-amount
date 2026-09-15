@@ -574,7 +574,7 @@ location: https://tc39.es/proposal-amount/
         <p>
           A <dfn variants="Conversion Source Records">Conversion Source Record</dfn> is a Record describing the quantity that a unit conversion starts from.
           It has fields [[Value]] (a Number) and [[Unit]] (a String), where [[Unit]] is a <emu-xref href="#amount-single-unit">single unit</emu-xref> and [[Value]] is the quantity of that unit.
-          For a single-unit Amount these are the Amount's own value and unit. For a sequence-unit Amount, [[Unit]] is the last (smallest) component and [[Value]] is the total of all entries expressed in that component.
+          For a single-unit Amount, [[Value]] is the numeric approximation of the Amount's stored value and [[Unit]] is the Amount's own unit. For a sequence-unit Amount, [[Unit]] is the last (smallest) component and [[Value]] is the total of all entries expressed in that component.
         </p>
       </emu-clause>
 
