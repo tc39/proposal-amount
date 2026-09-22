@@ -231,6 +231,45 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-amount-roundamountvalue" type="abstract operation">
+        <h1>
+          RoundAmountValue (
+            _value_: a Number, a BigInt, or an Intl MV Record,
+            _resolvedOpts_: an Amount Options Record,
+          ): a Number, a BigInt, or a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It returns the value to store in an Amount for the input _value_ under the precision options of _resolvedOpts_. A finite value to which precision options apply, and any value that came from a String, is returned as a decimal digit string in exponential notation; otherwise _value_ is returned unchanged.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
+          1. Let _significantDigits_ be _resolvedOpts_.[[SignificantDigits]].
+          1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
+            1. If _value_ is a finite Number or _value_ is not a Number, then
+              1. Let _formatter_ be CreateFormatterObject(_resolvedOpts_.[[RoundingMode]], _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
+              1. If _value_ is an Intl MV Record, let _intlMV_ be _value_; else let _intlMV_ be ! ToIntlMathematicalValue(_value_).
+              1. Let _fmt_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
+              1. Let _fmtParsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
+              1. Assert: _fmtParsed_ is an instance of |StringNumericLiteral|.
+              1. Let _fmtIntlMV_ be the StringIntlMV of _fmtParsed_.
+              1. Return RenderInExponentialNotation(_fmtIntlMV_.[[Value]], _fmtIntlMV_.[[StringDigitCount]]).
+            1. Return _value_.
+          1. If _value_ is an Intl MV Record, then
+            1. Let _mv_ be _value_.[[Value]].
+            1. If _value_.[[StringDigitCount]] ≥ 1, then
+              1. Let _digitCount_ be _value_.[[StringDigitCount]].
+            1. Else,
+              1. Assert: _mv_ is an integer.
+              1. Let _digitCount_ be the count of digits in the decimal representation of _mv_.
+            1. Return RenderInExponentialNotation(_mv_, _digitCount_).
+          1. Return _value_.
+        </emu-alg>
+        <emu-note type="editor">
+          <p>The rounding branch re-parses [[FormattedString]], which FormatNumericToString returns without a sign. This behaviour is carried over unchanged from the constructor; see the separate issue about negative values under precision options.</p>
+        </emu-note>
+      </emu-clause>
+
       <emu-clause id="sec-amount-createformatterobject" type="abstract operation">
         <h1>CreateFormatterObject (
           _roundingMode_: a String,
@@ -417,29 +456,9 @@ location: https://tc39.es/proposal-amount/
         1. Else if _value_ is not a Number or a BigInt, then
           1. Throw a *TypeError* exception.
         1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
-        1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
-        1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
-        1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
         1. Let _unit_ be _validatedOpts_.[[Unit]].
-        1. If _fractionDigits_ is not *undefined* or _significantDigits_ is not *undefined*, then
-          1. If _value_ is a finite Number or _value_ is not a Number, then
-            1. Let _formatter_ be CreateFormatterObject(_roundingMode_, _fractionDigits_, _fractionDigits_, _significantDigits_, _significantDigits_, *undefined*).
-            1. If _value_ is an Intl MV Record, let _intlMV_ be _value_; else let _intlMV_ be ! ToIntlMathematicalValue(_value_).
-            1. Let _fmt_ be FormatNumericToString(_formatter_, _intlMV_.[[Value]], 0, 0).
-            1. Let _fmtParsed_ be ParseText(_fmt_.[[FormattedString]], |StringNumericLiteral|).
-            1. Assert: _fmtParsed_ is an instance of |StringNumericLiteral|.
-            1. Let _fmtIntlMV_ be the StringIntlMV of _fmtParsed_.
-            1. Set _value_ to RenderInExponentialNotation(_fmtIntlMV_.[[Value]], _fmtIntlMV_.[[StringDigitCount]]).
-        1. Else if _value_ is an Intl MV Record, then
-          1. Let _mv_ be _value_.[[Value]].
-          1. If _value_.[[StringDigitCount]] ≥ 1, then
-            1. Let _digitCount_ be _value_.[[StringDigitCount]].
-          1. Else,
-            1. Assert: _mv_ is an integer.
-            1. Let _digitCount_ be the count of digits in the decimal representation of _mv_.
-          1. Set _value_ to RenderInExponentialNotation(_mv_, _digitCount_).
         1. Let _O_ be OrdinaryObjectCreate(%Amount.prototype%, « [[AmountValue]], [[Unit]] »).
-        1. Set _O_.[[AmountValue]] to _value_.
+        1. Set _O_.[[AmountValue]] to RoundAmountValue(_value_, _validatedOpts_).
         1. Set _O_.[[Unit]] to _unit_.
         1. Return _O_.
       </emu-alg>
