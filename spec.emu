@@ -208,9 +208,9 @@ location: https://tc39.es/proposal-amount/
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-amount-getamountnumericvalue" type="abstract operation">
+      <emu-clause id="sec-amount-getamountnumbervalue" type="abstract operation">
         <h1>
-          GetAmountNumericValue (
+          GetAmountNumberValue (
             _amount_: an Amount,
           ): a Number
         </h1>
