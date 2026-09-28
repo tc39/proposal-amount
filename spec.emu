@@ -168,9 +168,8 @@ location: https://tc39.es/proposal-amount/
         </dl>
         <p>
           An ECMAScript implementation that includes the ECMA-402 Internationalization API
-          must implement this abstract operation as specified in the ECMA-402 specification.
-          If an ECMAScript implementation does not include the ECMA-402 API,
-          SetAmountOptions performs the following steps when called:
+          must implement this abstract operation as specified in ECMA-402.
+          Otherwise, SetAmountOptions performs the following steps when called:
         </p>
         <emu-alg>
           1. Set _target_.[[FractionDigits]] to ? GetOption(_source_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
@@ -197,9 +196,8 @@ location: https://tc39.es/proposal-amount/
         </dl>
         <p>
           An ECMAScript implementation that includes the ECMA-402 Internationalization API
-          must implement this abstract operation as specified in the ECMA-402 specification.
-          If an ECMAScript implementation does not include the ECMA-402 API,
-          SelectTargetUnit performs the following steps when called:
+          must implement this abstract operation as specified in ECMA-402.
+          Otherwise, SelectTargetUnit performs the following steps when called:
         </p>
         <emu-alg>
           1. Let _unit_ be _resolvedOpts_.[[Unit]].
