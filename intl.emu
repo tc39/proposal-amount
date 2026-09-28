@@ -91,7 +91,7 @@
           1. If _locale_ is *undefined*, throw a *TypeError* exception.
           1. Set _usage_ to *"default"*.
         1. Let _sourceUnit_ be _conversionSource_.[[Unit]].
-        1. Let _sourceValue_ be GetAmountNumericValue(_conversionSource_).
+        1. Let _sourceValue_ be GetAmountNumberValue(_conversionSource_).
         1. Let _category_ be ? GetUnitCategory(_sourceUnit_).
         1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
         1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
