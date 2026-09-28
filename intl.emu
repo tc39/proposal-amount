@@ -144,7 +144,7 @@
         <dd>It determines the preferred units to use for the given category, usage, and region according to the <a href="https://unicode.org/reports/tr35/tr35-info.html#compute-the-preferred-output-unit">Compute the preferred output unit</a> algorithm specified in <a href="https://unicode.org/reports/tr35/tr35-info.html#Unit_Preferences">Unicode Technical Standard #35 Part 6 Supplemental, Unit Preferences</a>, and returns them ordered by descending threshold.</dd>
       </dl>
       <emu-alg>
-        1. Assert: _region_ can be matched by the <code>unicode_region_id</code> Unicode locale nonterminal and the ASCII-uppercase of _region_ is _region_.
+        1. Assert: _region_ can be matched by the <code>unicode_region_subtag</code> Unicode locale nonterminal and the ASCII-uppercase of _region_ is _region_.
         1. Let _candidateElements_ be ~unset~.
         1. Repeat, while _candidateElements_ is ~unset~,
           1. [declared="unitPreferencesElement"] If there is a <code>&lt;unitPreferences&gt;</code> element _unitPreferencesElement_ in the <emu-xref href="#sec-amount-unit-preference-data">unit preference data</emu-xref> such that its <code>category</code> is _category_ and its <code>usage</code> is _usage_, then
