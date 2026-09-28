@@ -96,6 +96,7 @@
         1. Let _requestedLocales_ be ? CanonicalizeLocaleList(_locale_).
         1. If _requestedLocales_ is an empty List, let _resolvedLocale_ be DefaultLocale(); else let _resolvedLocale_ be the first element of _requestedLocales_.
         1. Let _regionPreference_ be RegionPreference(_resolvedLocale_).
+        1. NOTE: An unknown locale is associated with [[Region]] *"001"* (the World).
         1. If _regionPreference_.[[RegionOverride]] is not *undefined*, let _region_ be _regionPreference_.[[RegionOverride]]; else let _region_ be _regionPreference_.[[Region]].
         1. Let _preferredUnits_ be GetPreferredUnits(_category_, _usage_, _region_).
         1. Set _unit_ to ~unset~.
