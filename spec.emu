@@ -120,6 +120,7 @@ location: https://tc39.es/proposal-amount/
       <emu-clause id="sec-amount-getamountoptions" type="abstract operation">
         <h1>GetAmountOptions (
           _opts_: an ECMAScript language value,
+          _purpose_: ~construction~ or ~unit-conversion~,
           optional _conversionSource_: an Amount,
         ): either a normal completion containing an Amount Options Record or a throw completion
         </h1>
@@ -136,7 +137,7 @@ location: https://tc39.es/proposal-amount/
             1. Set _resolvedOpts_.[[Unit]] to _opts_.
             1. Return _resolvedOpts_.
           1. Set _opts_ to ? GetOptionsObject(_opts_).
-          1. Perform ? SetAmountOptions(_resolvedOpts_, _opts_).
+          1. Perform ? SetAmountOptions(_resolvedOpts_, _opts_, _purpose_).
           1. Let _fractionDigits_ be _resolvedOpts_.[[FractionDigits]].
           1. Let _significantDigits_ be _resolvedOpts_.[[SignificantDigits]].
           1. If _fractionDigits_ is not *undefined*, then
@@ -160,6 +161,7 @@ location: https://tc39.es/proposal-amount/
           SetAmountOptions (
             _target_: an Amount Options Record,
             _source_: an Object,
+            _purpose_: ~construction~ or ~unit-conversion~,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -416,7 +418,7 @@ location: https://tc39.es/proposal-amount/
           1. Set _value_ to the StringIntlMV of _parsed_.
         1. Else if _value_ is not a Number or a BigInt, then
           1. Throw a *TypeError* exception.
-        1. Let _validatedOpts_ be ? GetAmountOptions(_options_).
+        1. Let _validatedOpts_ be ? GetAmountOptions(_options_, ~construction~).
         1. Let _roundingMode_ be _validatedOpts_.[[RoundingMode]].
         1. Let _fractionDigits_ be _validatedOpts_.[[FractionDigits]].
         1. Let _significantDigits_ be _validatedOpts_.[[SignificantDigits]].
@@ -537,7 +539,7 @@ location: https://tc39.es/proposal-amount/
       1. Perform ? RequireInternalSlot(_O_, [[AmountValue]]).
       1. Let _sourceUnit_ be _O_.[[Unit]].
       1. If _sourceUnit_ is *undefined*, throw a *TypeError* exception.
-      1. Let _opts_ be ? GetAmountOptions(_options_, _O_).
+      1. Let _opts_ be ? GetAmountOptions(_options_, ~unit-conversion~, _O_).
       1. Let _targetUnit_ be _opts_.[[Unit]].
       1. Let _numericValue_ be GetAmountNumberValue(_O_).
       1. Let _convertedValue_ be ? ConvertUnitValue(_numericValue_, _sourceUnit_, _targetUnit_).
