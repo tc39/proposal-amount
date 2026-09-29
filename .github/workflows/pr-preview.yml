@@ -8,7 +8,7 @@ on:
       - synchronize
       - closed
 
-concurrency: preview-${{ github.ref }}
+concurrency: gh-pages
 
 permissions:
   contents: write
