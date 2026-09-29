@@ -107,7 +107,7 @@ location: https://tc39.es/proposal-amount/
         <h1>Amount Options Record</h1>
         <p>
           An <dfn variants="Amount Options Records">Amount Options Record</dfn> is a Record holding the resolved values of the options
-          accepted by the Amount constructor and by <emu-xref href="#sec-amount.prototype.convertto">Amount.prototype.convertTo</emu-xref>.
+          accepted by the <emu-xref href="#sec-the-amount-constructor" title></emu-xref> and by <emu-xref href="#sec-amount.prototype.convertto" title></emu-xref>.
           It has fields [[FractionDigits]] (a non-negative integer or *undefined*), [[RoundingMode]] (a rounding mode),
           [[SignificantDigits]] (a positive integer or *undefined*), [[Unit]] (a String or *undefined*),
           and [[ExtendedOptions]] (*undefined*, or a value as specified in the ECMA-402 Internationalization API).
@@ -168,9 +168,8 @@ location: https://tc39.es/proposal-amount/
         </dl>
         <p>
           An ECMAScript implementation that includes the ECMA-402 Internationalization API
-          must implement this abstract operation as specified in the ECMA-402 specification.
-          If an ECMAScript implementation does not include the ECMA-402 API,
-          SetAmountOptions performs the following steps when called:
+          must implement this abstract operation as specified in ECMA-402.
+          Otherwise, SetAmountOptions performs the following steps when called:
         </p>
         <emu-alg>
           1. Set _target_.[[FractionDigits]] to ? GetOption(_source_, *"fractionDigits"*, ~number~, ~empty~, *undefined*).
@@ -197,9 +196,8 @@ location: https://tc39.es/proposal-amount/
         </dl>
         <p>
           An ECMAScript implementation that includes the ECMA-402 Internationalization API
-          must implement this abstract operation as specified in the ECMA-402 specification.
-          If an ECMAScript implementation does not include the ECMA-402 API,
-          SelectTargetUnit performs the following steps when called:
+          must implement this abstract operation as specified in ECMA-402.
+          Otherwise, SelectTargetUnit performs the following steps when called:
         </p>
         <emu-alg>
           1. Let _unit_ be _resolvedOpts_.[[Unit]].
