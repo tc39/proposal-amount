@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+concurrency: gh-pages
+
 permissions:
    contents: write
    pages: write
