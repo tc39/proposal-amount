@@ -356,8 +356,7 @@ location: https://tc39.es/proposal-amount/
           1. Let _sourceConv_ be ? GetUnitConversionFactor(_sourceUnit_).
           1. Let _targetConv_ be ? GetUnitConversionFactor(_targetUnit_).
           1. If _sourceConv_.[[BaseUnit]] is not _targetConv_.[[BaseUnit]], throw a *TypeError* exception.
-          1. If _value_ is ~not-a-number~, return ~not-a-number~.
-          1. If _value_ is ~positive-infinity~ or _value_ is ~negative-infinity~, return _value_.
+          1. If _intlMV_.[[Value]] is one of ~not-a-number~, ~positive-infinity~, or ~negative-infinity~, return _intlMV_.
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
