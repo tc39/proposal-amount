@@ -360,6 +360,7 @@ location: https://tc39.es/proposal-amount/
           1. Let _sourceFactor_ be _sourceConv_.[[Factor]].
           1. Let _sourceOffset_ be _sourceConv_.[[Offset]].
           1. Let _targetFactor_ be _targetConv_.[[Factor]].
+          1. Assert: _sourceFactor_ > 0 and _targetFactor_ > 0.
           1. Let _targetOffset_ be _targetConv_.[[Offset]].
           1. If _sourceOffset_ is _targetOffset_, then
             1. NOTE: With equal offsets the conversion is purely multiplicative. Since unit factors are positive, this preserves a value of ~negative-zero~.
